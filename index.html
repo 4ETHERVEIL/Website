@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐞 Laporkan Bug - ID Perangkat</title>
+    <title>🐞 Laporkan Bug - Auto Balasan</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -29,25 +29,30 @@
 
         <div id="result"></div>
 
-        <!-- SECTION CEK BALASAN -->
-        <div class="section">
-            <h3>🔍 Cek Balasan Admin</h3>
-            <p>Masukkan ID perangkat Anda untuk melihat balasan:</p>
-            <div style="display: flex; gap: 10px; margin: 15px 0;">
-                <input type="text" id="checkId" placeholder="ID perangkat Anda" style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 6px;" readonly>
-                <button id="checkBtn" style="padding: 12px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;">Cek Balasan</button>
-            </div>
-            <div id="replyResult" style="margin-top: 15px; padding: 15px; border-radius: 8px; background: #f8f9ff; display: none;"></div>
+        <!-- TAMPILAN OTOMATIS ID PERANGKAT -->
+        <div id="deviceInfo" style="margin-top: 30px; padding: 18px; background: #f0f7ff; border-radius: 10px; border-left: 4px solid #667eea; display: none;">
+            <strong>📱 ID Perangkat Anda:</strong>
+            <code id="deviceIdDisplay"></code>
+            <p style="margin-top: 10px; font-size: 14px; color: #555;">
+                Simpan ID ini. Admin akan membalas menggunakan ID ini.
+            </p>
+        </div>
+
+        <!-- BALASAN OTOMATIS DARI ADMIN -->
+        <div id="adminReply" style="margin-top: 20px; padding: 15px; background: #e8f5e9; border-radius: 8px; border-left: 4px solid #4caf50; display: none;">
+            <strong>✅ Balasan dari Admin:</strong>
+            <p id="replyText"></p>
+            <small id="replyTime" style="display: block; margin-top: 8px; color: #666;"></small>
         </div>
 
         <div class="note">
             <strong>ℹ️ Petunjuk Penting:</strong><br>
-            Setiap perangkat punya <strong>ID unik</strong>. ID ini akan digunakan untuk membalas bug Anda.<br><br>
-            1. Kirim laporan → sistem otomatis buat ID perangkat<br>
-            2. Admin akan balas lewat Telegram dengan: <code>/reply device_abc123 Pesan anda</code><br>
-            3. Kembali ke halaman ini → klik “Cek Balasan” → lihat jawabannya!<br><br>
+            Setiap perangkat punya <strong>ID unik</strong>. ID ini digunakan admin untuk membalas bug Anda.<br><br>
+            1. Kirim laporan → ID perangkat muncul otomatis<br>
+            2. Admin akan balas lewat Telegram: <code>/reply device_abc123 Pesan anda</code><br>
+            3. ⏳ <strong>Anda akan melihat balasan langsung di halaman ini</strong> — tanpa perlu refresh!<br><br>
             👉 Kirim pesan ke bot: <a href="https://t.me/BugReporterBot" target="_blank">@BugReporterBot</a><br><br>
-            💡 ID perangkat Anda tersimpan di browser ini — jangan hapus data situs!
+            💡 ID perangkat tersimpan di browser ini — jangan hapus data situs!
         </div>
     </div>
 
