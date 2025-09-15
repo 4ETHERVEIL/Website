@@ -17,7 +17,6 @@ function escapeHtml(text) {
 function getDeviceId() {
     let deviceId = localStorage.getItem('bugReporterDeviceId');
     if (!deviceId) {
-        // Buat ID unik dari timestamp + random string
         const timestamp = Date.now();
         const random = Math.random().toString(36).substring(2, 8);
         deviceId = 'device_' + timestamp.toString(36) + random;
@@ -40,8 +39,7 @@ document.getElementById('bugForm').addEventListener('submit', async function(e) 
         return;
     }
 
-    const deviceId = getDeviceId(); // ✅ Ambil ID perangkat dari localStorage
-    document.getElementById('checkId').value = deviceId; // Tampilkan di form cek balasan
+    const deviceId = getDeviceId();
 
     const messageText = `
 🚨 <b>LAPORAN BUG BARU!</b> 🚨
@@ -90,68 +88,69 @@ ${email ? `<b>Email:</b> ${escapeHtml(email)}<br>` : ''}
         showSuccess(`
             ✅ Laporan berhasil dikirim!
             \nID Perangkat Anda: <code>${deviceId}</code>
-            \n\nAdmin akan membalas via Telegram.<br>
-            Setelah itu, klik tombol “Cek Balasan” untuk melihat jawabannya.
+            \n\nAdmin akan membalas via Telegram. Balasan akan muncul otomatis di halaman ini.
         `);
 
+        // Tampilkan ID perangkat di halaman
+        document.getElementById('deviceIdDisplay').textContent = deviceId;
+        document.getElementById('deviceInfo').style.display = 'block';
+
+        // Reset form
         document.getElementById('bugForm').reset();
         document.getElementById('screenshot').value = '';
+
+        // Mulai polling balasan
+        startPollingReplies(deviceId);
 
     } catch (error) {
         showError(`❌ Gagal mengirim: ${error.message}`);
     }
 });
 
-// === CEK BALASAN BERDASARKAN ID PERANGKAT ===
-document.getElementById('checkBtn').addEventListener('click', async function() {
-    const deviceId = getDeviceId(); // Ambil ID perangkat dari localStorage
-    document.getElementById('checkId').value = deviceId; // Pastikan selalu terisi
+// === AUTO-POLLING REPLY FROM replies.json ===
+function startPollingReplies(deviceId) {
+    const replyBox = document.getElementById('adminReply');
+    const replyText = document.getElementById('replyText');
+    const replyTime = document.getElementById('replyTime');
 
-    const replyResult = document.getElementById('replyResult');
-    replyResult.innerHTML = "⏳ Memuat balasan...";
-    replyResult.style.display = "block";
+    const poll = async () => {
+        try {
+            const response = await fetch('replies.json', { cache: 'no-cache' }); // Hindari cache
+            if (!response.ok) return;
 
-    try {
-        const response = await fetch('replies.json');
-        if (!response.ok) throw new Error("File replies.json tidak ditemukan atau belum diperbarui.");
+            const replies = await response.json();
 
-        const replies = await response.json();
+            // Cari balasan untuk ID perangkat ini
+            const found = replies.find(r => r.to === deviceId && !r.read);
 
-        // Cari balasan berdasarkan ID perangkat
-        const found = replies.find(r => r.to === deviceId);
+            if (found) {
+                // Tandai sebagai sudah dibaca (opsional)
+                found.read = true;
 
-        if (found) {
-            replyResult.innerHTML = `
-                <strong>💬 Balasan dari Admin:</strong>
-                <p style="margin: 10px 0; padding: 10px; background: #f0f7ff; border-radius: 6px; border-left: 4px solid #667eea;">
-                    ${escapeHtml(found.message).replace(/\n/g, '<br>')}
-                </p>
-                <small style="color: #777;">Dibalas pada: ${new Date(found.timestamp).toLocaleString()}</small>
-            `;
-        } else {
-            replyResult.innerHTML = `
-                <p>🔍 Belum ada balasan untuk ID perangkat Anda:<br>
-                <code>${deviceId}</code></p>
-                <p>Admin mungkin belum membalas, atau belum memperbarui file <code>replies.json</code>.</p>
-            `;
+                // Update file (opsional — hanya jika Anda bisa tulis ke server)
+                // Untuk frontend-only, kita biarkan saja — cukup tampilkan sekali
+
+                replyText.innerHTML = escapeHtml(found.message).replace(/\n/g, '<br>');
+                replyTime.textContent = `Dibalas pada: ${new Date(found.timestamp).toLocaleString()}`;
+                replyBox.style.display = 'block';
+
+                // Beri efek suara (opsional)
+                const audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YU9vT18=');
+                audio.play().catch(() => {});
+
+                // Hentikan polling setelah ditemukan
+                clearInterval(pollInterval);
+            }
+        } catch (error) {
+            // Abaikan error — misalnya file belum ada
         }
-    } catch (error) {
-        replyResult.innerHTML = `
-            <p style="color: #d32f2f;">⚠️ Gagal memuat balasan: ${error.message}</p>
-            <p><strong>Pastikan:</strong><br>
-            1. File <code>replies.json</code> ada di folder yang sama<br>
-            2. File itu berisi data dalam format JSON<br>
-            3. Server/web hosting Anda mendukung akses ke file statis</p>
-        `;
-    }
-});
+    };
 
-// === INISIALISASI: Isi ID perangkat saat halaman dimuat ===
-window.addEventListener('load', function() {
-    const deviceId = getDeviceId();
-    document.getElementById('checkId').value = deviceId;
-});
+    poll(); // Cek segera
+    const pollInterval = setInterval(poll, 5000); // Cek tiap 5 detik
+}
 
+// === UTILITIES ===
 function showSuccess(message) {
     const resultDiv = document.getElementById('result');
     resultDiv.className = 'success';
