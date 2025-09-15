@@ -36,7 +36,6 @@ const firebaseConfig = {
     appId: "1:123456789012:web:abc123def456"
 };
 
-// Inisialisasi Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
@@ -65,11 +64,12 @@ ${email ? `<b>Email:</b> ${escapeHtml(email)}<br>` : ''}
 <b>Waktu:</b> ${new Date().toLocaleString()}
 <i>ID Perangkat:</i> <code>${deviceId}</code>
 
-⚠️ Admin: gunakan /reply ${deviceId} [pesan] untuk membalas.
+⚠️ Admin: Klik tombol di bawah ini untuk membalas:
+<a href="https://your-app.web.app/send-reply?device_id=${encodeURIComponent(deviceId)}">➡️ KLIK UNTUK BALAS</a>
 `.trim();
 
     const botToken = "7236427363:AAFLfTCytn7K8dax5jHXUbL0YjHNfUxL6Lc";
-    const adminChatId = "5984417495"; // ❗ GANTI DENGAN CHAT ID ANDA!
+    const adminChatId = "123456789"; // ❗ GANTI DENGAN CHAT ID ANDA!
 
     try {
         const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
@@ -103,7 +103,7 @@ ${email ? `<b>Email:</b> ${escapeHtml(email)}<br>` : ''}
         showSuccess(`
             ✅ Laporan berhasil dikirim!
             \nID Perangkat Anda: <code>${deviceId}</code>
-            \n\nAdmin akan membalas via Telegram. Balasan akan muncul otomatis di halaman ini.
+            \n\nAdmin akan menerima link balasan di Telegram. Klik link itu untuk membalas.
         `);
 
         document.getElementById('deviceIdDisplay').textContent = deviceId;
@@ -126,7 +126,6 @@ function listenForReplies(deviceId) {
     const replyText = document.getElementById('replyText');
     const replyTime = document.getElementById('replyTime');
 
-    // Gunakan path: /replies/[device_id]
     const replyRef = db.ref('replies/' + deviceId);
 
     replyRef.on('value', (snapshot) => {
