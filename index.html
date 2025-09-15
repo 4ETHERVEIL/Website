@@ -3,322 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NGL Message Tool</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 500px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            color: #333;
-            font-size: 2.2em;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .emoji {
-            font-size: 1.5em;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-            font-weight: 500;
-            font-size: 1.1em;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1em;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.8);
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .status {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: 500;
-            display: none;
-        }
-
-        .status.success {
-            background: rgba(76, 175, 80, 0.1);
-            color: #4CAF50;
-            border: 1px solid rgba(76, 175, 80, 0.3);
-        }
-
-        .status.error {
-            background: rgba(244, 67, 54, 0.1);
-            color: #f44336;
-            border: 1px solid rgba(244, 67, 54, 0.3);
-        }
-
-        .status.info {
-            background: rgba(33, 150, 243, 0.1);
-            color: #2196F3;
-            border: 1px solid rgba(33, 150, 243, 0.3);
-        }
-
-        .progress {
-            margin-top: 15px;
-            background: #e0e0e0;
-            border-radius: 10px;
-            overflow: hidden;
-            height: 8px;
-            display: none;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .warning {
-            background: rgba(255, 152, 0, 0.1);
-            border: 1px solid rgba(255, 152, 0, 0.3);
-            color: #FF9800;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 0.9em;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 25px;
-                margin: 10px;
-            }
-            
-            .header h1 {
-                font-size: 1.8em;
-            }
-        }
-    </style>
+    <title>🐞 Laporkan Bug - Frontend Only</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1><span class="emoji">📨</span> NGL Message Tool <span class="emoji">😹</span></h1>
-        </div>
+        <h1>🐞 Laporkan Bug</h1>
+        <form id="bugForm">
+            <label for="title">Judul Bug *</label>
+            <input type="text" id="title" name="title" required placeholder="Contoh: Tombol login tidak berfungsi">
 
-        <div class="warning">
-            ⚠️ Gunakan tool ini dengan bijak dan bertanggung jawab. Jangan melakukan spam yang dapat merugikan orang lain.
-        </div>
+            <label for="description">Deskripsi Bug *</label>
+            <textarea id="description" name="description" rows="5" required placeholder="Jelaskan langkah reproduksi, error, dll."></textarea>
 
-        <form id="nglForm">
-            <div class="form-group">
-                <label for="username">🎯 NGL Username:</label>
-                <input type="text" id="username" placeholder="Masukkan username NGL" required>
-            </div>
+            <label for="email">Email Kontak (untuk balasan)</label>
+            <input type="email" id="email" name="email" placeholder="contoh@email.com">
 
-            <div class="form-group">
-                <label for="message">💬 Pesan:</label>
-                <textarea id="message" placeholder="Tulis pesan kamu disini..." required></textarea>
-            </div>
+            <label for="screenshot">Unggah Screenshot (opsional)</label>
+            <input type="file" id="screenshot" name="screenshot" accept="image/*">
 
-            <div class="form-group">
-                <label for="spam">🔢 Jumlah Pengiriman:</label>
-                <input type="number" id="spam" min="1" max="10" value="1" required>
-            </div>
-
-            <button type="submit" class="btn" id="sendBtn">
-                🚀 Kirim Pesan
-            </button>
+            <button type="submit">Kirim Laporan</button>
         </form>
 
-        <div class="progress" id="progress">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
+        <div id="result"></div>
 
-        <div class="status" id="status"></div>
+        <div class="note">
+            <strong>ℹ️ Petunjuk Penting:</strong><br>
+            Setelah Anda mengirim laporan, <strong>admin akan melihatnya di Telegram</strong>.<br>
+            Untuk mendapat balasan, admin harus mengetik:<br>
+            <code>/reply [ID] Pesan balasan anda</code><br>
+            di bot Telegram. Pastikan Anda pernah chat bot ini dulu!<br><br>
+            👉 Kirim pesan ke bot: <a href="https://t.me/BugReporterBot" target="_blank">@BugReporterBot</a>
+        </div>
     </div>
 
-    <script>
-        document.getElementById('nglForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value.trim();
-            const message = document.getElementById('message').value.trim();
-            const spamCount = parseInt(document.getElementById('spam').value);
-            
-            const sendBtn = document.getElementById('sendBtn');
-            const status = document.getElementById('status');
-            const progress = document.getElementById('progress');
-            const progressBar = document.getElementById('progressBar');
-            
-            // Validasi input
-            if (!username || !message || spamCount < 1) {
-                showStatus('Mohon isi semua field dengan benar!', 'error');
-                return;
-            }
-
-            if (spamCount > 10) {
-                showStatus('Maksimal 10 pengiriman untuk mencegah spam berlebihan!', 'error');
-                return;
-            }
-            
-            // Disable button dan show progress
-            sendBtn.disabled = true;
-            sendBtn.textContent = '⏳ Mengirim...';
-            progress.style.display = 'block';
-            showStatus(`📤 Mengirim ${spamCount} pesan ke: ${username}`, 'info');
-            
-            let successCount = 0;
-            let errorCount = 0;
-            
-            for (let i = 0; i < spamCount; i++) {
-                try {
-                    const response = await fetch("https://ngl.link/api/submit", {
-                        "headers": {
-                            "accept": "*/*",
-                            "accept-language": "en-US,en;q=0.7",
-                            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                            "sec-fetch-dest": "empty",
-                            "sec-fetch-mode": "cors",
-                            "sec-fetch-site": "same-origin",
-                            "sec-gpc": "1",
-                            "x-requested-with": "XMLHttpRequest"
-                        },
-                        "referrer": `https://ngl.link/${username}`,
-                        "referrerPolicy": "strict-origin-when-cross-origin",
-                        "body": `username=${encodeURIComponent(username)}&question=${encodeURIComponent(message)}&deviceId=23d7346e-7d22-4256-80f3-dd4ce3fd8878&gameSlug=&referrer=`,
-                        "method": "POST",
-                        "mode": "cors",
-                        "credentials": "include"
-                    });
-                    
-                    if (response.ok) {
-                        successCount++;
-                    } else {
-                        errorCount++;
-                    }
-                } catch (error) {
-                    errorCount++;
-                    console.log('❌ Server down atau ada error:', error.message);
-                }
-                
-                // Update progress
-                const progressPercent = ((i + 1) / spamCount) * 100;
-                progressBar.style.width = progressPercent + '%';
-                
-                // Delay antar request untuk menghindari rate limiting
-                if (i < spamCount - 1) {
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                }
-            }
-            
-            // Selesai
-            sendBtn.disabled = false;
-            sendBtn.textContent = '🚀 Kirim Pesan';
-            progress.style.display = 'none';
-            progressBar.style.width = '0%';
-            
-            if (successCount > 0) {
-                showStatus(`✅ Berhasil mengirim ${successCount} pesan! ${errorCount > 0 ? `(${errorCount} gagal)` : ''}`, 'success');
-            } else {
-                showStatus('❌ Semua pengiriman gagal. Server mungkin down atau ada masalah koneksi.', 'error');
-            }
-        });
-        
-        function showStatus(message, type) {
-            const status = document.getElementById('status');
-            status.textContent = message;
-            status.className = `status ${type}`;
-            status.style.display = 'block';
-            
-            // Auto hide setelah 5 detik untuk pesan sukses
-            if (type === 'success') {
-                setTimeout(() => {
-                    status.style.display = 'none';
-                }, 5000);
-            }
-        }
-
-        // Limit input spam count
-        document.getElementById('spam').addEventListener('input', function() {
-            if (this.value > 10) {
-                this.value = 10;
-                showStatus('⚠️ Dibatasi maksimal 10 pengiriman', 'error');
-            }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
