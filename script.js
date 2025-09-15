@@ -11,35 +11,49 @@ document.getElementById('bugForm').addEventListener('submit', async function(e) 
         return;
     }
 
-    // Buat ID unik untuk pengguna (berdasarkan email + waktu)
+    // Buat ID unik untuk pengguna
     const userId = 'user_' + btoa(email + Date.now()).replace(/[+/=]/g, '').substring(0, 12);
 
-    // Format pesan ke admin
+    // Fungsi escape HTML untuk mencegah masalah parsing
+    function escapeHtml(text) {
+        const map = {
+            '&': '&amp;',
+            '<': '<',
+            '>': '>',
+            '"': '&quot;',
+            "'": '&#x27;',
+            '/': '&#x2F;'
+        };
+        return text.replace(/[&<>"'\/]/g, function (char) {
+            return map[char];
+        });
+    }
+
+    // Format pesan dalam HTML (lebih aman dari Markdown)
     const messageText = `
-🚨 *LAPORAN BUG BARU!* 🚨
+🚨 <b>LAPORAN BUG BARU!</b> 🚨
 
-*Judul:* ${encodeURIComponent(title)}
-*Deskripsi:* ${encodeURIComponent(description)}
-*Email:* ${encodeURIComponent(email)}
-*Waktu:* ${new Date().toLocaleString()}
-*ID Pengguna:* \`${userId}\`
+<b>Judul:</b> ${escapeHtml(title)}
+<b>Deskripsi:</b> ${escapeHtml(description)}
+<b>Email:</b> ${escapeHtml(email)}
+<b>Waktu:</b> ${new Date().toLocaleString()}
+<i>ID Pengguna:</i> <code>${userId}</code>
 
-⚠️ Gunakan /reply ${userId} [pesan] untuk membalas di Telegram.
+⚠️ Admin: gunakan /reply ${userId} [pesan] untuk membalas.
 `.trim();
 
-    // Token bot Anda
     const botToken = "7236427363:AAFLfTCytn7K8dax5jHXUbL0YjHNfUxL6Lc";
-    const adminChatId = "5984417495"; // ❗ GANTI DENGAN CHAT ID ANDA!
+    const adminChatId = "123456789"; // ❗ GANTI DENGAN CHAT ID ANDA!
 
     try {
-        // Kirim teks ke admin
+        // Kirim teks ke admin dengan parse_mode=HTML
         const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 chat_id: adminChatId,
                 text: messageText,
-                parse_mode: 'Markdown'
+                parse_mode: 'HTML' // ✅ GUNAKAN HTML, BUKAN MARKDOWN
             })
         });
 
@@ -49,11 +63,11 @@ document.getElementById('bugForm').addEventListener('submit', async function(e) 
             throw new Error(result.description || 'Gagal mengirim ke Telegram');
         }
 
-        // Jika ada screenshot, kirim sebagai foto
+        // Kirim screenshot jika ada
         if (screenshot) {
             const formData = new FormData();
             formData.append('chat_id', adminChatId);
-            formData.append('caption', `📸 Screenshot dari laporan bug:\n${title}`);
+            formData.append('caption', `📸 Screenshot dari laporan bug:\n${escapeHtml(title)}`);
             formData.append('photo', screenshot);
 
             await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
@@ -69,7 +83,6 @@ document.getElementById('bugForm').addEventListener('submit', async function(e) 
             \nPastikan Anda sudah chat @BugReporterBot terlebih dahulu.
         `);
 
-        // Reset form
         document.getElementById('bugForm').reset();
         document.getElementById('screenshot').value = '';
 
