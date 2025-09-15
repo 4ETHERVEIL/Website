@@ -25,13 +25,28 @@ function getDeviceId() {
     return deviceId;
 }
 
+// === INISIALISASI FIREBASE ===
+const firebaseConfig = {
+    apiKey: "AIzaSyBdCjZkXwY7qVWvQrXlJzRmNnLdXoTcD0E",
+    authDomain: "bug-reporter-xyz.firebaseapp.com",
+    databaseURL: "https://bug-reporter-xyz-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "bug-reporter-xyz",
+    storageBucket: "bug-reporter-xyz.appspot.com",
+    messagingSenderId: "123456789012",
+    appId: "1:123456789012:web:abc123def456"
+};
+
+// Inisialisasi Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
 // === KIRIM LAPORAN KE TELEGRAM ===
 document.getElementById('bugForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const title = document.getElementById('title').value.trim();
     const description = document.getElementById('description').value.trim();
-    const email = document.getElementById('email').value.trim(); // opsional
+    const email = document.getElementById('email').value.trim();
     const screenshot = document.getElementById('screenshot').files[0];
 
     if (!title || !description) {
@@ -91,63 +106,41 @@ ${email ? `<b>Email:</b> ${escapeHtml(email)}<br>` : ''}
             \n\nAdmin akan membalas via Telegram. Balasan akan muncul otomatis di halaman ini.
         `);
 
-        // Tampilkan ID perangkat di halaman
         document.getElementById('deviceIdDisplay').textContent = deviceId;
         document.getElementById('deviceInfo').style.display = 'block';
 
-        // Reset form
         document.getElementById('bugForm').reset();
         document.getElementById('screenshot').value = '';
 
-        // Mulai polling balasan
-        startPollingReplies(deviceId);
+        // Mulai mendengarkan balasan dari Firebase
+        listenForReplies(deviceId);
 
     } catch (error) {
         showError(`❌ Gagal mengirim: ${error.message}`);
     }
 });
 
-// === AUTO-POLLING REPLY FROM replies.json ===
-function startPollingReplies(deviceId) {
+// === DENGARKAN BALASAN DI FIREBASE ===
+function listenForReplies(deviceId) {
     const replyBox = document.getElementById('adminReply');
     const replyText = document.getElementById('replyText');
     const replyTime = document.getElementById('replyTime');
 
-    const poll = async () => {
-        try {
-            const response = await fetch('replies.json', { cache: 'no-cache' }); // Hindari cache
-            if (!response.ok) return;
+    // Gunakan path: /replies/[device_id]
+    const replyRef = db.ref('replies/' + deviceId);
 
-            const replies = await response.json();
+    replyRef.on('value', (snapshot) => {
+        const reply = snapshot.val();
+        if (reply && reply.message) {
+            replyText.innerHTML = escapeHtml(reply.message).replace(/\n/g, '<br>');
+            replyTime.textContent = `Dibalas pada: ${new Date(reply.timestamp).toLocaleString()}`;
+            replyBox.style.display = 'block';
 
-            // Cari balasan untuk ID perangkat ini
-            const found = replies.find(r => r.to === deviceId && !r.read);
-
-            if (found) {
-                // Tandai sebagai sudah dibaca (opsional)
-                found.read = true;
-
-                // Update file (opsional — hanya jika Anda bisa tulis ke server)
-                // Untuk frontend-only, kita biarkan saja — cukup tampilkan sekali
-
-                replyText.innerHTML = escapeHtml(found.message).replace(/\n/g, '<br>');
-                replyTime.textContent = `Dibalas pada: ${new Date(found.timestamp).toLocaleString()}`;
-                replyBox.style.display = 'block';
-
-                // Beri efek suara (opsional)
-                const audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YU9vT18=');
-                audio.play().catch(() => {});
-
-                // Hentikan polling setelah ditemukan
-                clearInterval(pollInterval);
-            }
-        } catch (error) {
-            // Abaikan error — misalnya file belum ada
+            // Mainkan suara (opsional)
+            const audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YU9vT18=');
+            audio.play().catch(() => {});
         }
-    };
-
-    poll(); // Cek segera
-    const pollInterval = setInterval(poll, 5000); // Cek tiap 5 detik
+    });
 }
 
 // === UTILITIES ===
