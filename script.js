@@ -29,7 +29,7 @@ document.getElementById('bugForm').addEventListener('submit', async function(e) 
 
     // Token bot Anda
     const botToken = "7236427363:AAFLfTCytn7K8dax5jHXUbL0YjHNfUxL6Lc";
-    const adminChatId = "123456789"; // ❗ GANTI DENGAN CHAT ID ANDA!
+    const adminChatId = "5984417495"; // ❗ GANTI DENGAN CHAT ID ANDA!
 
     try {
         // Kirim teks ke admin
