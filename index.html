@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📦 Manajemen Barang Bebas</title>
+    <title>📦 Manajemen Barang: KOWL, K81, LEVER 4xV</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
@@ -14,6 +14,7 @@
             --dark: #212529;
             --success: #4ade80;
             --danger: #f87171;
+            --warning: #fbbf24;
             --shadow: 0 4px 20px rgba(0,0,0,0.1);
             --radius: 16px;
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -155,22 +156,6 @@
             overflow: hidden;
         }
 
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
         .header h1 {
             font-size: 2rem;
             font-weight: 700;
@@ -179,21 +164,13 @@
             text-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
-        .header p {
-            margin-top: 0.5rem;
-            opacity: 0.9;
-            font-size: 0.95rem;
-            position: relative;
-            z-index: 2;
-        }
-
         .content {
             padding: 2rem;
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -213,17 +190,16 @@
             gap: 0.4rem;
         }
 
-        .form-control input, .form-control textarea {
+        .form-control input, .form-control select {
             padding: 0.9rem;
             border: 2px solid #e9ecef;
             border-radius: 12px;
             font-size: 1rem;
             transition: var(--transition);
             background: #f8fafc;
-            resize: vertical;
         }
 
-        .form-control input:focus, .form-control textarea:focus {
+        .form-control input:focus, .form-control select:focus {
             outline: none;
             border-color: var(--accent);
             background: white;
@@ -260,7 +236,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 600px;
+            min-width: 700px;
         }
 
         th, td {
@@ -286,7 +262,6 @@
 
         tbody tr:hover {
             background: #edf2ff;
-            transform: translateX(5px);
         }
 
         tbody tr:nth-child(even) {
@@ -308,6 +283,26 @@
             font-size: 3rem;
             margin-bottom: 1rem;
             opacity: 0.5;
+        }
+
+        /* DELETE BUTTON */
+        .btn-delete {
+            background: none;
+            border: none;
+            color: var(--danger);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            padding: 0.3rem;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-delete:hover {
+            background: rgba(248, 113, 113, 0.1);
+            transform: scale(1.2);
         }
 
         /* ANIMATIONS */
@@ -420,6 +415,11 @@
         .notification.error {
             background: var(--danger);
         }
+
+        .notification.warning {
+            background: var(--warning);
+            color: #000;
+        }
     </style>
 </head>
 <body>
@@ -450,19 +450,27 @@
     <!-- MAIN PAGE -->
     <div class="card" id="mainPage">
         <div class="header">
-            <h1><i class="fas fa-box-open"></i> Manajemen Barang Bebas</h1>
-            <p>Catat apapun: "Hari Rabu: 1 KOWL, 2 K81", "Hari Kamis: Lever rusak", dll</p>
+            <h1><i class="fas fa-boxes"></i> Manajemen Barang: KOWL, K81, LEVER 4xV</h1>
         </div>
 
         <div class="content">
             <div class="form-grid">
                 <div class="form-control">
-                    <label><i class="fas fa-pencil-alt"></i> Catatan Barang / Kegiatan</label>
-                    <textarea id="namaBarang" rows="3" placeholder="Contoh: Hari Rabu: 1 KOWL, 2 K81&#10;Hari Kamis: Lever perlu diganti"></textarea>
+                    <label><i class="fas fa-tag"></i> Nama Barang</label>
+                    <select id="namaBarang">
+                        <option value="">-- Pilih Barang --</option>
+                        <option value="KOWL">KOWL</option>
+                        <option value="K81">K81</option>
+                        <option value="LEVER 4xV">LEVER 4xV</option>
+                    </select>
                 </div>
                 <div class="form-control">
-                    <label><i class="fas fa-map-marker-alt"></i> Lokasi / Gudang</label>
-                    <input type="text" id="lokasi" placeholder="Gudang A / Rak 3 / Workshop">
+                    <label><i class="fas fa-sort-numeric-up"></i> Jumlah Barang</label>
+                    <input type="number" id="jumlah" placeholder="Contoh: 10" min="1">
+                </div>
+                <div class="form-control">
+                    <label><i class="fas fa-warehouse"></i> Nama Gudang</label>
+                    <input type="text" id="gudang" placeholder="Gudang A / Gudang Utama">
                 </div>
                 <div class="form-control">
                     <label><i class="fas fa-calendar"></i> Tanggal Input</label>
@@ -472,7 +480,7 @@
 
             <div class="btn-group">
                 <button class="btn" onclick="tambahData()">
-                    <i class="fas fa-plus-circle"></i> Tambah Catatan
+                    <i class="fas fa-plus-circle"></i> Tambah Data
                 </button>
                 <button class="btn btn-download" onclick="downloadData()">
                     <i class="fas fa-download"></i> Download Data (CSV)
@@ -480,7 +488,7 @@
             </div>
 
             <h3 style="margin: 2rem 0 1rem; color: var(--dark); font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fas fa-table"></i> Riwayat Catatan
+                <i class="fas fa-clipboard-list"></i> Data Barang
             </h3>
 
             <div class="table-container">
@@ -488,16 +496,18 @@
                     <thead>
                         <tr>
                             <th><i class="fas fa-list-ol"></i> No</th>
-                            <th><i class="fas fa-sticky-note"></i> Catatan</th>
-                            <th><i class="fas fa-map-pin"></i> Lokasi</th>
-                            <th><i class="fas fa-clock"></i> Tanggal Input</th>
+                            <th><i class="fas fa-tag"></i> Nama Barang</th>
+                            <th><i class="fas fa-sort-numeric-up"></i> Jumlah Barang</th>
+                            <th><i class="fas fa-warehouse"></i> Nama Gudang</th>
+                            <th><i class="fas fa-calendar-day"></i> Tanggal Barang</th>
+                            <th><i class="fas fa-trash-alt"></i> Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="dataBody">
                         <tr>
-                            <td colspan="4" class="empty-state">
+                            <td colspan="6" class="empty-state">
                                 <i class="fas fa-inbox"></i>
-                                <div>Belum ada catatan tersimpan</div>
+                                <div>Belum ada data tersimpan</div>
                             </td>
                         </tr>
                     </tbody>
@@ -519,7 +529,10 @@
             const notif = document.getElementById('notification');
             notif.className = `notification ${type}`;
             notif.querySelector('span').textContent = message;
-            notif.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            const icon = notif.querySelector('i');
+            if (type === 'success') icon.className = 'fas fa-check-circle';
+            else if (type === 'error') icon.className = 'fas fa-exclamation-circle';
+            else if (type === 'warning') icon.className = 'fas fa-exclamation-triangle';
             notif.classList.add('show');
             
             setTimeout(() => {
@@ -540,7 +553,6 @@
                 return;
             }
 
-            // Simulasi loading
             btn.disabled = true;
             loginText.style.display = 'none';
             spinner.style.display = 'inline-block';
@@ -567,13 +579,12 @@
                     document.getElementById('tanggal').value = dateString;
 
                     loadDataFromStorage();
-                    showNotification('Login berhasil! Selamat mencatat 📝');
+                    showNotification('Login berhasil! Selamat mengelola barang 📦');
 
                 } else {
                     showNotification('Username atau password salah!', 'error');
                 }
 
-                // Reset button
                 btn.disabled = false;
                 loginText.style.display = 'inline';
                 spinner.style.display = 'none';
@@ -583,36 +594,53 @@
         // Data
         let barangData = JSON.parse(localStorage.getItem('barangKOWL')) || [];
 
+        // Urutan prioritas barang (untuk sorting)
+        const urutanBarang = ["KOWL", "K81", "LEVER 4xV"];
+
         function tambahData() {
-            const catatan = document.getElementById('namaBarang').value.trim();
-            const lokasi = document.getElementById('lokasi').value.trim();
+            const nama = document.getElementById('namaBarang').value;
+            const jumlah = document.getElementById('jumlah').value.trim();
+            const gudang = document.getElementById('gudang').value.trim();
             const tanggal = document.getElementById('tanggal').value;
 
-            if (!catatan) {
-                showNotification('Catatan wajib diisi!', 'error');
+            if (!nama) {
+                showNotification('Pilih nama barang!', 'warning');
+                return;
+            }
+            if (!jumlah) {
+                showNotification('Jumlah wajib diisi!', 'warning');
                 return;
             }
 
             const newItem = {
-                catatan: catatan,
-                lokasi: lokasi || '-',
+                nama: nama,
+                jumlah: parseInt(jumlah),
+                gudang: gudang || '-',
                 tanggal: tanggal
             };
 
             barangData.push(newItem);
-            localStorage.setItem('barangKOWL', JSON.stringify(barangData));
-
-            tampilkanData();
+            simpanDanTampilkan();
             resetForm();
-            showNotification('Catatan berhasil disimpan! ✅');
+            showNotification('Data berhasil ditambahkan! ✅');
+        }
 
-            // Animasi baris baru
-            setTimeout(() => {
-                const rows = document.querySelectorAll('#dataBody tr');
-                if (rows.length > 0) {
-                    rows[rows.length - 1].classList.add('animate-fade-in-up');
-                }
-            }, 100);
+        function hapusData(index) {
+            if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
+                barangData.splice(index, 1);
+                simpanDanTampilkan();
+                showNotification('Data berhasil dihapus! 🗑️', 'warning');
+            }
+        }
+
+        function simpanDanTampilkan() {
+            // Urutkan data berdasarkan urutan: KOWL > K81 > LEVER 4xV
+            barangData.sort((a, b) => {
+                return urutanBarang.indexOf(a.nama) - urutanBarang.indexOf(b.nama);
+            });
+
+            localStorage.setItem('barangKOWL', JSON.stringify(barangData));
+            tampilkanData();
         }
 
         function tampilkanData() {
@@ -622,9 +650,9 @@
             if (barangData.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="4" class="empty-state">
+                        <td colspan="6" class="empty-state">
                             <i class="fas fa-inbox"></i>
-                            <div>Belum ada catatan tersimpan</div>
+                            <div>Belum ada data tersimpan</div>
                         </td>
                     </tr>
                 `;
@@ -635,9 +663,15 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${index + 1}</td>
-                    <td style="white-space: pre-line;">${item.catatan}</td>
-                    <td>${item.lokasi}</td>
+                    <td><strong>${item.nama}</strong></td>
+                    <td>${item.jumlah}</td>
+                    <td>${item.gudang}</td>
                     <td>${item.tanggal}</td>
+                    <td>
+                        <button class="btn-delete" onclick="hapusData(${index})" title="Hapus data">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -645,7 +679,8 @@
 
         function resetForm() {
             document.getElementById('namaBarang').value = '';
-            document.getElementById('lokasi').value = '';
+            document.getElementById('jumlah').value = '';
+            document.getElementById('gudang').value = '';
             const now = new Date();
             const dateString = now.toLocaleDateString('id-ID', {
                 weekday: 'long',
@@ -668,20 +703,17 @@
                 return;
             }
 
-            let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "No,Catatan,Lokasi,Tanggal Input\n";
+            let csvContent = "text/csv;charset=utf-8,";
+            csvContent += "No,Nama Barang,Jumlah Barang,Nama Gudang,Tanggal Barang\n";
 
             barangData.forEach((item, index) => {
-                // Escape comma & newlines for CSV
-                const catatan = `"${item.catatan.replace(/"/g, '""')}"`;
-                const lokasi = `"${item.lokasi.replace(/"/g, '""')}"`;
-                csvContent += `${index + 1},${catatan},${lokasi},"${item.tanggal}"\n`;
+                csvContent += `${index + 1},${item.nama},${item.jumlah},${item.gudang},"${item.tanggal}"\n`;
             });
 
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "catatan_barang_" + new Date().toISOString().slice(0,10) + ".csv");
+            link.setAttribute("download", "data_barang_" + new Date().toISOString().slice(0,10) + ".csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
