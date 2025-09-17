@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📦 KOWL K81 Data Manager</title>
+    <title>📦 Manajemen Barang Bebas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
@@ -213,16 +213,17 @@
             gap: 0.4rem;
         }
 
-        .form-control input, .form-control select {
+        .form-control input, .form-control textarea {
             padding: 0.9rem;
             border: 2px solid #e9ecef;
             border-radius: 12px;
             font-size: 1rem;
             transition: var(--transition);
             background: #f8fafc;
+            resize: vertical;
         }
 
-        .form-control input:focus, .form-control select:focus {
+        .form-control input:focus, .form-control textarea:focus {
             outline: none;
             border-color: var(--accent);
             background: white;
@@ -449,23 +450,19 @@
     <!-- MAIN PAGE -->
     <div class="card" id="mainPage">
         <div class="header">
-            <h1><i class="fas fa-box-open"></i> Manajemen Barang KOWL K81 Lever 4xV</h1>
-            <p>Kelola stok barang dengan mudah dan cepat</p>
+            <h1><i class="fas fa-box-open"></i> Manajemen Barang Bebas</h1>
+            <p>Catat apapun: "Hari Rabu: 1 KOWL, 2 K81", "Hari Kamis: Lever rusak", dll</p>
         </div>
 
         <div class="content">
             <div class="form-grid">
                 <div class="form-control">
-                    <label><i class="fas fa-tag"></i> Nama Barang</label>
-                    <input type="text" id="namaBarang" value="KOWL K81 Lever 4xV" readonly>
+                    <label><i class="fas fa-pencil-alt"></i> Catatan Barang / Kegiatan</label>
+                    <textarea id="namaBarang" rows="3" placeholder="Contoh: Hari Rabu: 1 KOWL, 2 K81&#10;Hari Kamis: Lever perlu diganti"></textarea>
                 </div>
                 <div class="form-control">
-                    <label><i class="fas fa-hashtag"></i> Jumlah</label>
-                    <input type="number" id="jumlah" placeholder="Contoh: 100" min="1">
-                </div>
-                <div class="form-control">
-                    <label><i class="fas fa-map-marker-alt"></i> Lokasi</label>
-                    <input type="text" id="lokasi" placeholder="Gudang A / Rak 3">
+                    <label><i class="fas fa-map-marker-alt"></i> Lokasi / Gudang</label>
+                    <input type="text" id="lokasi" placeholder="Gudang A / Rak 3 / Workshop">
                 </div>
                 <div class="form-control">
                     <label><i class="fas fa-calendar"></i> Tanggal Input</label>
@@ -475,7 +472,7 @@
 
             <div class="btn-group">
                 <button class="btn" onclick="tambahData()">
-                    <i class="fas fa-plus-circle"></i> Tambah Data
+                    <i class="fas fa-plus-circle"></i> Tambah Catatan
                 </button>
                 <button class="btn btn-download" onclick="downloadData()">
                     <i class="fas fa-download"></i> Download Data (CSV)
@@ -483,7 +480,7 @@
             </div>
 
             <h3 style="margin: 2rem 0 1rem; color: var(--dark); font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fas fa-table"></i> Data Barang
+                <i class="fas fa-table"></i> Riwayat Catatan
             </h3>
 
             <div class="table-container">
@@ -491,17 +488,16 @@
                     <thead>
                         <tr>
                             <th><i class="fas fa-list-ol"></i> No</th>
-                            <th><i class="fas fa-box"></i> Nama Barang</th>
-                            <th><i class="fas fa-sort-numeric-up"></i> Jumlah</th>
+                            <th><i class="fas fa-sticky-note"></i> Catatan</th>
                             <th><i class="fas fa-map-pin"></i> Lokasi</th>
                             <th><i class="fas fa-clock"></i> Tanggal Input</th>
                         </tr>
                     </thead>
                     <tbody id="dataBody">
                         <tr>
-                            <td colspan="5" class="empty-state">
+                            <td colspan="4" class="empty-state">
                                 <i class="fas fa-inbox"></i>
-                                <div>Belum ada data tersimpan</div>
+                                <div>Belum ada catatan tersimpan</div>
                             </td>
                         </tr>
                     </tbody>
@@ -558,7 +554,7 @@
                         document.getElementById('mainPage').classList.add('show');
                     }, 100);
 
-                    // Set tanggal
+                    // Set tanggal otomatis
                     const now = new Date();
                     const dateString = now.toLocaleDateString('id-ID', {
                         weekday: 'long',
@@ -571,7 +567,7 @@
                     document.getElementById('tanggal').value = dateString;
 
                     loadDataFromStorage();
-                    showNotification('Login berhasil! Selamat datang 👋');
+                    showNotification('Login berhasil! Selamat mencatat 📝');
 
                 } else {
                     showNotification('Username atau password salah!', 'error');
@@ -588,19 +584,18 @@
         let barangData = JSON.parse(localStorage.getItem('barangKOWL')) || [];
 
         function tambahData() {
-            const jumlah = document.getElementById('jumlah').value.trim();
+            const catatan = document.getElementById('namaBarang').value.trim();
             const lokasi = document.getElementById('lokasi').value.trim();
             const tanggal = document.getElementById('tanggal').value;
 
-            if (!jumlah || !lokasi) {
-                showNotification('Harap isi semua kolom!', 'error');
+            if (!catatan) {
+                showNotification('Catatan wajib diisi!', 'error');
                 return;
             }
 
             const newItem = {
-                nama: "KOWL K81 Lever 4xV",
-                jumlah: parseInt(jumlah),
-                lokasi: lokasi,
+                catatan: catatan,
+                lokasi: lokasi || '-',
                 tanggal: tanggal
             };
 
@@ -609,7 +604,7 @@
 
             tampilkanData();
             resetForm();
-            showNotification('Data berhasil ditambahkan! ✅');
+            showNotification('Catatan berhasil disimpan! ✅');
 
             // Animasi baris baru
             setTimeout(() => {
@@ -627,9 +622,9 @@
             if (barangData.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="5" class="empty-state">
+                        <td colspan="4" class="empty-state">
                             <i class="fas fa-inbox"></i>
-                            <div>Belum ada data tersimpan</div>
+                            <div>Belum ada catatan tersimpan</div>
                         </td>
                     </tr>
                 `;
@@ -640,8 +635,7 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${item.nama}</td>
-                    <td><strong>${item.jumlah}</strong></td>
+                    <td style="white-space: pre-line;">${item.catatan}</td>
                     <td>${item.lokasi}</td>
                     <td>${item.tanggal}</td>
                 `;
@@ -650,7 +644,7 @@
         }
 
         function resetForm() {
-            document.getElementById('jumlah').value = '';
+            document.getElementById('namaBarang').value = '';
             document.getElementById('lokasi').value = '';
             const now = new Date();
             const dateString = now.toLocaleDateString('id-ID', {
@@ -675,16 +669,19 @@
             }
 
             let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "No,Nama Barang,Jumlah,Lokasi,Tanggal Input\n";
+            csvContent += "No,Catatan,Lokasi,Tanggal Input\n";
 
             barangData.forEach((item, index) => {
-                csvContent += `${index + 1},${item.nama},${item.jumlah},${item.lokasi},"${item.tanggal}"\n`;
+                // Escape comma & newlines for CSV
+                const catatan = `"${item.catatan.replace(/"/g, '""')}"`;
+                const lokasi = `"${item.lokasi.replace(/"/g, '""')}"`;
+                csvContent += `${index + 1},${catatan},${lokasi},"${item.tanggal}"\n`;
             });
 
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "data_barang_kowl_k81_" + new Date().toISOString().slice(0,10) + ".csv");
+            link.setAttribute("download", "catatan_barang_" + new Date().toISOString().slice(0,10) + ".csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
