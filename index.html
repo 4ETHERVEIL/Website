@@ -3,57 +3,412 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📦 Data Barang - KOWL, K81, LEVER 4XV</title>
-    <link rel="stylesheet" href="style.css">
+    <title>KOWL K81 Data Manager</title>
+    <style>
+        /* ===== RESET & GLOBAL ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 1000px;
+            padding: 30px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .container.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            margin: 10px auto;
+            border-radius: 2px;
+        }
+
+        /* ===== LOGIN PAGE ===== */
+        #loginPage {
+            text-align: center;
+            padding: 40px;
+        }
+
+        #loginPage h2 {
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 1.8rem;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: block;
+            margin: 20px auto;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* ===== MAIN PAGE ===== */
+        #mainPage {
+            display: none;
+        }
+
+        .form-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-control {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-control label {
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-control input, .form-control select {
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-control input:focus, .form-control select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: #fafafa;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background-color: #f1f5ff;
+            transition: background 0.3s;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .empty-row td {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+        }
+
+        /* ANIMASI ENTRANCE */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .form-group {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* BUTTON EFFECT */
+        .btn-download {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+        }
+
+        .btn-download:hover {
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>📊 Manajemen Barang</h1>
-            <p>KOWL • K81 • LEVER 4XV</p>
-        </header>
 
-        <form id="barangForm" class="form-box">
-            <h2>➕ Tambah Barang Baru</h2>
-            <div class="input-group">
-                <label for="nama">Nama Barang</label>
-                <select id="nama" required>
-                    <option value="">Pilih Barang</option>
-                    <option value="KOWL">KOWL</option>
-                    <option value="K81">K81</option>
-                    <option value="LEVER 4XV">LEVER 4XV</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="jumlah">Jumlah</label>
-                <input type="number" id="jumlah" placeholder="Contoh: 10" required>
-            </div>
-            <div class="input-group">
-                <label for="lokasi">Lokasi Penyimpanan</label>
-                <input type="text" id="lokasi" placeholder="Contoh: Gudang A" required>
-            </div>
-            <button type="submit" class="btn-submit">💾 Simpan Data</button>
-        </form>
-
-        <div class="table-container">
-            <h2>📋 Daftar Barang</h2>
-            <table id="barangTable">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nama Barang</th>
-                        <th>Jumlah</th>
-                        <th>Lokasi</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Data akan diisi otomatis oleh JavaScript -->
-                </tbody>
-            </table>
+    <!-- LOGIN PAGE -->
+    <div class="container" id="loginPage">
+        <h2>🔒 Login ke Sistem</h2>
+        <div class="input-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Masukkan username">
         </div>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Masukkan password">
+        </div>
+        <button onclick="login()">Login</button>
     </div>
 
-    <script src="script.js"></script>
+    <!-- MAIN PAGE -->
+    <div class="container" id="mainPage">
+        <h1>📦 Manajemen Barang KOWL K81 Lever 4xV</h1>
+
+        <div class="form-group">
+            <div class="form-control">
+                <label for="namaBarang">Nama Barang</label>
+                <input type="text" id="namaBarang" value="KOWL K81 Lever 4xV" readonly>
+            </div>
+            <div class="form-control">
+                <label for="jumlah">Jumlah</label>
+                <input type="number" id="jumlah" placeholder="Masukkan jumlah" min="1">
+            </div>
+            <div class="form-control">
+                <label for="lokasi">Lokasi Penyimpanan</label>
+                <input type="text" id="lokasi" placeholder="Gudang A / Rak 3">
+            </div>
+            <div class="form-control">
+                <label for="tanggal">Tanggal Input</label>
+                <input type="text" id="tanggal" readonly>
+            </div>
+        </div>
+
+        <button onclick="tambahData()">➕ Tambah Data</button>
+        <button class="btn-download" onclick="downloadData()">💾 Download Data (CSV)</button>
+
+        <h3 style="margin: 30px 0 15px; color: #333;">📊 Data Barang</h3>
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Barang</th>
+                    <th>Jumlah</th>
+                    <th>Lokasi</th>
+                    <th>Tanggal Input</th>
+                </tr>
+            </thead>
+            <tbody id="dataBody">
+                <tr class="empty-row">
+                    <td colspan="5">Belum ada data</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Animasi masuk halaman
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.getElementById('loginPage').classList.add('show');
+            }, 300);
+        });
+
+        // Login sederhana
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === '2623' && password === '2623') {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('mainPage').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('mainPage').classList.add('show');
+                }, 100);
+
+                // Set tanggal otomatis
+                const now = new Date();
+                const dateString = now.toLocaleDateString('id-ID') + ' ' + now.toLocaleTimeString('id-ID');
+                document.getElementById('tanggal').value = dateString;
+
+                loadDataFromStorage();
+            } else {
+                alert('❌ Username atau password salah!');
+            }
+        }
+
+        // Data barang
+        let barangData = JSON.parse(localStorage.getItem('barangKOWL')) || [];
+
+        function tambahData() {
+            const jumlah = document.getElementById('jumlah').value;
+            const lokasi = document.getElementById('lokasi').value;
+            const tanggal = document.getElementById('tanggal').value;
+
+            if (!jumlah || !lokasi) {
+                alert('⚠️ Harap isi semua kolom!');
+                return;
+            }
+
+            const newItem = {
+                nama: "KOWL K81 Lever 4xV",
+                jumlah: parseInt(jumlah),
+                lokasi: lokasi,
+                tanggal: tanggal
+            };
+
+            barangData.push(newItem);
+            localStorage.setItem('barangKOWL', JSON.stringify(barangData));
+
+            tampilkanData();
+            resetForm();
+
+            // Animasi tambah data
+            const rows = document.querySelectorAll('#dataBody tr');
+            if (rows.length > 0) {
+                rows[rows.length - 1].classList.add('fade-in-up');
+            }
+        }
+
+        function tampilkanData() {
+            const tbody = document.getElementById('dataBody');
+            tbody.innerHTML = '';
+
+            if (barangData.length === 0) {
+                tbody.innerHTML = `<tr class="empty-row"><td colspan="5">Belum ada data</td></tr>`;
+                return;
+            }
+
+            barangData.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.nama}</td>
+                    <td>${item.jumlah}</td>
+                    <td>${item.lokasi}</td>
+                    <td>${item.tanggal}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function resetForm() {
+            document.getElementById('jumlah').value = '';
+            document.getElementById('lokasi').value = '';
+            const now = new Date();
+            document.getElementById('tanggal').value = now.toLocaleDateString('id-ID') + ' ' + now.toLocaleTimeString('id-ID');
+        }
+
+        function loadDataFromStorage() {
+            tampilkanData();
+        }
+
+        function downloadData() {
+            if (barangData.length === 0) {
+                alert('❌ Tidak ada data untuk diunduh!');
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "No,Nama Barang,Jumlah,Lokasi,Tanggal Input\n";
+
+            barangData.forEach((item, index) => {
+                csvContent += `${index + 1},${item.nama},${item.jumlah},${item.lokasi},"${item.tanggal}"\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "data_barang_kowl_k81.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Panggil saat halaman dimuat
+        tampilkanData();
+    </script>
+
 </body>
 </html>
