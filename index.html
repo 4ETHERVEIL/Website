@@ -20,6 +20,12 @@
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
+        .dark-theme {
+            --light: #1a1a2e;
+            --dark: #f4f4f9;
+            --shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -36,10 +42,15 @@
             padding: 1rem;
             color: var(--dark);
             overflow-x: hidden;
+            transition: background 0.4s ease;
+        }
+
+        body.dark-theme {
+            background: linear-gradient(135deg, #0f1626, #1a2a4a);
         }
 
         .card {
-            background: white;
+            background: var(--light);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             width: 100%;
@@ -60,6 +71,12 @@
             padding: 3rem 2rem;
             text-align: center;
             background: linear-gradient(120deg, #f6f7ff, #e9eafc);
+            transition: background 0.4s;
+        }
+
+        .dark-theme #loginPage {
+            background: linear-gradient(120deg, #161a2d, #1a1f3a);
+            color: var(--dark);
         }
 
         #loginPage h2 {
@@ -69,6 +86,10 @@
             font-weight: 700;
             position: relative;
             display: inline-block;
+        }
+
+        .dark-theme #loginPage h2 {
+            color: #a3bffa;
         }
 
         #loginPage h2::after {
@@ -98,6 +119,10 @@
             letter-spacing: 0.3px;
         }
 
+        .dark-theme .input-group label {
+            color: #e0e0ff;
+        }
+
         .input-group input {
             width: 100%;
             padding: 1rem;
@@ -106,12 +131,23 @@
             font-size: 1rem;
             transition: var(--transition);
             background: #fcfdff;
+            color: var(--dark);
+        }
+
+        .dark-theme .input-group input {
+            background: #1a1a3a;
+            border-color: #3a3a6a;
+            color: #ffffff;
         }
 
         .input-group input:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .dark-theme .input-group input:focus {
+            box-shadow: 0 0 0 3px rgba(100, 130, 255, 0.3);
         }
 
         .btn {
@@ -144,7 +180,7 @@
         /* ===== MAIN PAGE ===== */
         #mainPage {
             display: none;
-            background: #ffffff;
+            background: var(--light);
         }
 
         .header {
@@ -166,6 +202,12 @@
 
         .content {
             padding: 2rem;
+            background: var(--light);
+            transition: background 0.4s;
+        }
+
+        .dark-theme .content {
+            background: #161a2d;
         }
 
         .form-grid {
@@ -190,6 +232,10 @@
             gap: 0.4rem;
         }
 
+        .dark-theme .form-control label {
+            color: #e0e0ff;
+        }
+
         .form-control input, .form-control select {
             padding: 0.9rem;
             border: 2px solid #e9ecef;
@@ -197,6 +243,14 @@
             font-size: 1rem;
             transition: var(--transition);
             background: #f8fafc;
+            color: var(--dark);
+        }
+
+        .dark-theme .form-control input,
+        .dark-theme .form-control select {
+            background: #1a1a3a;
+            border-color: #3a3a6a;
+            color: #ffffff;
         }
 
         .form-control input:focus, .form-control select:focus {
@@ -204,6 +258,12 @@
             border-color: var(--accent);
             background: white;
             box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.2);
+        }
+
+        .dark-theme .form-control input:focus,
+        .dark-theme .form-control select:focus {
+            background: #2a2a5a;
+            box-shadow: 0 0 0 3px rgba(100, 200, 255, 0.3);
         }
 
         .btn-group {
@@ -231,6 +291,12 @@
             box-shadow: var(--shadow);
             margin: 2rem 0;
             border: 1px solid #e9ecef;
+            transition: background 0.4s, border 0.4s;
+        }
+
+        .dark-theme .table-container {
+            background: #1a1a3a;
+            border-color: #2a2a5a;
         }
 
         table {
@@ -243,6 +309,10 @@
             padding: 1rem;
             text-align: left;
             border-bottom: 1px solid #e9ecef;
+        }
+
+        .dark-theme th, .dark-theme td {
+            border-bottom: 1px solid #2a2a5a;
         }
 
         th {
@@ -264,12 +334,20 @@
             background: #edf2ff;
         }
 
+        .dark-theme tbody tr:hover {
+            background: #1f1f4f;
+        }
+
         tbody tr:nth-child(even) {
             background: #f8fafc;
         }
 
-        tbody tr:nth-child(even):hover {
-            background: #e0e7ff;
+        .dark-theme tbody tr:nth-child(even) {
+            background: #161636;
+        }
+
+        .dark-theme tbody tr:nth-child(even):hover {
+            background: #1f1f4f;
         }
 
         .empty-state {
@@ -277,6 +355,10 @@
             padding: 3rem 1rem;
             color: #94a3b8;
             font-style: italic;
+        }
+
+        .dark-theme .empty-state {
+            color: #a3bffa;
         }
 
         .empty-state i {
@@ -305,6 +387,37 @@
             transform: scale(1.2);
         }
 
+        .dark-theme .btn-delete:hover {
+            background: rgba(248, 113, 113, 0.2);
+        }
+
+        /* DARK MODE TOGGLE BUTTON */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .dark-theme .dark-mode-toggle {
+            background: rgba(30,30,50,0.9);
+            color: #f4f4f9;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: rotate(15deg);
+        }
+
         /* ANIMATIONS */
         @keyframes fadeInUp {
             from {
@@ -321,7 +434,6 @@
             animation: fadeInUp 0.6s ease forwards;
         }
 
-        /* FLOATING ANIMATION */
         .floating {
             animation: floating 3s ease-in-out infinite;
         }
@@ -337,20 +449,16 @@
             .form-grid {
                 grid-template-columns: 1fr;
             }
-
             .btn-group {
                 flex-direction: column;
                 align-items: stretch;
             }
-
             .header h1 {
                 font-size: 1.5rem;
             }
-
             #loginPage h2 {
                 font-size: 1.8rem;
             }
-
             .content {
                 padding: 1.5rem;
             }
@@ -360,13 +468,17 @@
             #loginPage {
                 padding: 2rem 1rem;
             }
-
             .header {
                 padding: 1.5rem 1rem;
             }
-
             .header h1 {
                 font-size: 1.3rem;
+            }
+            .dark-mode-toggle {
+                width: 44px;
+                height: 44px;
+                right: 15px;
+                top: 15px;
             }
         }
 
@@ -404,6 +516,10 @@
             gap: 0.5rem;
         }
 
+        .dark-theme .notification {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
         .notification.show {
             transform: translateX(0);
         }
@@ -420,9 +536,18 @@
             background: var(--warning);
             color: #000;
         }
+
+        .dark-theme .notification.warning {
+            color: #000;
+        }
     </style>
 </head>
 <body>
+
+    <!-- DARK MODE TOGGLE -->
+    <div class="dark-mode-toggle" id="darkModeToggle" onclick="toggleDarkMode()">
+        <i class="fas fa-moon"></i>
+    </div>
 
     <!-- NOTIFICATION -->
     <div class="notification" id="notification">
@@ -517,14 +642,33 @@
     </div>
 
     <script>
-        // Animasi masuk halaman
+        // ========== DARK MODE ==========
         document.addEventListener('DOMContentLoaded', function() {
+            const isDark = localStorage.getItem('darkMode') === 'enabled';
+            if (isDark) {
+                document.body.classList.add('dark-theme');
+                document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+            }
+
             setTimeout(() => {
                 document.getElementById('loginPage').classList.add('show');
             }, 300);
         });
 
-        // Notifikasi
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-theme');
+            const toggleBtn = document.getElementById('darkModeToggle');
+            
+            if (document.body.classList.contains('dark-theme')) {
+                localStorage.setItem('darkMode', 'enabled');
+                toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+                toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        }
+
+        // ========== NOTIFIKASI ==========
         function showNotification(message, type = 'success') {
             const notif = document.getElementById('notification');
             notif.className = `notification ${type}`;
@@ -540,25 +684,37 @@
             }, 3000);
         }
 
-        // Login
+        // ========== LOGIN DENGAN BASE64 OBFUSCATION ==========
         function login() {
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
+            const usernameInput = document.getElementById('username').value.trim();
+            const passwordInput = document.getElementById('password').value.trim();
             const btn = document.querySelector('.btn');
             const loginText = document.getElementById('loginText');
             const spinner = document.getElementById('spinner');
 
-            if (!username || !password) {
+            if (!usernameInput || !passwordInput) {
                 showNotification('Username dan password wajib diisi!', 'error');
                 return;
             }
 
+            // Encode input user ke Base64
+            const encodedUserInput = btoa(usernameInput);
+            const encodedPassInput = btoa(passwordInput);
+
+            // ✅ GANTI INI DENGAN BASE64 DARI USERNAME & PASSWORD YANG KAMU INGINKAN
+            // Contoh: 
+            //   Username asli: "manager" → Base64: "bWFuYWdlcg=="
+            //   Password asli: "secure2024" → Base64: "c2VjdXJlMjAyNA=="
+            const VALID_USER_ENCODED = "bWFuYWdlcg==";     // manager
+            const VALID_PASS_ENCODED = "c2VjdXJlMjAyNA==";  // secure2024
+
+            // Simulasi loading
             btn.disabled = true;
             loginText.style.display = 'none';
             spinner.style.display = 'inline-block';
 
             setTimeout(() => {
-                if (username === 'admin' && password === 'admin123') {
+                if (encodedUserInput === VALID_USER_ENCODED && encodedPassInput === VALID_PASS_ENCODED) {
                     document.getElementById('loginPage').style.display = 'none';
                     document.getElementById('mainPage').style.display = 'block';
                     
@@ -585,16 +741,15 @@
                     showNotification('Username atau password salah!', 'error');
                 }
 
+                // Reset button
                 btn.disabled = false;
                 loginText.style.display = 'inline';
                 spinner.style.display = 'none';
             }, 1200);
         }
 
-        // Data
+        // ========== MANAJEMEN DATA ==========
         let barangData = JSON.parse(localStorage.getItem('barangKOWL')) || [];
-
-        // Urutan prioritas barang (untuk sorting)
         const urutanBarang = ["KOWL", "K81", "LEVER 4xV"];
 
         function tambahData() {
@@ -634,7 +789,6 @@
         }
 
         function simpanDanTampilkan() {
-            // Urutkan data berdasarkan urutan: KOWL > K81 > LEVER 4xV
             barangData.sort((a, b) => {
                 return urutanBarang.indexOf(a.nama) - urutanBarang.indexOf(b.nama);
             });
@@ -727,7 +881,7 @@
             }
         });
 
-        // Load data saat halaman utama muncul
+        // Load data
         tampilkanData();
     </script>
 
