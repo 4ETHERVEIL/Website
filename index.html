@@ -3,354 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Penyimpanan Barang - KOWL, K81, Lever 4xV</title>
-    <style>
-        :root {
-            --primary: #4361ee;
-            --secondary: #3a0ca3;
-            --accent: #f72585;
-            --light: #f8f9fa;
-            --dark: #212529;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #4361ee, #3a0ca3);
-            color: white;
-            min-height: 100vh;
-            padding: 40px 20px;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            animation: fadeInUp 1s ease;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5rem;
-            background: linear-gradient(to right, #ff9a9e, #fecfef, #a18cd1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        select, input {
-            width: 100%;
-            padding: 12px 16px;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        select:focus, input:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 0 0 3px rgba(247, 37, 133, 0.3);
-        }
-
-        button {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(45deg, var(--accent), #b5179e);
-            color: white;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 7px 20px rgba(247, 37, 133, 0.4);
-        }
-
-        .data-section {
-            margin-top: 50px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 15px;
-            overflow: hidden;
-        }
-
-        th, td {
-            padding: 16px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        th {
-            background: rgba(255, 255, 255, 0.1);
-            font-weight: 600;
-        }
-
-        tr:hover {
-            background: rgba(255, 255, 255, 0.05);
-            transform: scale(1.01);
-            transition: all 0.2s ease;
-        }
-
-        .download-btn {
-            background: linear-gradient(45deg, #06d6a0, #118ab2);
-            margin-top: 30px;
-            padding: 16px;
-            font-size: 1.2rem;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: rgba(255, 255, 255, 0.7);
-            font-style: italic;
-        }
-
-        .item-card {
-            animation: slideIn 0.5s ease forwards;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .glow {
-            text-shadow: 0 0 10px rgba(255,255,255,0.7);
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            font-size: 0.9rem;
-            color: rgba(255,255,255,0.7);
-        }
-    </style>
+    <title>📦 Data Barang - KOWL, K81, LEVER 4XV</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1 class="glow">📦 Penyimpanan Barang</h1>
+        <header>
+            <h1>📊 Manajemen Barang</h1>
+            <p>KOWL • K81 • LEVER 4XV</p>
+        </header>
 
-        <div class="form-group">
-            <label for="itemType">Pilih Barang</label>
-            <select id="itemType">
-                <option value="KOWL">KOWL</option>
-                <option value="K81">K81</option>
-                <option value="Lever 4xV">Lever 4xV</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="quantity">Jumlah</label>
-            <input type="number" id="quantity" placeholder="Masukkan jumlah" min="1">
-        </div>
-
-        <button id="saveBtn">💾 Simpan Barang</button>
-
-        <div class="data-section">
-            <h2>Data Barang Tersimpan</h2>
-            <div id="tableContainer">
-                <div class="empty-state" id="emptyState">
-                    📭 Belum ada data. Silakan tambahkan barang!
-                </div>
-                <table id="dataTable" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Barang</th>
-                            <th>Jumlah</th>
-                            <th>Tanggal Input</th>
-                        </tr>
-                    </thead>
-                    <tbody id="dataBody">
-                        <!-- Data akan muncul di sini -->
-                    </tbody>
-                </table>
+        <form id="barangForm" class="form-box">
+            <h2>➕ Tambah Barang Baru</h2>
+            <div class="input-group">
+                <label for="nama">Nama Barang</label>
+                <select id="nama" required>
+                    <option value="">Pilih Barang</option>
+                    <option value="KOWL">KOWL</option>
+                    <option value="K81">K81</option>
+                    <option value="LEVER 4XV">LEVER 4XV</option>
+                </select>
             </div>
+            <div class="input-group">
+                <label for="jumlah">Jumlah</label>
+                <input type="number" id="jumlah" placeholder="Contoh: 10" required>
+            </div>
+            <div class="input-group">
+                <label for="lokasi">Lokasi Penyimpanan</label>
+                <input type="text" id="lokasi" placeholder="Contoh: Gudang A" required>
+            </div>
+            <button type="submit" class="btn-submit">💾 Simpan Data</button>
+        </form>
 
-            <button class="download-btn" id="downloadBtn" style="display: none;">
-                📥 Download Data (CSV)
-            </button>
+        <div class="table-container">
+            <h2>📋 Daftar Barang</h2>
+            <table id="barangTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nama Barang</th>
+                        <th>Jumlah</th>
+                        <th>Lokasi</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data akan diisi otomatis oleh JavaScript -->
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <footer>
-        Dibuat dengan 💜 | Penyimpanan Barang KOWL, K81, Lever 4xV
-    </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const saveBtn = document.getElementById('saveBtn');
-            const downloadBtn = document.getElementById('downloadBtn');
-            const dataTable = document.getElementById('dataTable');
-            const dataBody = document.getElementById('dataBody');
-            const emptyState = document.getElementById('emptyState');
-
-            // Ambil data dari localStorage atau inisialisasi array kosong
-            let items = JSON.parse(localStorage.getItem('storedItems')) || [];
-
-            // Render data awal
-            renderData();
-
-            // Fungsi simpan data
-            saveBtn.addEventListener('click', () => {
-                const itemType = document.getElementById('itemType').value;
-                const quantity = parseInt(document.getElementById('quantity').value);
-                const date = new Date().toLocaleString('id-ID');
-
-                if (!quantity || quantity <= 0) {
-                    alert('⚠️ Masukkan jumlah yang valid!');
-                    return;
-                }
-
-                const newItem = {
-                    id: Date.now(),
-                    type: itemType,
-                    quantity: quantity,
-                    date: date
-                };
-
-                items.push(newItem);
-                localStorage.setItem('storedItems', JSON.stringify(items));
-
-                renderData();
-
-                // Reset form
-                document.getElementById('quantity').value = '';
-                showNotification('✅ Barang berhasil disimpan!');
-            });
-
-            // Render ulang tabel
-            function renderData() {
-                dataBody.innerHTML = '';
-
-                if (items.length === 0) {
-                    emptyState.style.display = 'block';
-                    dataTable.style.display = 'none';
-                    downloadBtn.style.display = 'none';
-                    return;
-                }
-
-                emptyState.style.display = 'none';
-                dataTable.style.display = 'table';
-                downloadBtn.style.display = 'block';
-
-                items.forEach((item, index) => {
-                    const row = document.createElement('tr');
-                    row.classList.add('item-card');
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${item.type}</td>
-                        <td>${item.quantity}</td>
-                        <td>${item.date}</td>
-                    `;
-                    dataBody.appendChild(row);
-                });
-            }
-
-            // Download data CSV
-            downloadBtn.addEventListener('click', () => {
-                if (items.length === 0) return;
-
-                let csvContent = "data:text/csv;charset=utf-8,";
-                csvContent += "No,Barang,Jumlah,Tanggal Input\n";
-
-                items.forEach((item, index) => {
-                    csvContent += `${index + 1},${item.type},${item.quantity},"${item.date}"\n`;
-                });
-
-                const encodedUri = encodeURI(csvContent);
-                const link = document.createElement("a");
-                link.setAttribute("href", encodedUri);
-                link.setAttribute("download", "data_barang_" + new Date().toISOString().slice(0,10) + ".csv");
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-
-                showNotification('📄 Data berhasil diunduh!');
-            });
-
-            // Notifikasi animasi kecil
-            function showNotification(message) {
-                const notif = document.createElement('div');
-                notif.innerText = message;
-                notif.style.position = 'fixed';
-                notif.style.bottom = '30px';
-                notif.style.left = '50%';
-                notif.style.transform = 'translateX(-50%)';
-                notif.style.backgroundColor = 'rgba(0,0,0,0.8)';
-                notif.style.color = 'white';
-                notif.style.padding = '15px 30px';
-                notif.style.borderRadius = '50px';
-                notif.style.zIndex = '1000';
-                notif.style.fontSize = '1rem';
-                notif.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
-                document.body.appendChild(notif);
-
-                setTimeout(() => {
-                    notif.style.opacity = '0';
-                    notif.style.transition = 'opacity 0.5s';
-                    setTimeout(() => document.body.removeChild(notif), 500);
-                }, 2500);
-            }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
