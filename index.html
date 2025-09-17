@@ -3,194 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KOWL K81 Data Manager</title>
+    <title>📦 KOWL K81 Data Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* ===== RESET & GLOBAL ===== */
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4ade80;
+            --danger: #f87171;
+            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+            --radius: 16px;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 1rem;
+            color: var(--dark);
+            overflow-x: hidden;
         }
 
-        .container {
+        .card {
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            width: 90%;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            width: 100%;
             max-width: 1000px;
-            padding: 30px;
+            overflow: hidden;
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
+            transform: translateY(40px);
+            transition: var(--transition);
         }
 
-        .container.show {
+        .card.show {
             opacity: 1;
             transform: translateY(0);
         }
 
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-            font-size: 2.2rem;
-            position: relative;
-        }
-
-        h1::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(to right, #667eea, #764ba2);
-            margin: 10px auto;
-            border-radius: 2px;
-        }
-
         /* ===== LOGIN PAGE ===== */
         #loginPage {
+            padding: 3rem 2rem;
             text-align: center;
-            padding: 40px;
+            background: linear-gradient(120deg, #f6f7ff, #e9eafc);
         }
 
         #loginPage h2 {
-            margin-bottom: 30px;
-            color: #333;
-            font-size: 1.8rem;
+            font-size: 2.2rem;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        #loginPage h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
         }
 
         .input-group {
-            margin-bottom: 20px;
+            margin: 1.5rem 0;
             text-align: left;
+            position: relative;
         }
 
         .input-group label {
             display: block;
-            margin-bottom: 8px;
-            color: #555;
-            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
         }
 
         .input-group input {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e1e5e9;
-            border-radius: 8px;
+            padding: 1rem;
+            border: 2px solid #e3e6f0;
+            border-radius: 12px;
             font-size: 1rem;
-            transition: border 0.3s;
+            transition: var(--transition);
+            background: #fcfdff;
         }
 
         .input-group input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
         }
 
-        button {
-            background: linear-gradient(to right, #667eea, #764ba2);
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            padding: 14px 30px;
-            border-radius: 8px;
+            padding: 1rem 2rem;
+            border-radius: 50px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: block;
-            margin: 20px auto;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+            margin: 1.5rem 0;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
         }
 
         /* ===== MAIN PAGE ===== */
         #mainPage {
             display: none;
+            background: #ffffff;
         }
 
-        .form-group {
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            margin-top: 0.5rem;
+            opacity: 0.9;
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .form-control {
             display: flex;
             flex-direction: column;
+            gap: 0.5rem;
         }
 
         .form-control label {
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #555;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
         }
 
         .form-control input, .form-control select {
-            padding: 12px;
-            border: 2px solid #e1e5e9;
-            border-radius: 8px;
+            padding: 0.9rem;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
             font-size: 1rem;
+            transition: var(--transition);
+            background: #f8fafc;
         }
 
         .form-control input:focus, .form-control select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--accent);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.2);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+            justify-content: center;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, var(--accent), #4895ef);
+            box-shadow: 0 4px 15px rgba(76, 201, 240, 0.3);
+        }
+
+        .btn-download:hover {
+            box-shadow: 0 8px 25px rgba(76, 201, 240, 0.4);
         }
 
         /* TABLE */
+        .table-container {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            background: #f8fafc;
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+            border: 1px solid #e9ecef;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 30px 0;
-            background: #fafafa;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            min-width: 600px;
         }
 
         th, td {
-            padding: 14px;
+            padding: 1rem;
             text-align: left;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e9ecef;
         }
 
         th {
-            background: linear-gradient(to right, #667eea, #764ba2);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
         }
 
-        tr:hover {
-            background-color: #f1f5ff;
-            transition: background 0.3s;
+        tbody tr {
+            transition: var(--transition);
         }
 
-        tr:last-child td {
-            border-bottom: none;
+        tbody tr:hover {
+            background: #edf2ff;
+            transform: translateX(5px);
         }
 
-        .empty-row td {
+        tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        tbody tr:nth-child(even):hover {
+            background: #e0e7ff;
+        }
+
+        .empty-state {
             text-align: center;
-            color: #999;
+            padding: 3rem 1rem;
+            color: #94a3b8;
             font-style: italic;
         }
 
-        /* ANIMASI ENTRANCE */
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* ANIMATIONS */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -202,89 +321,193 @@
             }
         }
 
-        .fade-in-up {
-            animation: fadeInUp 0.8s ease forwards;
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* FLOATING ANIMATION */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .form-group {
+            .form-grid {
                 grid-template-columns: 1fr;
             }
-            h1 {
+
+            .btn-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            #loginPage h2 {
                 font-size: 1.8rem;
+            }
+
+            .content {
+                padding: 1.5rem;
             }
         }
 
-        /* BUTTON EFFECT */
-        .btn-download {
-            background: linear-gradient(to right, #4facfe, #00f2fe);
+        @media (max-width: 480px) {
+            #loginPage {
+                padding: 2rem 1rem;
+            }
+
+            .header {
+                padding: 1.5rem 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.3rem;
+            }
         }
 
-        .btn-download:hover {
-            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        /* LOADING SPINNER */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* NOTIFICATION */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: translateX(150%);
+            transition: transform 0.4s ease-out;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: var(--success);
+        }
+
+        .notification.error {
+            background: var(--danger);
         }
     </style>
 </head>
 <body>
 
+    <!-- NOTIFICATION -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span>Pesan</span>
+    </div>
+
     <!-- LOGIN PAGE -->
-    <div class="container" id="loginPage">
-        <h2>🔒 Login ke Sistem</h2>
+    <div class="card" id="loginPage">
+        <h2><i class="fas fa-lock floating"></i> Login ke Sistem</h2>
         <div class="input-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" placeholder="Masukkan username">
+            <label for="username"><i class="fas fa-user"></i> Username</label>
+            <input type="text" id="username" placeholder="Masukkan username" autocomplete="username">
         </div>
         <div class="input-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Masukkan password">
+            <label for="password"><i class="fas fa-key"></i> Password</label>
+            <input type="password" id="password" placeholder="Masukkan password" autocomplete="current-password">
         </div>
-        <button onclick="login()">Login</button>
+        <button class="btn" onclick="login()">
+            <span id="loginText">Login</span>
+            <div class="spinner" id="spinner" style="display:none;"></div>
+        </button>
     </div>
 
     <!-- MAIN PAGE -->
-    <div class="container" id="mainPage">
-        <h1>📦 Manajemen Barang KOWL K81 Lever 4xV</h1>
-
-        <div class="form-group">
-            <div class="form-control">
-                <label for="namaBarang">Nama Barang</label>
-                <input type="text" id="namaBarang" value="KOWL K81 Lever 4xV" readonly>
-            </div>
-            <div class="form-control">
-                <label for="jumlah">Jumlah</label>
-                <input type="number" id="jumlah" placeholder="Masukkan jumlah" min="1">
-            </div>
-            <div class="form-control">
-                <label for="lokasi">Lokasi Penyimpanan</label>
-                <input type="text" id="lokasi" placeholder="Gudang A / Rak 3">
-            </div>
-            <div class="form-control">
-                <label for="tanggal">Tanggal Input</label>
-                <input type="text" id="tanggal" readonly>
-            </div>
+    <div class="card" id="mainPage">
+        <div class="header">
+            <h1><i class="fas fa-box-open"></i> Manajemen Barang KOWL K81 Lever 4xV</h1>
+            <p>Kelola stok barang dengan mudah dan cepat</p>
         </div>
 
-        <button onclick="tambahData()">➕ Tambah Data</button>
-        <button class="btn-download" onclick="downloadData()">💾 Download Data (CSV)</button>
+        <div class="content">
+            <div class="form-grid">
+                <div class="form-control">
+                    <label><i class="fas fa-tag"></i> Nama Barang</label>
+                    <input type="text" id="namaBarang" value="KOWL K81 Lever 4xV" readonly>
+                </div>
+                <div class="form-control">
+                    <label><i class="fas fa-hashtag"></i> Jumlah</label>
+                    <input type="number" id="jumlah" placeholder="Contoh: 100" min="1">
+                </div>
+                <div class="form-control">
+                    <label><i class="fas fa-map-marker-alt"></i> Lokasi</label>
+                    <input type="text" id="lokasi" placeholder="Gudang A / Rak 3">
+                </div>
+                <div class="form-control">
+                    <label><i class="fas fa-calendar"></i> Tanggal Input</label>
+                    <input type="text" id="tanggal" readonly>
+                </div>
+            </div>
 
-        <h3 style="margin: 30px 0 15px; color: #333;">📊 Data Barang</h3>
-        <table id="dataTable">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama Barang</th>
-                    <th>Jumlah</th>
-                    <th>Lokasi</th>
-                    <th>Tanggal Input</th>
-                </tr>
-            </thead>
-            <tbody id="dataBody">
-                <tr class="empty-row">
-                    <td colspan="5">Belum ada data</td>
-                </tr>
-            </tbody>
-        </table>
+            <div class="btn-group">
+                <button class="btn" onclick="tambahData()">
+                    <i class="fas fa-plus-circle"></i> Tambah Data
+                </button>
+                <button class="btn btn-download" onclick="downloadData()">
+                    <i class="fas fa-download"></i> Download Data (CSV)
+                </button>
+            </div>
+
+            <h3 style="margin: 2rem 0 1rem; color: var(--dark); font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-table"></i> Data Barang
+            </h3>
+
+            <div class="table-container">
+                <table id="dataTable">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-list-ol"></i> No</th>
+                            <th><i class="fas fa-box"></i> Nama Barang</th>
+                            <th><i class="fas fa-sort-numeric-up"></i> Jumlah</th>
+                            <th><i class="fas fa-map-pin"></i> Lokasi</th>
+                            <th><i class="fas fa-clock"></i> Tanggal Input</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataBody">
+                        <tr>
+                            <td colspan="5" class="empty-state">
+                                <i class="fas fa-inbox"></i>
+                                <div>Belum ada data tersimpan</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -295,39 +518,82 @@
             }, 300);
         });
 
-        // Login sederhana
-        function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            if (username === '2623' && password === '2623') {
-                document.getElementById('loginPage').style.display = 'none';
-                document.getElementById('mainPage').style.display = 'block';
-                setTimeout(() => {
-                    document.getElementById('mainPage').classList.add('show');
-                }, 100);
-
-                // Set tanggal otomatis
-                const now = new Date();
-                const dateString = now.toLocaleDateString('id-ID') + ' ' + now.toLocaleTimeString('id-ID');
-                document.getElementById('tanggal').value = dateString;
-
-                loadDataFromStorage();
-            } else {
-                alert('❌ Username atau password salah!');
-            }
+        // Notifikasi
+        function showNotification(message, type = 'success') {
+            const notif = document.getElementById('notification');
+            notif.className = `notification ${type}`;
+            notif.querySelector('span').textContent = message;
+            notif.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            notif.classList.add('show');
+            
+            setTimeout(() => {
+                notif.classList.remove('show');
+            }, 3000);
         }
 
-        // Data barang
+        // Login
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const btn = document.querySelector('.btn');
+            const loginText = document.getElementById('loginText');
+            const spinner = document.getElementById('spinner');
+
+            if (!username || !password) {
+                showNotification('Username dan password wajib diisi!', 'error');
+                return;
+            }
+
+            // Simulasi loading
+            btn.disabled = true;
+            loginText.style.display = 'none';
+            spinner.style.display = 'inline-block';
+
+            setTimeout(() => {
+                if (username === 'admin' && password === 'admin123') {
+                    document.getElementById('loginPage').style.display = 'none';
+                    document.getElementById('mainPage').style.display = 'block';
+                    
+                    setTimeout(() => {
+                        document.getElementById('mainPage').classList.add('show');
+                    }, 100);
+
+                    // Set tanggal
+                    const now = new Date();
+                    const dateString = now.toLocaleDateString('id-ID', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    document.getElementById('tanggal').value = dateString;
+
+                    loadDataFromStorage();
+                    showNotification('Login berhasil! Selamat datang 👋');
+
+                } else {
+                    showNotification('Username atau password salah!', 'error');
+                }
+
+                // Reset button
+                btn.disabled = false;
+                loginText.style.display = 'inline';
+                spinner.style.display = 'none';
+            }, 1200);
+        }
+
+        // Data
         let barangData = JSON.parse(localStorage.getItem('barangKOWL')) || [];
 
         function tambahData() {
-            const jumlah = document.getElementById('jumlah').value;
-            const lokasi = document.getElementById('lokasi').value;
+            const jumlah = document.getElementById('jumlah').value.trim();
+            const lokasi = document.getElementById('lokasi').value.trim();
             const tanggal = document.getElementById('tanggal').value;
 
             if (!jumlah || !lokasi) {
-                alert('⚠️ Harap isi semua kolom!');
+                showNotification('Harap isi semua kolom!', 'error');
                 return;
             }
 
@@ -343,12 +609,15 @@
 
             tampilkanData();
             resetForm();
+            showNotification('Data berhasil ditambahkan! ✅');
 
-            // Animasi tambah data
-            const rows = document.querySelectorAll('#dataBody tr');
-            if (rows.length > 0) {
-                rows[rows.length - 1].classList.add('fade-in-up');
-            }
+            // Animasi baris baru
+            setTimeout(() => {
+                const rows = document.querySelectorAll('#dataBody tr');
+                if (rows.length > 0) {
+                    rows[rows.length - 1].classList.add('animate-fade-in-up');
+                }
+            }, 100);
         }
 
         function tampilkanData() {
@@ -356,7 +625,14 @@
             tbody.innerHTML = '';
 
             if (barangData.length === 0) {
-                tbody.innerHTML = `<tr class="empty-row"><td colspan="5">Belum ada data</td></tr>`;
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <div>Belum ada data tersimpan</div>
+                        </td>
+                    </tr>
+                `;
                 return;
             }
 
@@ -365,7 +641,7 @@
                 tr.innerHTML = `
                     <td>${index + 1}</td>
                     <td>${item.nama}</td>
-                    <td>${item.jumlah}</td>
+                    <td><strong>${item.jumlah}</strong></td>
                     <td>${item.lokasi}</td>
                     <td>${item.tanggal}</td>
                 `;
@@ -377,7 +653,15 @@
             document.getElementById('jumlah').value = '';
             document.getElementById('lokasi').value = '';
             const now = new Date();
-            document.getElementById('tanggal').value = now.toLocaleDateString('id-ID') + ' ' + now.toLocaleTimeString('id-ID');
+            const dateString = now.toLocaleDateString('id-ID', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById('tanggal').value = dateString;
         }
 
         function loadDataFromStorage() {
@@ -386,7 +670,7 @@
 
         function downloadData() {
             if (barangData.length === 0) {
-                alert('❌ Tidak ada data untuk diunduh!');
+                showNotification('Tidak ada data untuk diunduh!', 'error');
                 return;
             }
 
@@ -400,13 +684,21 @@
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "data_barang_kowl_k81.csv");
+            link.setAttribute("download", "data_barang_kowl_k81_" + new Date().toISOString().slice(0,10) + ".csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+            showNotification('Data berhasil diunduh! 💾');
         }
 
-        // Panggil saat halaman dimuat
+        // Enter key to login
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                login();
+            }
+        });
+
+        // Load data saat halaman utama muncul
         tampilkanData();
     </script>
 
