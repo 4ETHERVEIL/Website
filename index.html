@@ -610,6 +610,9 @@
                 <button class="btn btn-download" onclick="downloadData()">
                     <i class="fas fa-download"></i> Download Data (CSV)
                 </button>
+                <button class="btn btn-download" onclick="downloadTableAsImage()">
+                    <i class="fas fa-image"></i> Download Gambar Tabel
+                </button>
             </div>
 
             <h3 style="margin: 2rem 0 1rem; color: var(--dark); font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
@@ -640,6 +643,9 @@
             </div>
         </div>
     </div>
+
+    <!-- LIBRARY UNTUK CAPTURE GAMBAR -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <script>
         // ========== DARK MODE ==========
@@ -701,12 +707,10 @@
             const encodedUserInput = btoa(usernameInput);
             const encodedPassInput = btoa(passwordInput);
 
-            // ✅ GANTI INI DENGAN BASE64 DARI USERNAME & PASSWORD YANG KAMU INGINKAN
+            // ✅ GANTI INI SESUAI KEBUTUHAN
             // Contoh: 
-            //   Username asli: "NYARI APAAN " → Base64: "HAYO NGAPAIN"
-            //   Password asli: "MAU CARI PW NY YA " → Base64: "GA ADA PW NYA DISINI"
-            const VALID_USER_ENCODED = "U0pN";     // ERROR CODE
-            const VALID_PASS_ENCODED = "U0pN";  // ERROR CODE 
+            const VALID_USER_ENCODED = "U0pN";     // 
+            const VALID_PASS_ENCODED = "U0pN";  // 
 
             // Simulasi loading
             btn.disabled = true;
@@ -851,6 +855,7 @@
             tampilkanData();
         }
 
+        // ========== DOWNLOAD CSV ==========
         function downloadData() {
             if (barangData.length === 0) {
                 showNotification('Tidak ada data untuk diunduh!', 'error');
@@ -872,6 +877,34 @@
             link.click();
             document.body.removeChild(link);
             showNotification('Data berhasil diunduh! 💾');
+        }
+
+        // ========== DOWNLOAD TABEL SEBAGAI GAMBAR ==========
+        function downloadTableAsImage() {
+            const table = document.getElementById('dataTable');
+            if (!table || barangData.length === 0) {
+                showNotification('Tidak ada data untuk diunduh sebagai gambar!', 'error');
+                return;
+            }
+
+            showNotification('Mengambil screenshot tabel...', 'success');
+
+            html2canvas(table, {
+                backgroundColor: null,
+                scale: 2,
+                useCORS: true,
+                allowTaint: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'tabel_barang_' + new Date().toISOString().slice(0,10) + '.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                showNotification('Gambar tabel berhasil diunduh! 🖼️', 'success');
+            }).catch(err => {
+                console.error('Gagal capture tabel:', err);
+                showNotification('Gagal mengambil gambar tabel!', 'error');
+            });
         }
 
         // Enter key to login
