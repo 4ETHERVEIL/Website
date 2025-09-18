@@ -326,16 +326,24 @@
             top: 0;
         }
 
+        /* ✅ PERBAIKAN UTAMA: WARNA TEKS DI BARIS DATA */
         tbody tr {
             transition: var(--transition);
+            color: var(--dark); /* Mode terang: teks gelap */
+        }
+
+        .dark-theme tbody tr {
+            color: #e0e0ff; /* Mode gelap: teks terang */
         }
 
         tbody tr:hover {
             background: #edf2ff;
+            color: var(--dark);
         }
 
         .dark-theme tbody tr:hover {
             background: #1f1f4f;
+            color: #f4f4f9;
         }
 
         tbody tr:nth-child(even) {
@@ -708,7 +716,6 @@
             const encodedPassInput = btoa(passwordInput);
 
             // ✅ GANTI INI SESUAI KEBUTUHAN
-            // Contoh: 
             const VALID_USER_ENCODED = "U0pN";     // 
             const VALID_PASS_ENCODED = "U0pN";  // 
 
