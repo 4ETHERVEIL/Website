@@ -760,7 +760,7 @@
                 </div>
                 <div class="form-control">
                     <label><i class="fas fa-calendar"></i> Tanggal Barang</label>
-                    <input type="text" id="editTanggal" readonly>
+                    <input type="text" id="editTanggal">
                 </div>
             </div>
             <div class="modal-footer">
@@ -873,20 +873,8 @@
         }
 
         // ========== MANAJEMEN DATA ==========
-        let barangData = [];
-
-        function loadDataFromStorage() {
-            const stored = JSON.parse(localStorage.getItem('barangKOWL')) || [];
-            // Tambahkan timestamp ke data lama jika belum ada
-            barangData = stored.map(item => {
-                if (item.timestamp === undefined) {
-                    // fallback: gunakan waktu sekarang
-                    return { ...item, timestamp: Date.now() };
-                }
-                return item;
-            });
-            tampilkanData();
-        }
+        let barangData = JSON.parse(localStorage.getItem('barangKOWL')) || [];
+        const urutanBarang = ["KOWL", "K81", "LEVER 4xV"];
 
         function tambahData() {
             const nama = document.getElementById('namaBarang').value;
@@ -907,8 +895,7 @@
                 nama: nama,
                 jumlah: parseInt(jumlah),
                 gudang: gudang || '-',
-                tanggal: tanggal,
-                timestamp: Date.now() // simpan waktu input sebagai angka
+                tanggal: tanggal
             };
 
             barangData.push(newItem);
@@ -948,15 +935,11 @@
                 return;
             }
 
-            // Pertahankan timestamp asli agar urutan tidak berubah
-            const oldTimestamp = barangData[index]?.timestamp || Date.now();
-
             barangData[index] = {
                 nama: nama,
                 jumlah: parseInt(jumlah),
                 gudang: gudang || '-',
-                tanggal: tanggal,
-                timestamp: oldTimestamp
+                tanggal: tanggal
             };
 
             simpanDanTampilkan();
@@ -969,8 +952,9 @@
         }
 
         function simpanDanTampilkan() {
-            // Urutkan berdasarkan timestamp: terlama → terbaru
-            barangData.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+            barangData.sort((a, b) => {
+                return urutanBarang.indexOf(a.nama) - urutanBarang.indexOf(b.nama);
+            });
 
             localStorage.setItem('barangKOWL', JSON.stringify(barangData));
             tampilkanData();
@@ -1027,6 +1011,10 @@
                 minute: '2-digit'
             });
             document.getElementById('tanggal').value = dateString;
+        }
+
+        function loadDataFromStorage() {
+            tampilkanData();
         }
 
         // ========== DOWNLOAD CSV ==========
@@ -1095,8 +1083,8 @@
             }
         });
 
-        // Load data saat awal (sebelum login, tapi tidak ditampilkan)
-        // Data akan ditampilkan setelah login via loadDataFromStorage()
+        // Load data
+        tampilkanData();
     </script>
 
 </body>
