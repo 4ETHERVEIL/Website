@@ -760,7 +760,7 @@
                 </div>
                 <div class="form-control">
                     <label><i class="fas fa-calendar"></i> Tanggal Barang</label>
-                    <input type="text" id="editTanggal">
+                    <input type="text" id="editTanggal" readonly>
                 </div>
             </div>
             <div class="modal-footer">
@@ -774,6 +774,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <script>
+        // ========== BANTUAN TANGGAL ==========
+        function getTodayDateForStorage() {
+            const now = new Date();
+            return now.toISOString().split('T')[0]; // "2025-11-05"
+        }
+
+        function formatDisplayDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('id-ID', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
         // ========== DARK MODE ==========
         document.addEventListener('DOMContentLoaded', function() {
             const isDark = localStorage.getItem('darkMode') === 'enabled';
@@ -848,16 +864,8 @@
                         document.getElementById('mainPage').classList.add('show');
                     }, 100);
 
-                    const now = new Date();
-                    const dateString = now.toLocaleDateString('id-ID', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                    document.getElementById('tanggal').value = dateString;
+                    // Setel tanggal input ke hari ini (tanpa jam)
+                    document.getElementById('tanggal').value = formatDisplayDate(getTodayDateForStorage());
 
                     loadDataFromStorage();
                     showNotification('Login berhasil! Selamat mengelola barang 📦');
@@ -874,13 +882,11 @@
 
         // ========== MANAJEMEN DATA ==========
         let barangData = JSON.parse(localStorage.getItem('barangKOWL')) || [];
-        const urutanBarang = ["KOWL", "K81", "LEVER 4xV"];
 
         function tambahData() {
             const nama = document.getElementById('namaBarang').value;
             const jumlah = document.getElementById('jumlah').value.trim();
             const gudang = document.getElementById('gudang').value.trim();
-            const tanggal = document.getElementById('tanggal').value;
 
             if (!nama) {
                 showNotification('Pilih nama barang!', 'warning');
@@ -895,7 +901,7 @@
                 nama: nama,
                 jumlah: parseInt(jumlah),
                 gudang: gudang || '-',
-                tanggal: tanggal
+                tanggal: getTodayDateForStorage() // Simpan tanggal ISO
             };
 
             barangData.push(newItem);
@@ -918,7 +924,7 @@
             document.getElementById('editNamaBarang').value = item.nama;
             document.getElementById('editJumlah').value = item.jumlah;
             document.getElementById('editGudang').value = item.gudang;
-            document.getElementById('editTanggal').value = item.tanggal;
+            document.getElementById('editTanggal').value = formatDisplayDate(item.tanggal);
 
             document.getElementById('editModal').classList.add('show');
         }
@@ -928,7 +934,6 @@
             const nama = document.getElementById('editNamaBarang').value;
             const jumlah = document.getElementById('editJumlah').value.trim();
             const gudang = document.getElementById('editGudang').value.trim();
-            const tanggal = document.getElementById('editTanggal').value.trim();
 
             if (!jumlah) {
                 showNotification('Jumlah wajib diisi!', 'warning');
@@ -939,7 +944,7 @@
                 nama: nama,
                 jumlah: parseInt(jumlah),
                 gudang: gudang || '-',
-                tanggal: tanggal
+                tanggal: barangData[index].tanggal // Pertahankan tanggal asli
             };
 
             simpanDanTampilkan();
@@ -952,8 +957,9 @@
         }
 
         function simpanDanTampilkan() {
+            // Urutkan berdasarkan tanggal: terbaru di atas
             barangData.sort((a, b) => {
-                return urutanBarang.indexOf(a.nama) - urutanBarang.indexOf(b.nama);
+                return new Date(b.tanggal) - new Date(a.tanggal);
             });
 
             localStorage.setItem('barangKOWL', JSON.stringify(barangData));
@@ -983,7 +989,7 @@
                     <td><strong>${item.nama}</strong></td>
                     <td>${item.jumlah}</td>
                     <td>${item.gudang}</td>
-                    <td>${item.tanggal}</td>
+                    <td>${formatDisplayDate(item.tanggal)}</td>
                     <td>
                         <button class="btn-action btn-edit" onclick="editData(${index})" title="Edit data">
                             <i class="fas fa-edit"></i>
@@ -1001,16 +1007,7 @@
             document.getElementById('namaBarang').value = '';
             document.getElementById('jumlah').value = '';
             document.getElementById('gudang').value = '';
-            const now = new Date();
-            const dateString = now.toLocaleDateString('id-ID', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-            document.getElementById('tanggal').value = dateString;
+            document.getElementById('tanggal').value = formatDisplayDate(getTodayDateForStorage());
         }
 
         function loadDataFromStorage() {
