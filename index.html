@@ -632,6 +632,14 @@
         .dark-theme .notification.warning {
             color: #000;
         }
+
+        /* CUSTOM: Tombol tambah item */
+        #namaBarang + .btn {
+            padding: 0.7rem 1rem;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            min-width: 40px;
+        }
     </style>
 </head>
 <body>
@@ -674,12 +682,12 @@
             <div class="form-grid">
                 <div class="form-control">
                     <label><i class="fas fa-tag"></i> Nama Barang</label>
-                    <select id="namaBarang">
-                        <option value="">-- Pilih Barang --</option>
-                        <option value="KOWL">KOWL</option>
-                        <option value="K81">K81</option>
-                        <option value="LEVER 4xV">LEVER 4xV</option>
-                    </select>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <select id="namaBarang" style="flex: 1;"></select>
+                        <button class="btn" onclick="bukaModalTambahItem()">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="form-control">
                     <label><i class="fas fa-sort-numeric-up"></i> Jumlah Barang</label>
@@ -745,9 +753,7 @@
                 <div class="form-control">
                     <label><i class="fas fa-tag"></i> Nama Barang</label>
                     <select id="editNamaBarang">
-                        <option value="KOWL">KOWL</option>
-                        <option value="K81">K81</option>
-                        <option value="LEVER 4xV">LEVER 4xV</option>
+                        <!-- Diisi via JS -->
                     </select>
                 </div>
                 <div class="form-control">
@@ -770,10 +776,35 @@
         </div>
     </div>
 
+    <!-- MODAL TAMBAH ITEM -->
+    <div class="modal-overlay" id="tambahItemModal">
+        <div class="modal">
+            <h3><i class="fas fa-plus-circle"></i> Tambah Nama Barang Baru</h3>
+            <div class="modal-form">
+                <div class="form-control">
+                    <label><i class="fas fa-tag"></i> Nama Barang Baru</label>
+                    <input type="text" id="inputNamaBarangBaru" placeholder="Contoh: SENSOR X2, K95" maxlength="50" style="text-transform: uppercase;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="simpanItemBaru()">
+                    <i class="fas fa-save"></i> Simpan
+                </button>
+                <button class="btn" style="background: #6c757d;" onclick="batalTambahItem()">❌ Batal</button>
+            </div>
+        </div>
+    </div>
+
     <!-- LIBRARY UNTUK CAPTURE GAMBAR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <script>
+        // ========== GLOBAL DATA ==========
+        let barangData = [];
+        let daftarItem = [];
+        const itemDefault = ["KOWL", "K81", "LEVER 4xV"];
+        const urutanBarang = [...itemDefault]; // akan diperbarui saat load
+
         // ========== DARK MODE ==========
         document.addEventListener('DOMContentLoaded', function() {
             const isDark = localStorage.getItem('darkMode') === 'enabled';
@@ -781,6 +812,11 @@
                 document.body.classList.add('dark-theme');
                 document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-sun"></i>';
             }
+
+            // Muat daftar item & data
+            muatDaftarItem();
+            muatDropdownBarang();
+            loadDataFromStorage();
 
             setTimeout(() => {
                 document.getElementById('loginPage').classList.add('show');
@@ -859,9 +895,7 @@
                     });
                     document.getElementById('tanggal').value = dateString;
 
-                    loadDataFromStorage();
                     showNotification('Login berhasil! Selamat mengelola barang 📦');
-
                 } else {
                     showNotification('Username atau password salah!', 'error');
                 }
@@ -872,10 +906,79 @@
             }, 1200);
         }
 
-        // ========== MANAJEMEN DATA ==========
-        let barangData = JSON.parse(localStorage.getItem('barangKOWL')) || [];
-        const urutanBarang = ["KOWL", "K81", "LEVER 4xV"];
+        // ======== MANAJEMEN ITEM BARU ========
+        function muatDaftarItem() {
+            daftarItem = JSON.parse(localStorage.getItem('daftarItem')) || [...itemDefault];
+        }
 
+        function simpanDaftarItem() {
+            localStorage.setItem('daftarItem', JSON.stringify(daftarItem));
+        }
+
+        function muatDropdownBarang() {
+            const select = document.getElementById('namaBarang');
+            const selectEdit = document.getElementById('editNamaBarang');
+            
+            // Pisahkan item default dan custom
+            const customItems = daftarItem.filter(item => !itemDefault.includes(item));
+            customItems.sort(); // urutkan alfabetis
+
+            const semuaItem = [...itemDefault, ...customItems];
+
+            // Update dropdown utama
+            select.innerHTML = '<option value="">-- Pilih Barang --</option>';
+            semuaItem.forEach(item => {
+                const opt = document.createElement('option');
+                opt.value = item;
+                opt.textContent = item;
+                select.appendChild(opt);
+            });
+
+            // Update dropdown di modal edit
+            selectEdit.innerHTML = '';
+            semuaItem.forEach(item => {
+                const opt = document.createElement('option');
+                opt.value = item;
+                opt.textContent = item;
+                selectEdit.appendChild(opt);
+            });
+        }
+
+        function bukaModalTambahItem() {
+            document.getElementById('inputNamaBarangBaru').value = '';
+            document.getElementById('tambahItemModal').classList.add('show');
+        }
+
+        function batalTambahItem() {
+            document.getElementById('tambahItemModal').classList.remove('show');
+        }
+
+        function simpanItemBaru() {
+            let nama = document.getElementById('inputNamaBarangBaru').value.trim();
+            
+            if (!nama) {
+                showNotification('Nama barang tidak boleh kosong!', 'error');
+                return;
+            }
+
+            // Normalisasi: uppercase & hapus spasi berlebih
+            nama = nama.toUpperCase().replace(/\s+/g, ' ');
+
+            // Cek duplikat (case-insensitive)
+            const lowerDaftar = daftarItem.map(x => x.toUpperCase());
+            if (lowerDaftar.includes(nama.toUpperCase())) {
+                showNotification('Nama barang sudah ada!', 'warning');
+                return;
+            }
+
+            daftarItem.push(nama);
+            simpanDaftarItem();
+            muatDropdownBarang();
+            batalTambahItem();
+            showNotification(`Item "${nama}" berhasil ditambahkan!`, 'success');
+        }
+
+        // ========== MANAJEMEN DATA ==========
         function tambahData() {
             const nama = document.getElementById('namaBarang').value;
             const jumlah = document.getElementById('jumlah').value.trim();
@@ -952,8 +1055,14 @@
         }
 
         function simpanDanTampilkan() {
+            // Urutkan: default dulu, lalu alfabetis
             barangData.sort((a, b) => {
-                return urutanBarang.indexOf(a.nama) - urutanBarang.indexOf(b.nama);
+                const idxA = itemDefault.includes(a.nama) ? itemDefault.indexOf(a.nama) : 999 + a.nama;
+                const idxB = itemDefault.includes(b.nama) ? itemDefault.indexOf(b.nama) : 999 + b.nama;
+                if (typeof idxA === 'number' && typeof idxB === 'number') {
+                    return idxA - idxB;
+                }
+                return a.nama.localeCompare(b.nama);
             });
 
             localStorage.setItem('barangKOWL', JSON.stringify(barangData));
@@ -1014,6 +1123,7 @@
         }
 
         function loadDataFromStorage() {
+            barangData = JSON.parse(localStorage.getItem('barangKOWL')) || [];
             tampilkanData();
         }
 
@@ -1069,10 +1179,16 @@
             });
         }
 
-        // Close modal if click outside
+        // Close modal jika klik di luar
         document.getElementById('editModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 batalEdit();
+            }
+        });
+
+        document.getElementById('tambahItemModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                batalTambahItem();
             }
         });
 
@@ -1083,8 +1199,12 @@
             }
         });
 
-        // Load data
-        tampilkanData();
+        // Enter di modal tambah item → simpan
+        document.getElementById('inputNamaBarangBaru').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                simpanItemBaru();
+            }
+        });
     </script>
 
 </body>
