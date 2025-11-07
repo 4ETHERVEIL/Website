@@ -510,131 +510,12 @@
             transform: rotate(15deg);
         }
 
-        /* ANIMATIONS */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-fade-in-up {
-            animation: fadeInUp 0.6s ease forwards;
-        }
-
-        .floating {
-            animation: floating 3s ease-in-out infinite;
-        }
-
-        @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            .btn-group {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .header h1 {
-                font-size: 1.5rem;
-            }
-            #loginPage h2 {
-                font-size: 1.8rem;
-            }
-            .content {
-                padding: 1.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            #loginPage {
-                padding: 2rem 1rem;
-            }
-            .header {
-                padding: 1.5rem 1rem;
-            }
-            .header h1 {
-                font-size: 1.3rem;
-            }
-            .dark-mode-toggle {
-                width: 44px;
-                height: 44px;
-                right: 15px;
-                top: 15px;
-            }
-        }
-
-        /* LOADING SPINNER */
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 8px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* NOTIFICATION */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            border-radius: 50px;
-            color: white;
-            font-weight: 500;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            transform: translateX(150%);
-            transition: transform 0.4s ease-out;
-            z-index: 1000;
+        /* CUSTOM: Tombol tambah item & tanggal */
+        .input-with-btn {
             display: flex;
-            align-items: center;
             gap: 0.5rem;
         }
-
-        .dark-theme .notification {
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.success {
-            background: var(--success);
-        }
-
-        .notification.error {
-            background: var(--danger);
-        }
-
-        .notification.warning {
-            background: var(--warning);
-            color: #000;
-        }
-
-        .dark-theme .notification.warning {
-            color: #000;
-        }
-
-        /* CUSTOM: Tombol tambah item */
-        #namaBarang + .btn {
+        .input-with-btn .btn {
             padding: 0.7rem 1rem;
             font-size: 0.9rem;
             border-radius: 8px;
@@ -682,9 +563,9 @@
             <div class="form-grid">
                 <div class="form-control">
                     <label><i class="fas fa-tag"></i> Nama Barang</label>
-                    <div style="display: flex; gap: 0.5rem;">
+                    <div class="input-with-btn">
                         <select id="namaBarang" style="flex: 1;"></select>
-                        <button class="btn" onclick="bukaModalTambahItem()">
+                        <button class="btn" onclick="bukaModalTambahItem()" title="Tambah item baru">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
@@ -698,8 +579,13 @@
                     <input type="text" id="gudang" placeholder="Gudang A / Gudang Utama">
                 </div>
                 <div class="form-control">
-                    <label><i class="fas fa-calendar"></i> Tanggal Input</label>
-                    <input type="text" id="tanggal" readonly>
+                    <label><i class="fas fa-calendar"></i> Tanggal Barang</label>
+                    <div class="input-with-btn">
+                        <input type="text" id="tanggal" placeholder="Contoh: Senin, 7 November 2025 pukul 14:30" style="flex: 1;">
+                        <button class="btn" onclick="isiTanggalSekarang()" title="Isi dengan waktu saat ini">
+                            <i class="fas fa-clock"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -752,9 +638,7 @@
                 <input type="hidden" id="editIndex">
                 <div class="form-control">
                     <label><i class="fas fa-tag"></i> Nama Barang</label>
-                    <select id="editNamaBarang">
-                        <!-- Diisi via JS -->
-                    </select>
+                    <select id="editNamaBarang"></select>
                 </div>
                 <div class="form-control">
                     <label><i class="fas fa-sort-numeric-up"></i> Jumlah Barang</label>
@@ -766,7 +650,7 @@
                 </div>
                 <div class="form-control">
                     <label><i class="fas fa-calendar"></i> Tanggal Barang</label>
-                    <input type="text" id="editTanggal">
+                    <input type="text" id="editTanggal" placeholder="Contoh: Selasa, 8 November 2025 pukul 10:00">
                 </div>
             </div>
             <div class="modal-footer">
@@ -803,7 +687,6 @@
         let barangData = [];
         let daftarItem = [];
         const itemDefault = ["KOWL", "K81", "LEVER 4xV"];
-        const urutanBarang = [...itemDefault]; // akan diperbarui saat load
 
         // ========== DARK MODE ==========
         document.addEventListener('DOMContentLoaded', function() {
@@ -884,17 +767,6 @@
                         document.getElementById('mainPage').classList.add('show');
                     }, 100);
 
-                    const now = new Date();
-                    const dateString = now.toLocaleDateString('id-ID', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                    document.getElementById('tanggal').value = dateString;
-
                     showNotification('Login berhasil! Selamat mengelola barang 📦');
                 } else {
                     showNotification('Username atau password salah!', 'error');
@@ -919,13 +791,11 @@
             const select = document.getElementById('namaBarang');
             const selectEdit = document.getElementById('editNamaBarang');
             
-            // Pisahkan item default dan custom
             const customItems = daftarItem.filter(item => !itemDefault.includes(item));
-            customItems.sort(); // urutkan alfabetis
+            customItems.sort();
 
             const semuaItem = [...itemDefault, ...customItems];
 
-            // Update dropdown utama
             select.innerHTML = '<option value="">-- Pilih Barang --</option>';
             semuaItem.forEach(item => {
                 const opt = document.createElement('option');
@@ -934,7 +804,6 @@
                 select.appendChild(opt);
             });
 
-            // Update dropdown di modal edit
             selectEdit.innerHTML = '';
             semuaItem.forEach(item => {
                 const opt = document.createElement('option');
@@ -961,10 +830,8 @@
                 return;
             }
 
-            // Normalisasi: uppercase & hapus spasi berlebih
             nama = nama.toUpperCase().replace(/\s+/g, ' ');
 
-            // Cek duplikat (case-insensitive)
             const lowerDaftar = daftarItem.map(x => x.toUpperCase());
             if (lowerDaftar.includes(nama.toUpperCase())) {
                 showNotification('Nama barang sudah ada!', 'warning');
@@ -978,12 +845,28 @@
             showNotification(`Item "${nama}" berhasil ditambahkan!`, 'success');
         }
 
+        // ======== TANGGAL MANUAL ========
+        function isiTanggalSekarang() {
+            const now = new Date();
+            let dateString = now.toLocaleDateString('id-ID', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            // Pastikan format "pukul" muncul (beberapa browser pakai "at")
+            dateString = dateString.replace(/\bat\b/gi, 'pukul');
+            document.getElementById('tanggal').value = dateString;
+        }
+
         // ========== MANAJEMEN DATA ==========
         function tambahData() {
             const nama = document.getElementById('namaBarang').value;
             const jumlah = document.getElementById('jumlah').value.trim();
             const gudang = document.getElementById('gudang').value.trim();
-            const tanggal = document.getElementById('tanggal').value;
+            const tanggal = document.getElementById('tanggal').value.trim();
 
             if (!nama) {
                 showNotification('Pilih nama barang!', 'warning');
@@ -998,7 +881,7 @@
                 nama: nama,
                 jumlah: parseInt(jumlah),
                 gudang: gudang || '-',
-                tanggal: tanggal
+                tanggal: tanggal || '-'  // boleh kosong → simpan '-'
             };
 
             barangData.push(newItem);
@@ -1042,7 +925,7 @@
                 nama: nama,
                 jumlah: parseInt(jumlah),
                 gudang: gudang || '-',
-                tanggal: tanggal
+                tanggal: tanggal || '-'
             };
 
             simpanDanTampilkan();
@@ -1054,14 +937,21 @@
             document.getElementById('editModal').classList.remove('show');
         }
 
+        function resetForm() {
+            document.getElementById('namaBarang').value = '';
+            document.getElementById('jumlah').value = '';
+            document.getElementById('gudang').value = '';
+            document.getElementById('tanggal').value = ''; // KOSONG — tidak otomatis
+        }
+
         function simpanDanTampilkan() {
-            // Urutkan: default dulu, lalu alfabetis
+            // Urutkan: KOWL → K81 → LEVER 4xV → item baru (A-Z)
             barangData.sort((a, b) => {
-                const idxA = itemDefault.includes(a.nama) ? itemDefault.indexOf(a.nama) : 999 + a.nama;
-                const idxB = itemDefault.includes(b.nama) ? itemDefault.indexOf(b.nama) : 999 + b.nama;
-                if (typeof idxA === 'number' && typeof idxB === 'number') {
-                    return idxA - idxB;
-                }
+                const idxA = itemDefault.indexOf(a.nama);
+                const idxB = itemDefault.indexOf(b.nama);
+                if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+                if (idxA !== -1) return -1;
+                if (idxB !== -1) return 1;
                 return a.nama.localeCompare(b.nama);
             });
 
@@ -1104,22 +994,6 @@
                 `;
                 tbody.appendChild(tr);
             });
-        }
-
-        function resetForm() {
-            document.getElementById('namaBarang').value = '';
-            document.getElementById('jumlah').value = '';
-            document.getElementById('gudang').value = '';
-            const now = new Date();
-            const dateString = now.toLocaleDateString('id-ID', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-            document.getElementById('tanggal').value = dateString;
         }
 
         function loadDataFromStorage() {
@@ -1192,19 +1066,14 @@
             }
         });
 
-        // Enter key to login
+        // Enter key to login & modal
         document.getElementById('password').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                login();
-            }
+            if (e.key === 'Enter') login();
+        });
+        document.getElementById('inputNamaBarangBaru').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') simpanItemBaru();
         });
 
-        // Enter di modal tambah item → simpan
-        document.getElementById('inputNamaBarangBaru').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                simpanItemBaru();
-            }
-        });
     </script>
 
 </body>
