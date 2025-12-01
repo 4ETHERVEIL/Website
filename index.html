@@ -3,9 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Inventaris Barang — PNG dengan Header Kolom</title>
+  <title>Inventaris Barang</title>
+  
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  
+  <!-- html2canvas -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <script>
+    // 🔑 Firebase Config — sudah diisi sesuai milik Anda
+    const firebaseConfig = {
+      apiKey: "AIzaSyB0q9aSR1-MZkbJ0woYiqQI6il6oeoEWUo",
+      authDomain: "inventory-2ab17.firebaseapp.com",
+      projectId: "inventory-2ab17",
+      storageBucket: "inventory-2ab17.firebasestorage.app",
+      messagingSenderId: "1085281663088",
+      appId: "1:1085281663088:web:a65f8c29b07a224ccf9cb5",
+      measurementId: "G-0PKKSLJ6TB"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const googleProvider = new firebase.auth.GoogleAuthProvider();
+    googleProvider.setCustomParameters({ prompt: 'select_account' });
+  </script>
+
   <style>
     :root {
       --primary: #4361ee;
@@ -42,8 +72,8 @@
       margin: 0 auto;
     }
 
-    /* ===== LOGIN ===== */
-    #loginPage {
+    /* ===== AUTH PAGES ===== */
+    #authPage, #forgotPasswordPage, #resetPasswordPage {
       background: white;
       padding: 2.5rem;
       border-radius: var(--radius);
@@ -79,8 +109,11 @@
       color: var(--dark);
     }
 
+    input[type="email"],
+    input[type="password"],
     input[type="text"],
-    input[type="password"] {
+    input[type="number"],
+    input[type="date"] {
       width: 100%;
       padding: 0.75rem 1rem;
       border: 1px solid var(--border);
@@ -107,10 +140,28 @@
       font-weight: 600;
       cursor: pointer;
       transition: var(--transition);
+      margin-top: 0.5rem;
     }
 
     .btn:hover {
       background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+    }
+
+    .btn-google {
+      background: #dd4b39;
+    }
+
+    .btn-cancel {
+      background: #e9ecef;
+      color: var(--dark);
+    }
+
+    .btn-cancel:hover {
+      background: #dee2e6;
     }
 
     /* ===== MAIN APP ===== */
@@ -149,7 +200,8 @@
       color: var(--danger);
     }
 
-    .fab {
+    /* ===== FAB BUTTON ===== */
+    #fabButton {
       position: fixed;
       bottom: 20px;
       right: 20px;
@@ -158,7 +210,7 @@
       background: var(--primary);
       color: white;
       border-radius: 50%;
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       font-size: 1.5rem;
@@ -168,12 +220,16 @@
       transition: var(--transition);
     }
 
-    .fab:hover {
+    #fabButton.show {
+      display: flex !important;
+    }
+
+    #fabButton:hover {
       transform: scale(1.1);
       background: var(--primary-dark);
     }
 
-    /* ===== MODAL TAMBAH & EDIT ===== */
+    /* ===== MODAL ===== */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -187,7 +243,7 @@
       align-items: center;
     }
 
-    .modal {
+    .modal, .modal-confirm {
       background: white;
       border-radius: var(--radius);
       box-shadow: 0 8px 32px rgba(0,0,0,0.1);
@@ -197,6 +253,11 @@
       overflow-y: auto;
       padding: 1.5rem;
       animation: fadeIn 0.3s ease-out;
+    }
+
+    .modal-confirm {
+      max-width: 400px;
+      text-align: center;
     }
 
     @keyframes fadeIn {
@@ -233,107 +294,6 @@
 
     .form-control {
       margin-bottom: 1.2rem;
-    }
-
-    .form-control label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-      color: var(--dark);
-    }
-
-    input[type="number"],
-    input[type="date"],
-    input[type="text"] {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      font-size: 1rem;
-      transition: var(--transition);
-    }
-
-    input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-    }
-
-    .btn-modal {
-      width: 100%;
-      padding: 0.9rem;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: var(--radius);
-      font-size: 1.05rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .btn-modal:hover {
-      background: var(--primary-dark);
-    }
-
-    .btn-cancel {
-      background: #e9ecef;
-      color: var(--dark);
-    }
-
-    .btn-cancel:hover {
-      background: #dee2e6;
-    }
-
-    /* ===== MODAL KONFIRMASI HAPUS ===== */
-    .modal-confirm {
-      background: white;
-      border-radius: var(--radius);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-      width: 90%;
-      max-width: 400px;
-      padding: 1.5rem;
-      animation: fadeIn 0.3s ease-out;
-      text-align: center;
-    }
-
-    .modal-confirm .modal-title {
-      font-size: 1.25rem;
-      margin-bottom: 1rem;
-      color: var(--danger);
-    }
-
-    .modal-confirm p {
-      margin-bottom: 1.5rem;
-      font-size: 1.1rem;
-      line-height: 1.5;
-    }
-
-    .btn-confirm {
-      width: 48%;
-      padding: 0.75rem;
-      border-radius: var(--radius);
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .btn-confirm.yes {
-      background: var(--danger);
-      color: white;
-    }
-
-    .btn-confirm.yes:hover {
-      background: #dc3545;
-    }
-
-    .btn-confirm.no {
-      background: #e9ecef;
-      color: var(--dark);
-    }
-
-    .btn-confirm.no:hover {
-      background: #dee2e6;
     }
 
     /* ===== TABLE ===== */
@@ -425,33 +385,110 @@
     .notif-warning { background: var(--warning); color: var(--dark); }
 
     @media (max-width: 768px) {
-      .fab { bottom: 80px; }
+      #fabButton { bottom: 80px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- LOGIN PAGE -->
-  <div id="loginPage" class="container">
+  <!-- AUTH PAGE -->
+  <div id="authPage" class="container">
     <div class="logo">
       <i class="fas fa-box-open"></i>
     </div>
-    <h1>Masuk ke Inventaris Barang</h1>
+
+    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; justify-content: center;">
+      <button id="tabLogin" class="btn" onclick="showTab('login')">Masuk</button>
+      <button id="tabSignup" class="btn btn-secondary" onclick="showTab('signup')">Daftar</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="loginForm">
+      <h1>Masuk ke Inventaris</h1>
+      <div class="input-group">
+        <label for="emailLogin"><i class="fas fa-envelope"></i> Email</label>
+        <input type="email" id="emailLogin" placeholder="contoh@email.com" autocomplete="off">
+      </div>
+      <div class="input-group">
+        <label for="passwordLogin"><i class="fas fa-lock"></i> Password</label>
+        <input type="password" id="passwordLogin" placeholder="Minimal 6 karakter">
+      </div>
+      <button class="btn" onclick="loginWithEmail()">Login</button>
+      <button class="btn btn-secondary" onclick="forgotPassword()">
+        <i class="fas fa-key"></i> Lupa Password?
+      </button>
+      <button class="btn btn-google" onclick="signInWithGoogle()">
+        <i class="fab fa-google"></i> Lanjutkan dengan Google
+      </button>
+    </div>
+
+    <!-- SIGNUP FORM -->
+    <div id="signupForm" style="display: none;">
+      <h1>Buat Akun Baru</h1>
+      <div class="input-group">
+        <label for="emailSignup"><i class="fas fa-envelope"></i> Email</label>
+        <input type="email" id="emailSignup" placeholder="contoh@email.com" autocomplete="off">
+      </div>
+      <div class="input-group">
+        <label for="passwordSignup"><i class="fas fa-lock"></i> Password</label>
+        <input type="password" id="passwordSignup" placeholder="Minimal 6 karakter">
+      </div>
+      <div class="input-group">
+        <label for="confirmPassword"><i class="fas fa-lock"></i> Konfirmasi Password</label>
+        <input type="password" id="confirmPassword" placeholder="Ulangi password">
+      </div>
+      <button class="btn" onclick="signUpWithEmail()">Daftar Akun</button>
+    </div>
+  </div>
+
+  <!-- FORGOT PASSWORD PAGE -->
+  <div id="forgotPasswordPage" class="container" style="display: none;">
+    <div class="logo">
+      <i class="fas fa-key"></i>
+    </div>
+    <h1>Reset Password</h1>
+    <p style="margin-bottom: 1.5rem; color: var(--gray);">
+      Masukkan email akun Anda. Kami akan mengirim tautan reset.
+    </p>
     <div class="input-group">
-      <label for="username"><i class="fas fa-user"></i> Username</label>
-      <input type="text" id="username" placeholder="Masukkan username" autocomplete="off">
+      <label for="fpEmail"><i class="fas fa-envelope"></i> Email</label>
+      <input type="email" id="fpEmail" placeholder="contoh@email.com" autocomplete="off">
+    </div>
+    <button class="btn" onclick="sendPasswordResetLink()">Kirim Tautan Reset</button>
+    <button class="btn btn-secondary" onclick="showAuthPage()">
+      <i class="fas fa-arrow-left"></i> Kembali ke Login
+    </button>
+  </div>
+
+  <!-- RESET PASSWORD PAGE -->
+  <div id="resetPasswordPage" class="container" style="display: none;">
+    <div class="logo">
+      <i class="fas fa-lock-open"></i>
+    </div>
+    <h1>Atur Ulang Password</h1>
+    <p style="margin-bottom: 1.5rem; color: var(--gray);">
+      Masukkan password baru untuk akun Anda.
+    </p>
+    <div class="input-group">
+      <label for="newPassword"><i class="fas fa-lock"></i> Password Baru</label>
+      <input type="password" id="newPassword" placeholder="Minimal 6 karakter">
     </div>
     <div class="input-group">
-      <label for="password"><i class="fas fa-lock"></i> Password</label>
-      <input type="password" id="password" placeholder="Masukkan password">
+      <label for="confirmNewPassword"><i class="fas fa-lock"></i> Konfirmasi Password</label>
+      <input type="password" id="confirmNewPassword" placeholder="Ulangi password">
     </div>
-    <button class="btn" onclick="login()">Login</button>
+    <button class="btn" onclick="confirmPasswordReset()">Simpan Password Baru</button>
+    <button class="btn btn-secondary" onclick="showAuthPage()">
+      <i class="fas fa-arrow-left"></i> Kembali ke Login
+    </button>
   </div>
 
   <!-- MAIN APP -->
   <div id="app" class="container">
     <header>
-      <div class="title"><i class="fas fa-warehouse"></i> Manajemen Inventaris</div>
+      <div class="title" id="userDisplayName">
+        <i class="fas fa-warehouse"></i> Manajemen Inventaris
+      </div>
       <button class="logout-btn" title="Keluar" onclick="logout()">
         <i class="fas fa-sign-out-alt"></i>
       </button>
@@ -461,7 +498,7 @@
       <div style="padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
         <h2 style="font-size: 1.25rem; font-weight: 700;"><i class="fas fa-clipboard-list"></i> Daftar Barang (Terkini)</h2>
         <div style="display: flex; gap: 0.5rem;">
-          <button class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="downloadCSV()">
+          <button class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: var(--success);" onclick="downloadCSV()">
             <i class="fas fa-file-csv"></i> Unduh CSV
           </button>
           <button class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: #6c5ce7;" onclick="exportToPNG()">
@@ -480,14 +517,13 @@
           </tr>
         </thead>
         <tbody id="dataBody">
-          <!-- Diisi via JS -->
         </tbody>
       </table>
     </div>
   </div>
 
   <!-- FAB BUTTON -->
-  <div class="fab" onclick="openAddModal()" title="Tambah Data">
+  <div id="fabButton" class="fab" onclick="openAddModal()" title="Tambah Data">
     <i class="fas fa-plus"></i>
   </div>
 
@@ -513,8 +549,8 @@
         </div>
       </div>
       <div style="display: flex; gap: 0.5rem;">
-        <button class="btn-modal" onclick="tambahData()">Simpan</button>
-        <button class="btn-modal btn-cancel" onclick="closeModal('addModal')">Batal</button>
+        <button class="btn" onclick="tambahData()">Simpan</button>
+        <button class="btn btn-cancel" onclick="closeModal('addModal')">Batal</button>
       </div>
     </div>
   </div>
@@ -542,8 +578,8 @@
         </div>
       </div>
       <div style="display: flex; gap: 0.5rem;">
-        <button class="btn-modal" onclick="updateData()">Simpan Perubahan</button>
-        <button class="btn-modal btn-cancel" onclick="closeModal('editModal')">Batal</button>
+        <button class="btn" onclick="updateData()">Simpan Perubahan</button>
+        <button class="btn btn-cancel" onclick="closeModal('editModal')">Batal</button>
       </div>
     </div>
   </div>
@@ -554,54 +590,242 @@
       <div class="modal-title"><i class="fas fa-exclamation-triangle"></i> Konfirmasi Hapus</div>
       <p>Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.</p>
       <div style="display: flex; gap: 0.5rem; justify-content: center;">
-        <button class="btn-confirm no" onclick="closeModal('confirmModal')">Batal</button>
-        <button class="btn-confirm yes" onclick="confirmDelete()">Hapus</button>
+        <button class="btn btn-cancel" onclick="closeModal('confirmModal')">Batal</button>
+        <button class="btn" style="background: var(--danger);" onclick="confirmDelete()">Hapus</button>
       </div>
     </div>
   </div>
 
-  <!-- NOTIFICATION -->
   <div id="notification"></div>
 
   <script>
-    const CREDENTIALS = { user: "admin", pass: "rahasia123" };
-    let deleteIndex = null;
-    let barangData = JSON.parse(localStorage.getItem('barangData')) || [];
+    let currentUser = null;
+    let barangData = [];
 
-    document.addEventListener('DOMContentLoaded', () => {
-      if (localStorage.getItem('isLoggedIn') === 'true') {
-        showApp();
-        loadData();
-      }
-    });
+    function showTab(tab) {
+      document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+      document.getElementById('signupForm').style.display = tab === 'signup' ? 'block' : 'none';
+      document.getElementById('tabLogin').classList.toggle('btn-secondary', tab !== 'login');
+      document.getElementById('tabSignup').classList.toggle('btn-secondary', tab !== 'signup');
+      if (tab === 'login') document.getElementById('tabLogin').classList.remove('btn-secondary');
+      if (tab === 'signup') document.getElementById('tabSignup').classList.remove('btn-secondary');
+    }
 
-    function login() {
-      const u = document.getElementById('username').value.trim();
-      const p = document.getElementById('password').value;
-      if (u === CREDENTIALS.user && p === CREDENTIALS.pass) {
-        localStorage.setItem('isLoggedIn', 'true');
-        showNotification('Login berhasil! Selamat datang 👋', 'success');
-        setTimeout(showApp, 600);
-      } else {
-        showNotification('Username atau password salah ❌', 'error');
+    function showAuthPage() {
+      document.getElementById('authPage').style.display = 'block';
+      document.getElementById('forgotPasswordPage').style.display = 'none';
+      document.getElementById('resetPasswordPage').style.display = 'none';
+      document.getElementById('app').style.display = 'none';
+      document.getElementById('fabButton').classList.remove('show');
+    }
+
+    function forgotPassword() {
+      const email = document.getElementById('emailLogin').value.trim();
+      if (email) document.getElementById('fpEmail').value = email;
+      showAuthPage();
+      setTimeout(() => {
+        document.getElementById('authPage').style.display = 'none';
+        document.getElementById('forgotPasswordPage').style.display = 'block';
+      }, 300);
+    }
+
+    async function signUpWithEmail() {
+      const email = document.getElementById('emailSignup').value.trim();
+      const pass = document.getElementById('passwordSignup').value;
+      const pass2 = document.getElementById('confirmPassword').value;
+
+      if (!email || !pass) return showNotification('Email & password wajib diisi!', 'warning');
+      if (pass !== pass2) return showNotification('Password tidak cocok!', 'warning');
+      if (pass.length < 6) return showNotification('Password minimal 6 karakter!', 'warning');
+
+      try {
+        showNotification('Membuat akun...', 'warning');
+        const userCredential = await auth.createUserWithEmailAndPassword(email, pass);
+        showNotification('✅ Akun berhasil dibuat! Silakan login.', 'success');
+        showTab('login');
+      } catch (error) {
+        let msg = 'Gagal daftar: ';
+        if (error.code === 'auth/email-already-in-use') msg += 'Email sudah terdaftar.';
+        else if (error.code === 'auth/invalid-email') msg += 'Format email tidak valid.';
+        else if (error.code === 'auth/weak-password') msg += 'Password terlalu lemah.';
+        else msg += error.message;
+        showNotification(msg, 'error');
       }
     }
 
-    function logout() {
-      localStorage.removeItem('isLoggedIn');
-      document.getElementById('app').style.display = 'none';
-      document.getElementById('loginPage').style.display = 'block';
-      showNotification('Anda telah keluar ✅', 'success');
+    async function loginWithEmail() {
+      const email = document.getElementById('emailLogin').value.trim();
+      const pass = document.getElementById('passwordLogin').value;
+
+      if (!email || !pass) return showNotification('Email & password wajib diisi!', 'warning');
+
+      try {
+        showNotification('Login...', 'warning');
+        const userCredential = await auth.signInWithEmailAndPassword(email, pass);
+        currentUser = userCredential.user;
+
+        showNotification(`Selamat datang, ${currentUser.email} 👋`, 'success');
+        setTimeout(showApp, 600);
+        await loadUserData();
+      } catch (error) {
+        let msg = 'Gagal login: ';
+        if (error.code === 'auth/user-not-found') msg += 'Akun tidak ditemukan.';
+        else if (error.code === 'auth/wrong-password') msg += 'Password salah.';
+        else if (error.code === 'auth/invalid-email') msg += 'Format email tidak valid.';
+        else msg += error.message;
+        showNotification(msg, 'error');
+      }
+    }
+
+    async function signInWithGoogle() {
+      try {
+        showNotification('Menghubungkan ke Google...', 'warning');
+        const result = await auth.signInWithPopup(googleProvider);
+        currentUser = result.user;
+
+        const docRef = db.collection('users').doc(currentUser.uid);
+        const doc = await docRef.get();
+        if (!doc.exists) {
+          await docRef.set({ barangData: [] });
+        }
+
+        showNotification(`👋 Selamat datang, ${currentUser.displayName || currentUser.email}!`, 'success');
+        setTimeout(showApp, 600);
+        await loadUserData();
+      } catch (error) {
+        if (error.code === 'auth/popup-closed-by-user') {
+          showNotification('Login dibatalkan.', 'warning');
+        } else if (error.code === 'auth/popup-blocked') {
+          showNotification('Popup diblokir. Izinkan popup untuk login.', 'error');
+        } else {
+          showNotification('Gagal login dengan Google: ' + error.message, 'error');
+        }
+      }
+    }
+
+    async function logout() {
+      try {
+        await auth.signOut();
+        currentUser = null;
+        showNotification('Anda telah keluar ✅', 'success');
+        setTimeout(showAuthPage, 500);
+      } catch (error) {
+        showNotification('Gagal logout: ' + error.message, 'error');
+      }
+    }
+
+    async function sendPasswordResetLink() {
+      const email = document.getElementById('fpEmail').value.trim();
+      if (!email) return showNotification('Masukkan email Anda.', 'warning');
+
+      try {
+        await auth.sendPasswordResetEmail(email, {
+          url: window.location.origin + '/reset-password',
+          handleCodeInApp: true
+        });
+        showNotification(`✅ Tautan reset dikirim ke ${email}. Cek inbox Anda!`, 'success');
+        setTimeout(showAuthPage, 2000);
+      } catch (error) {
+        let msg = 'Gagal kirim: ';
+        if (error.code === 'auth/user-not-found') msg += 'Email tidak terdaftar.';
+        else if (error.code === 'auth/invalid-email') msg += 'Format email salah.';
+        else msg += error.message;
+        showNotification(msg, 'error');
+      }
+    }
+
+    async function confirmPasswordReset() {
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+      const oobCode = window.passwordResetCode;
+
+      if (!oobCode) {
+        return showNotification('Sesi reset telah kadaluarsa. Mohon ulangi.', 'error');
+      }
+
+      if (!newPassword || !confirmNewPassword) {
+        return showNotification('Semua kolom wajib diisi!', 'warning');
+      }
+
+      if (newPassword !== confirmNewPassword) {
+        return showNotification('Password tidak cocok!', 'warning');
+      }
+
+      if (newPassword.length < 6) {
+        return showNotification('Password minimal 6 karakter!', 'warning');
+      }
+
+      try {
+        await auth.confirmPasswordReset(oobCode, newPassword);
+        showNotification('✅ Password berhasil diubah! Silakan login.', 'success');
+        setTimeout(() => {
+          window.passwordResetCode = null;
+          showAuthPage();
+        }, 2000);
+      } catch (error) {
+        let msg = 'Gagal reset password: ';
+        if (error.code === 'auth/expired-action-code') {
+          msg += 'Tautan sudah kadaluarsa.';
+        } else if (error.code === 'auth/invalid-action-code') {
+          msg += 'Tautan tidak valid.';
+        } else if (error.code === 'auth/weak-password') {
+          msg += 'Password terlalu lemah.';
+        } else {
+          msg += error.message;
+        }
+        showNotification(msg, 'error');
+      }
+    }
+
+    async function loadUserData() {
+      if (!currentUser) return;
+      try {
+        const docRef = db.collection('users').doc(currentUser.uid);
+        const doc = await docRef.get();
+        barangData = doc.exists && doc.data().barangData ? doc.data().barangData : [];
+        renderTable();
+      } catch (error) {
+        console.error("Error loading ", error);
+        showNotification('Gagal memuat data: ' + error.message, 'error');
+      }
+    }
+
+    async function saveUserData() {
+      if (!currentUser) return;
+      try {
+        barangData.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
+        const docRef = db.collection('users').doc(currentUser.uid);
+        await docRef.set({ barangData }, { merge: true });
+        renderTable();
+      } catch (error) {
+        console.error("Error saving ", error);
+        showNotification('Gagal menyimpan data: ' + error.message, 'error');
+      }
     }
 
     function showApp() {
-      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('authPage').style.display = 'none';
+      document.getElementById('forgotPasswordPage').style.display = 'none';
+      document.getElementById('resetPasswordPage').style.display = 'none';
       document.getElementById('app').style.display = 'flex';
+      document.getElementById('fabButton').classList.add('show');
+
+      const nameEl = document.getElementById('userDisplayName');
+      if (currentUser.displayName) {
+        nameEl.innerHTML = `<i class="fas fa-warehouse"></i> Hai, ${currentUser.displayName} 👋`;
+      } else {
+        nameEl.innerHTML = `<i class="fas fa-warehouse"></i> ${currentUser.email}`;
+      }
+
       document.getElementById('tanggalInput').valueAsDate = new Date();
       document.getElementById('editTanggal').valueAsDate = new Date();
     }
 
     function openAddModal() {
+      if (!currentUser) {
+        showNotification('Silakan login terlebih dahulu!', 'warning');
+        return;
+      }
       document.getElementById('namaBarangInput').value = '';
       document.getElementById('jumlahInput').value = '';
       document.getElementById('tanggalInput').valueAsDate = new Date();
@@ -612,7 +836,7 @@
       document.getElementById(id).style.display = 'none';
     }
 
-    function tambahData() {
+    async function tambahData() {
       const nama = document.getElementById('namaBarangInput').value.trim();
       const jumlah = parseInt(document.getElementById('jumlahInput').value);
       const tanggal = document.getElementById('tanggalInput').value;
@@ -622,15 +846,59 @@
       if (!tanggal) return showNotification('Pilih tanggal!', 'warning');
 
       barangData.push({ nama, jumlah, tanggal });
-      simpanDanTampilkan();
+      await saveUserData();
       closeModal('addModal');
       showNotification('✅ Data berhasil ditambahkan!', 'success');
     }
 
-    function simpanDanTampilkan() {
-      barangData.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
-      localStorage.setItem('barangData', JSON.stringify(barangData));
-      renderTable();
+    async function updateData() {
+      const index = parseInt(document.getElementById('editIndex').value);
+      const nama = document.getElementById('editNama').value.trim();
+      const jumlah = parseInt(document.getElementById('editJumlah').value);
+      const tanggal = document.getElementById('editTanggal').value;
+
+      if (!nama) return showNotification('Nama barang wajib diisi!', 'warning');
+      if (!jumlah || jumlah <= 0) return showNotification('Jumlah harus > 0!', 'warning');
+      if (!tanggal) return showNotification('Pilih tanggal!', 'warning');
+
+      barangData[index] = { nama, jumlah, tanggal };
+      await saveUserData();
+      closeModal('editModal');
+      showNotification('✅ Data berhasil diperbarui!', 'success');
+    }
+
+    let deleteIndex = null;
+
+    function openConfirmDelete(index) {
+      if (!currentUser) {
+        showNotification('Silakan login terlebih dahulu!', 'warning');
+        return;
+      }
+      deleteIndex = index;
+      document.getElementById('confirmModal').style.display = 'flex';
+    }
+
+    async function confirmDelete() {
+      if (deleteIndex !== null) {
+        barangData.splice(deleteIndex, 1);
+        await saveUserData();
+        closeModal('confirmModal');
+        showNotification('🗑️ Data dihapus!', 'warning');
+        deleteIndex = null;
+      }
+    }
+
+    function openEditModal(index) {
+      if (!currentUser) {
+        showNotification('Silakan login terlebih dahulu!', 'warning');
+        return;
+      }
+      const item = barangData[index];
+      document.getElementById('editIndex').value = index;
+      document.getElementById('editNama').value = item.nama;
+      document.getElementById('editJumlah').value = item.jumlah;
+      document.getElementById('editTanggal').value = item.tanggal;
+      document.getElementById('editModal').style.display = 'flex';
     }
 
     function renderTable() {
@@ -660,46 +928,6 @@
       });
     }
 
-    function openConfirmDelete(index) {
-      deleteIndex = index;
-      document.getElementById('confirmModal').style.display = 'flex';
-    }
-
-    function confirmDelete() {
-      if (deleteIndex !== null) {
-        barangData.splice(deleteIndex, 1);
-        simpanDanTampilkan();
-        closeModal('confirmModal');
-        showNotification('🗑️ Data dihapus!', 'warning');
-        deleteIndex = null;
-      }
-    }
-
-    function openEditModal(index) {
-      const item = barangData[index];
-      document.getElementById('editIndex').value = index;
-      document.getElementById('editNama').value = item.nama;
-      document.getElementById('editJumlah').value = item.jumlah;
-      document.getElementById('editTanggal').value = item.tanggal;
-      document.getElementById('editModal').style.display = 'flex';
-    }
-
-    function updateData() {
-      const index = parseInt(document.getElementById('editIndex').value);
-      const nama = document.getElementById('editNama').value.trim();
-      const jumlah = parseInt(document.getElementById('editJumlah').value);
-      const tanggal = document.getElementById('editTanggal').value;
-
-      if (!nama) return showNotification('Nama barang wajib diisi!', 'warning');
-      if (!jumlah || jumlah <= 0) return showNotification('Jumlah harus > 0!', 'warning');
-      if (!tanggal) return showNotification('Pilih tanggal!', 'warning');
-
-      barangData[index] = { nama, jumlah, tanggal };
-      simpanDanTampilkan();
-      closeModal('editModal');
-      showNotification('✅ Data berhasil diperbarui!', 'success');
-    }
-
     function downloadCSV() {
       if (barangData.length === 0) return showNotification('❌ Tidak ada data untuk diunduh!', 'error');
 
@@ -721,11 +949,9 @@
       showNotification(`💾 File "${filename}" berhasil diunduh!`, 'success');
     }
 
-    // ✅ FUNGSI EKSPOR PNG YANG DIPERBAIKI
     function exportToPNG() {
       if (barangData.length === 0) return showNotification('❌ Tidak ada data untuk diekspor!', 'error');
 
-      // Buat elemen sementara untuk render tabel + judul
       const container = document.createElement('div');
       container.style.padding = '20px 30px';
       container.style.backgroundColor = 'white';
@@ -737,22 +963,18 @@
       container.style.maxWidth = '800px';
       container.style.margin = '0 auto';
 
-      // Judul
       const title = document.createElement('h2');
       title.textContent = 'Daftar Barang (Terkini)';
       title.style.margin = '0 0 20px 0';
       title.style.fontSize = '18px';
       title.style.fontWeight = '700';
 
-      // Clone tabel — dan pastikan thead tidak hilang
       const table = document.getElementById('dataTable');
       const tableClone = table.cloneNode(true);
 
-      // Hapus kolom "Aksi" (opsional, agar tidak muncul ikon edit/hapus di PNG)
       const ths = tableClone.querySelectorAll('th');
       const tds = tableClone.querySelectorAll('td');
       if (ths.length >= 5 && tds.length > 0) {
-        // Hapus kolom ke-5 (Aksi)
         ths[4].remove();
         for (let i = 4; i < tds.length; i += 5) {
           if (tds[i]) tds[i].remove();
@@ -761,13 +983,10 @@
 
       container.appendChild(title);
       container.appendChild(tableClone);
-
-      // Tempatkan sementara di DOM (tapi di luar layar)
       container.style.position = 'absolute';
       container.style.left = '-9999px';
       document.body.appendChild(container);
 
-      // Render dengan html2canvas
       html2canvas(container, {
         scale: 2,
         backgroundColor: 'white',
@@ -777,11 +996,10 @@
         const link = document.createElement('a');
         link.download = `inventaris_${new Date().toISOString().slice(0,10)}.png`;
         link.href = canvas.toDataURL('image/png');
-        document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        document.body.removeChild(container); // cleanup
-        showNotification('🖼️ PNG tabel lengkap berhasil diunduh!', 'success');
+        document.body.removeChild(container);
+        showNotification('🖼️ PNG tabel berhasil diunduh!', 'success');
       }).catch(err => {
         console.error('Error:', err);
         showNotification('❌ Gagal membuat PNG. Coba lagi.', 'error');
@@ -797,10 +1015,31 @@
       setTimeout(() => notif.classList.remove('show'), 3000);
     }
 
-    function loadData() {
-      barangData = JSON.parse(localStorage.getItem('barangData')) || [];
-      renderTable();
-    }
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const mode = urlParams.get('mode');
+      const oobCode = urlParams.get('oobCode');
+
+      if (mode === 'resetPassword' && oobCode) {
+        window.passwordResetCode = oobCode;
+        history.replaceState({}, document.title, window.location.pathname);
+        setTimeout(() => {
+          document.getElementById('authPage').style.display = 'none';
+          document.getElementById('forgotPasswordPage').style.display = 'none';
+          document.getElementById('resetPasswordPage').style.display = 'block';
+        }, 100);
+      }
+
+      auth.onAuthStateChanged(async (user) => {
+        if (user) {
+          currentUser = user;
+          showApp();
+          await loadUserData();
+        } else {
+          showAuthPage();
+        }
+      });
+    });
   </script>
 
 </body>
