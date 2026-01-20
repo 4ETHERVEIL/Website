@@ -8,16 +8,16 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   
-  <!-- Firebase SDK (versi stabil) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   
   <!-- html2canvas -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
-    // 🔑 Firebase Config — pastikan sesuai project Anda
+    // 🔑 Firebase Config — sudah diisi sesuai milik Anda
     const firebaseConfig = {
       apiKey: "AIzaSyB0q9aSR1-MZkbJ0woYiqQI6il6oeoEWUo",
       authDomain: "inventory-2ab17.firebaseapp.com",
@@ -29,12 +29,7 @@
     };
 
     // Initialize Firebase
-    try {
-      firebase.initializeApp(firebaseConfig);
-    } catch (e) {
-      console.error("Firebase init error:", e);
-    }
-
+    firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
     const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -47,7 +42,8 @@
       --primary-dark: #3a56d4;
       --success: #06d6a0;
       --danger: #ef476f;
-      --warning: #ffd166;      --light: #ffffff;
+      --warning: #ffd166;
+      --light: #ffffff;
       --dark: #212529;
       --gray: #6c757d;
       --border: #dee2e6;
@@ -96,7 +92,8 @@
 
     h1 {
       font-weight: 700;
-      font-size: 1.6rem;      color: var(--dark);
+      font-size: 1.6rem;
+      color: var(--dark);
       margin-bottom: 1.5rem;
     }
 
@@ -145,6 +142,7 @@
       transition: var(--transition);
       margin-top: 0.5rem;
     }
+
     .btn:hover {
       background: var(--primary-dark);
     }
@@ -194,7 +192,8 @@
       border: none;
       color: var(--gray);
       font-size: 1.1rem;
-      cursor: pointer;      transition: color 0.2s;
+      cursor: pointer;
+      transition: color 0.2s;
     }
 
     .logout-btn:hover {
@@ -243,6 +242,7 @@
       justify-content: center;
       align-items: center;
     }
+
     .modal, .modal-confirm {
       background: white;
       border-radius: var(--radius);
@@ -292,7 +292,8 @@
       margin-bottom: 1.5rem;
     }
 
-    .form-control {      margin-bottom: 1.2rem;
+    .form-control {
+      margin-bottom: 1.2rem;
     }
 
     /* ===== TABLE ===== */
@@ -342,6 +343,7 @@
       margin: 0 0.25rem;
       transition: var(--transition);
     }
+
     .btn-edit { background: #cce7ff; color: #0d6efd; }
     .btn-edit:hover { background: #b3daff; }
     .btn-delete { background: #ffe6e6; color: var(--danger); }
@@ -390,7 +392,8 @@
 <body>
 
   <!-- AUTH PAGE -->
-  <div id="authPage" class="container">    <div class="logo">
+  <div id="authPage" class="container">
+    <div class="logo">
       <i class="fas fa-box-open"></i>
     </div>
 
@@ -439,7 +442,8 @@
   </div>
 
   <!-- FORGOT PASSWORD PAGE -->
-  <div id="forgotPasswordPage" class="container" style="display: none;">    <div class="logo">
+  <div id="forgotPasswordPage" class="container" style="display: none;">
+    <div class="logo">
       <i class="fas fa-key"></i>
     </div>
     <h1>Reset Password</h1>
@@ -489,14 +493,10 @@
         <i class="fas fa-sign-out-alt"></i>
       </button>
     </header>
+
     <div class="table-container">
       <div style="padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
-        <div style="display: flex; gap: 1rem; align-items: center;">
-          <h2 style="font-size: 1.25rem; font-weight: 700;"><i class="fas fa-clipboard-list"></i> Daftar Barang (Terkini)</h2>
-          <span id="totalJumlah" style="font-weight: bold; color: var(--primary); padding: 0.5rem 1rem; background: #eef2ff; border-radius: 8px;">
-            Total: 0
-          </span>
-        </div>
+        <h2 style="font-size: 1.25rem; font-weight: 700;"><i class="fas fa-clipboard-list"></i> Daftar Barang (Terkini)</h2>
         <div style="display: flex; gap: 0.5rem;">
           <button class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: var(--success);" onclick="downloadCSV()">
             <i class="fas fa-file-csv"></i> Unduh CSV
@@ -537,7 +537,8 @@
       <div class="modal-body">
         <div class="form-control">
           <label><i class="fas fa-tag"></i> Nama Barang</label>
-          <input type="text" id="namaBarangInput" placeholder="Contoh: KOWL, K81, LEVER 4xV" required>        </div>
+          <input type="text" id="namaBarangInput" placeholder="Contoh: KOWL, K81, LEVER 4xV" required>
+        </div>
         <div class="form-control">
           <label><i class="fas fa-sort-numeric-up"></i> Jumlah</label>
           <input type="number" id="jumlahInput" min="1" placeholder="Contoh: 10" required>
@@ -586,7 +587,8 @@
   <!-- MODAL KONFIRMASI HAPUS -->
   <div id="confirmModal" class="modal-backdrop">
     <div class="modal-confirm">
-      <div class="modal-title"><i class="fas fa-exclamation-triangle"></i> Konfirmasi Hapus</div>      <p>Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.</p>
+      <div class="modal-title"><i class="fas fa-exclamation-triangle"></i> Konfirmasi Hapus</div>
+      <p>Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.</p>
       <div style="display: flex; gap: 0.5rem; justify-content: center;">
         <button class="btn btn-cancel" onclick="closeModal('confirmModal')">Batal</button>
         <button class="btn" style="background: var(--danger);" onclick="confirmDelete()">Hapus</button>
@@ -599,14 +601,6 @@
   <script>
     let currentUser = null;
     let barangData = [];
-
-    function showNotification(text, type = 'success') {
-      const notif = document.getElementById('notification');
-      notif.textContent = text;
-      notif.className = `notif-${type}`;
-      notif.classList.add('show');
-      setTimeout(() => notif.classList.remove('show'), 3000);
-    }
 
     function showTab(tab) {
       document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
@@ -635,7 +629,8 @@
       }, 300);
     }
 
-    async function signUpWithEmail() {      const email = document.getElementById('emailSignup').value.trim();
+    async function signUpWithEmail() {
+      const email = document.getElementById('emailSignup').value.trim();
       const pass = document.getElementById('passwordSignup').value;
       const pass2 = document.getElementById('confirmPassword').value;
 
@@ -684,7 +679,8 @@
 
     async function signInWithGoogle() {
       try {
-        showNotification('Menghubungkan ke Google...', 'warning');        const result = await auth.signInWithPopup(googleProvider);
+        showNotification('Menghubungkan ke Google...', 'warning');
+        const result = await auth.signInWithPopup(googleProvider);
         currentUser = result.user;
 
         const docRef = db.collection('users').doc(currentUser.uid);
@@ -733,7 +729,8 @@
         let msg = 'Gagal kirim: ';
         if (error.code === 'auth/user-not-found') msg += 'Email tidak terdaftar.';
         else if (error.code === 'auth/invalid-email') msg += 'Format email salah.';
-        else msg += error.message;        showNotification(msg, 'error');
+        else msg += error.message;
+        showNotification(msg, 'error');
       }
     }
 
@@ -780,10 +777,6 @@
       }
     }
 
-    function updateTotal() {
-      const total = barangData.reduce((sum, item) => sum + item.jumlah, 0);
-      document.getElementById('totalJumlah').textContent = `Total: ${total}`;    }
-
     async function loadUserData() {
       if (!currentUser) return;
       try {
@@ -791,7 +784,6 @@
         const doc = await docRef.get();
         barangData = doc.exists && doc.data().barangData ? doc.data().barangData : [];
         renderTable();
-        updateTotal();
       } catch (error) {
         console.error("Error loading ", error);
         showNotification('Gagal memuat data: ' + error.message, 'error');
@@ -805,7 +797,6 @@
         const docRef = db.collection('users').doc(currentUser.uid);
         await docRef.set({ barangData }, { merge: true });
         renderTable();
-        updateTotal();
       } catch (error) {
         console.error("Error saving ", error);
         showNotification('Gagal menyimpan data: ' + error.message, 'error');
@@ -831,7 +822,8 @@
     }
 
     function openAddModal() {
-      if (!currentUser) {        showNotification('Silakan login terlebih dahulu!', 'warning');
+      if (!currentUser) {
+        showNotification('Silakan login terlebih dahulu!', 'warning');
         return;
       }
       document.getElementById('namaBarangInput').value = '';
@@ -853,20 +845,10 @@
       if (!jumlah || jumlah <= 0) return showNotification('Jumlah harus > 0!', 'warning');
       if (!tanggal) return showNotification('Pilih tanggal!', 'warning');
 
-      const existingIndex = barangData.findIndex(item => 
-        item.nama.toLowerCase() === nama.toLowerCase()
-      );
-
-      if (existingIndex !== -1) {
-        barangData[existingIndex].jumlah += jumlah;
-        barangData[existingIndex].tanggal = tanggal;
-      } else {
-        barangData.push({ nama, jumlah, tanggal });
-      }
-
+      barangData.push({ nama, jumlah, tanggal });
       await saveUserData();
       closeModal('addModal');
-      showNotification('✅ Data berhasil ditambahkan atau diperbarui!', 'success');
+      showNotification('✅ Data berhasil ditambahkan!', 'success');
     }
 
     async function updateData() {
@@ -879,24 +861,7 @@
       if (!jumlah || jumlah <= 0) return showNotification('Jumlah harus > 0!', 'warning');
       if (!tanggal) return showNotification('Pilih tanggal!', 'warning');
 
-      const currentItem = barangData[index];
-      const isNameChanged = currentItem.nama.toLowerCase() !== nama.toLowerCase();
-      if (isNameChanged) {
-        const existingIndex = barangData.findIndex((item, i) => 
-          i !== index && item.nama.toLowerCase() === nama.toLowerCase()
-        );
-
-        if (existingIndex !== -1) {
-          barangData[existingIndex].jumlah += jumlah;
-          barangData[existingIndex].tanggal = tanggal;
-          barangData.splice(index, 1);
-        } else {
-          barangData[index] = { nama, jumlah, tanggal };
-        }
-      } else {
-        barangData[index] = { nama, jumlah, tanggal };
-      }
-
+      barangData[index] = { nama, jumlah, tanggal };
       await saveUserData();
       closeModal('editModal');
       showNotification('✅ Data berhasil diperbarui!', 'success');
@@ -929,7 +894,8 @@
         return;
       }
       const item = barangData[index];
-      document.getElementById('editIndex').value = index;      document.getElementById('editNama').value = item.nama;
+      document.getElementById('editIndex').value = index;
+      document.getElementById('editNama').value = item.nama;
       document.getElementById('editJumlah').value = item.jumlah;
       document.getElementById('editTanggal').value = item.tanggal;
       document.getElementById('editModal').style.display = 'flex';
@@ -978,7 +944,8 @@
       a.download = filename;
       document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);      URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
       showNotification(`💾 File "${filename}" berhasil diunduh!`, 'success');
     }
 
@@ -1027,7 +994,8 @@
         logging: false
       }).then(canvas => {
         const link = document.createElement('a');
-        link.download = `inventaris_${new Date().toISOString().slice(0,10)}.png`;        link.href = canvas.toDataURL('image/png');
+        link.download = `inventaris_${new Date().toISOString().slice(0,10)}.png`;
+        link.href = canvas.toDataURL('image/png');
         link.click();
         document.body.removeChild(link);
         document.body.removeChild(container);
@@ -1037,6 +1005,14 @@
         showNotification('❌ Gagal membuat PNG. Coba lagi.', 'error');
         document.body.removeChild(container);
       });
+    }
+
+    function showNotification(text, type = 'success') {
+      const notif = document.getElementById('notification');
+      notif.textContent = text;
+      notif.className = `notif-${type}`;
+      notif.classList.add('show');
+      setTimeout(() => notif.classList.remove('show'), 3000);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
