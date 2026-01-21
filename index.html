@@ -8,7 +8,7 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   
-  <!-- Firebase SDK -->
+  <!-- Firebase SDK - URUTAN PENTING! -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -17,7 +17,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
-    // 🔑 Firebase Config — sudah diisi sesuai milik Anda
+    // 🔑 Firebase Config — sesuai project Anda
     const firebaseConfig = {
       apiKey: "AIzaSyB0q9aSR1-MZkbJ0woYiqQI6il6oeoEWUo",
       authDomain: "inventory-2ab17.firebaseapp.com",
@@ -28,8 +28,17 @@
       measurementId: "G-0PKKSLJ6TB"
     };
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
+    // Initialize Firebase dengan penanganan error
+    let app;
+    try {
+      app = firebase.initializeApp(firebaseConfig);
+    } catch (e) {
+      if (!firebase.apps.length) {
+        app = firebase.initializeApp(firebaseConfig);
+      }
+    }
+
+    // Pastikan semua layanan diambil setelah inisialisasi
     const auth = firebase.auth();
     const db = firebase.firestore();
     const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -38,8 +47,7 @@
 
   <style>
     :root {
-      --primary: #4361ee;
-      --primary-dark: #3a56d4;
+      --primary: #4361ee;      --primary-dark: #3a56d4;
       --success: #06d6a0;
       --danger: #ef476f;
       --warning: #ffd166;
@@ -47,7 +55,8 @@
       --dark: #212529;
       --gray: #6c757d;
       --border: #dee2e6;
-      --card-shadow: 0 4px 12px rgba(0,0,0,0.08);      --radius: 16px;
+      --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --radius: 16px;
       --transition: all 0.3s ease;
     }
 
@@ -88,7 +97,6 @@
       color: var(--primary);
       margin-bottom: 1rem;
     }
-
     h1 {
       font-weight: 700;
       font-size: 1.6rem;
@@ -96,7 +104,8 @@
       margin-bottom: 1.5rem;
     }
 
-    .input-group {      margin-bottom: 1.2rem;
+    .input-group {
+      margin-bottom: 1.2rem;
       text-align: left;
     }
 
@@ -136,8 +145,7 @@
       border-radius: var(--radius);
       font-size: 1.05rem;
       font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
+      cursor: pointer;      transition: var(--transition);
       margin-top: 0.5rem;
     }
 
@@ -145,7 +153,8 @@
       background: var(--primary-dark);
     }
 
-    .btn-secondary {      background: #6c757d;
+    .btn-secondary {
+      background: #6c757d;
     }
 
     .btn-google {
@@ -185,8 +194,7 @@
     }
 
     .logout-btn {
-      background: none;
-      border: none;
+      background: none;      border: none;
       color: var(--gray);
       font-size: 1.1rem;
       cursor: pointer;
@@ -194,7 +202,8 @@
     }
 
     .logout-btn:hover {
-      color: var(--danger);    }
+      color: var(--danger);
+    }
 
     /* ===== FAB BUTTON ===== */
     #fabButton {
@@ -234,8 +243,7 @@
       width: 100%;
       height: 100%;
       background: rgba(0,0,0,0.5);
-      z-index: 999;
-      justify-content: center;
+      z-index: 999;      justify-content: center;
       align-items: center;
     }
 
@@ -243,7 +251,8 @@
       background: white;
       border-radius: var(--radius);
       box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-      width: 90%;      max-width: 500px;
+      width: 90%;
+      max-width: 500px;
       max-height: 80vh;
       overflow-y: auto;
       padding: 1.5rem;
@@ -283,8 +292,7 @@
       cursor: pointer;
     }
 
-    .modal-body {
-      margin-bottom: 1.5rem;
+    .modal-body {      margin-bottom: 1.5rem;
     }
 
     .form-control {
@@ -292,7 +300,8 @@
     }
 
     /* ===== TABLE ===== */
-    .table-container {      background: white;
+    .table-container {
+      background: white;
       border-radius: var(--radius);
       box-shadow: var(--card-shadow);
       overflow: hidden;
@@ -332,8 +341,7 @@
       background: #e9ecef;
       color: var(--gray);
       display: flex;
-      align-items: center;
-      justify-content: center;
+      align-items: center;      justify-content: center;
       cursor: pointer;
       margin: 0 0.25rem;
       transition: var(--transition);
@@ -341,7 +349,8 @@
 
     .btn-edit { background: #cce7ff; color: #0d6efd; }
     .btn-edit:hover { background: #b3daff; }
-    .btn-delete { background: #ffe6e6; color: var(--danger); }    .btn-delete:hover { background: #ffcccc; }
+    .btn-delete { background: #ffe6e6; color: var(--danger); }
+    .btn-delete:hover { background: #ffcccc; }
 
     .empty-state {
       text-align: center;
@@ -381,8 +390,7 @@
     @media (max-width: 768px) {
       #fabButton { bottom: 80px; }
     }
-  </style>
-</head>
+  </style></head>
 <body>
 
   <!-- AUTH PAGE -->
@@ -390,6 +398,7 @@
     <div class="logo">
       <i class="fas fa-box-open"></i>
     </div>
+
     <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; justify-content: center;">
       <button id="tabLogin" class="btn" onclick="showTab('login')">Masuk</button>
       <button id="tabSignup" class="btn btn-secondary" onclick="showTab('signup')">Daftar</button>
@@ -430,8 +439,7 @@
         <label for="confirmPassword"><i class="fas fa-lock"></i> Konfirmasi Password</label>
         <input type="password" id="confirmPassword" placeholder="Ulangi password">
       </div>
-      <button class="btn" onclick="signUpWithEmail()">Daftar Akun</button>
-    </div>
+      <button class="btn" onclick="signUpWithEmail()">Daftar Akun</button>    </div>
   </div>
 
   <!-- FORGOT PASSWORD PAGE -->
@@ -439,7 +447,8 @@
     <div class="logo">
       <i class="fas fa-key"></i>
     </div>
-    <h1>Reset Password</h1>    <p style="margin-bottom: 1.5rem; color: var(--gray);">
+    <h1>Reset Password</h1>
+    <p style="margin-bottom: 1.5rem; color: var(--gray);">
       Masukkan email akun Anda. Kami akan mengirim tautan reset.
     </p>
     <div class="input-group">
@@ -479,8 +488,7 @@
   <div id="app" class="container">
     <header>
       <div class="title" id="userDisplayName">
-        <i class="fas fa-warehouse"></i> Manajemen Inventaris
-      </div>
+        <i class="fas fa-warehouse"></i> Manajemen Inventaris      </div>
       <button class="logout-btn" title="Keluar" onclick="logout()">
         <i class="fas fa-sign-out-alt"></i>
       </button>
@@ -488,7 +496,8 @@
 
     <!-- TABEL UTAMA -->
     <div class="table-container">
-      <div style="padding: 1rem; display: flex; justify-content: space-between; align-items: center;">        <h2 style="font-size: 1.25rem; font-weight: 700;"><i class="fas fa-clipboard-list"></i> Daftar Barang (Terkini)</h2>
+      <div style="padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="font-size: 1.25rem; font-weight: 700;"><i class="fas fa-clipboard-list"></i> Daftar Barang (Terkini)</h2>
         <div style="display: flex; gap: 0.5rem;">
           <button class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: var(--success);" onclick="downloadCSV()">
             <i class="fas fa-file-csv"></i> Unduh CSV
@@ -528,8 +537,7 @@
         <tbody id="summaryBody">
         </tbody>
       </table>
-    </div>
-  </div>
+    </div>  </div>
 
   <!-- FAB BUTTON -->
   <div id="fabButton" class="fab" onclick="openAddModal()" title="Tambah Data">
@@ -537,7 +545,8 @@
   </div>
 
   <!-- MODAL TAMBAH DATA -->
-  <div id="addModal" class="modal-backdrop">    <div class="modal">
+  <div id="addModal" class="modal-backdrop">
+    <div class="modal">
       <div class="modal-header">
         <div class="modal-title"><i class="fas fa-plus-circle"></i> Tambah Data Barang</div>
         <button class="modal-close" onclick="closeModal('addModal')">&times;</button>
@@ -577,8 +586,7 @@
           <input type="text" id="editNama" placeholder="Contoh: KOWL, K81, LEVER 4xV" required>
         </div>
         <div class="form-control">
-          <label><i class="fas fa-sort-numeric-up"></i> Jumlah</label>
-          <input type="number" id="editJumlah" min="1" placeholder="Contoh: 10" required>
+          <label><i class="fas fa-sort-numeric-up"></i> Jumlah</label>          <input type="number" id="editJumlah" min="1" placeholder="Contoh: 10" required>
         </div>
         <div class="form-control">
           <label><i class="fas fa-calendar-day"></i> Tanggal</label>
@@ -586,7 +594,8 @@
         </div>
       </div>
       <div style="display: flex; gap: 0.5rem;">
-        <button class="btn" onclick="updateData()">Simpan Perubahan</button>        <button class="btn btn-cancel" onclick="closeModal('editModal')">Batal</button>
+        <button class="btn" onclick="updateData()">Simpan Perubahan</button>
+        <button class="btn btn-cancel" onclick="closeModal('editModal')">Batal</button>
       </div>
     </div>
   </div>
@@ -626,8 +635,7 @@
       document.getElementById('fabButton').classList.remove('show');
     }
 
-    function forgotPassword() {
-      const email = document.getElementById('emailLogin').value.trim();
+    function forgotPassword() {      const email = document.getElementById('emailLogin').value.trim();
       if (email) document.getElementById('fpEmail').value = email;
       showAuthPage();
       setTimeout(() => {
@@ -635,6 +643,7 @@
         document.getElementById('forgotPasswordPage').style.display = 'block';
       }, 300);
     }
+
     async function signUpWithEmail() {
       const email = document.getElementById('emailSignup').value.trim();
       const pass = document.getElementById('passwordSignup').value;
@@ -675,8 +684,7 @@
         await loadUserData();
       } catch (error) {
         let msg = 'Gagal login: ';
-        if (error.code === 'auth/user-not-found') msg += 'Akun tidak ditemukan.';
-        else if (error.code === 'auth/wrong-password') msg += 'Password salah.';
+        if (error.code === 'auth/user-not-found') msg += 'Akun tidak ditemukan.';        else if (error.code === 'auth/wrong-password') msg += 'Password salah.';
         else if (error.code === 'auth/invalid-email') msg += 'Format email tidak valid.';
         else msg += error.message;
         showNotification(msg, 'error');
@@ -684,7 +692,8 @@
     }
 
     async function signInWithGoogle() {
-      try {        showNotification('Menghubungkan ke Google...', 'warning');
+      try {
+        showNotification('Menghubungkan ke Google...', 'warning');
         const result = await auth.signInWithPopup(googleProvider);
         currentUser = result.user;
 
@@ -724,8 +733,7 @@
       if (!email) return showNotification('Masukkan email Anda.', 'warning');
 
       try {
-        await auth.sendPasswordResetEmail(email, {
-          url: window.location.origin + '/reset-password',
+        await auth.sendPasswordResetEmail(email, {          url: window.location.origin + '/reset-password',
           handleCodeInApp: true
         });
         showNotification(`✅ Tautan reset dikirim ke ${email}. Cek inbox Anda!`, 'success');
@@ -733,7 +741,8 @@
       } catch (error) {
         let msg = 'Gagal kirim: ';
         if (error.code === 'auth/user-not-found') msg += 'Email tidak terdaftar.';
-        else if (error.code === 'auth/invalid-email') msg += 'Format email salah.';        else msg += error.message;
+        else if (error.code === 'auth/invalid-email') msg += 'Format email salah.';
+        else msg += error.message;
         showNotification(msg, 'error');
       }
     }
@@ -773,8 +782,7 @@
         } else if (error.code === 'auth/invalid-action-code') {
           msg += 'Tautan tidak valid.';
         } else if (error.code === 'auth/weak-password') {
-          msg += 'Password terlalu lemah.';
-        } else {
+          msg += 'Password terlalu lemah.';        } else {
           msg += error.message;
         }
         showNotification(msg, 'error');
@@ -782,14 +790,15 @@
     }
 
     async function loadUserData() {
-      if (!currentUser) return;      try {
+      if (!currentUser) return;
+      try {
         const docRef = db.collection('users').doc(currentUser.uid);
         const doc = await docRef.get();
         barangData = doc.exists && doc.data().barangData ? doc.data().barangData : [];
         renderTable();
       } catch (error) {
         console.error("Error loading ", error);
-        showNotification('Gagal memuat  ' + error.message, 'error');
+        showNotification('Gagal memuat data: ' + error.message, 'error');
       }
     }
 
@@ -823,7 +832,6 @@
       document.getElementById('tanggalInput').valueAsDate = new Date();
       document.getElementById('editTanggal').valueAsDate = new Date();
     }
-
     function openAddModal() {
       if (!currentUser) {
         showNotification('Silakan login terlebih dahulu!', 'warning');
@@ -831,7 +839,8 @@
       }
       document.getElementById('namaBarangInput').value = '';
       document.getElementById('jumlahInput').value = '';
-      document.getElementById('tanggalInput').valueAsDate = new Date();      document.getElementById('addModal').style.display = 'flex';
+      document.getElementById('tanggalInput').valueAsDate = new Date();
+      document.getElementById('addModal').style.display = 'flex';
     }
 
     function closeModal(id) {
@@ -871,8 +880,7 @@
 
     let deleteIndex = null;
 
-    function openConfirmDelete(index) {
-      if (!currentUser) {
+    function openConfirmDelete(index) {      if (!currentUser) {
         showNotification('Silakan login terlebih dahulu!', 'warning');
         return;
       }
@@ -880,7 +888,8 @@
       document.getElementById('confirmModal').style.display = 'flex';
     }
 
-    async function confirmDelete() {      if (deleteIndex !== null) {
+    async function confirmDelete() {
+      if (deleteIndex !== null) {
         barangData.splice(deleteIndex, 1);
         await saveUserData();
         closeModal('confirmModal');
@@ -920,34 +929,30 @@
             <button class="btn-action btn-edit" title="Edit" onclick="openEditModal(${i})"><i class="fas fa-edit"></i></button>
             <button class="btn-action btn-delete" title="Hapus" onclick="openConfirmDelete(${i})"><i class="fas fa-trash-alt"></i></button>
           </td>
-        </tr>
-      `).join('');
+        </tr>      `).join('');
 
-      renderSummaryTable(); // ✅ Panggil fungsi ringkasan
+      renderSummaryTable();
     }
 
     function renderSummaryTable() {
       const summaryBody = document.getElementById('summaryBody');
       
-      // Jika tidak ada data, tampilkan pesan kosong      if (!barangData || barangData.length === 0) {
+      if (!barangData || barangData.length === 0) {
         summaryBody.innerHTML = `<tr><td colspan="2" class="empty-state"><i class="fas fa-inbox"></i><div>📦 Belum ada data untuk diakumulasi</div></td></tr>`;
         return;
       }
 
-      // Buat objek untuk akumulasi per nama (case-insensitive)
       const summaryMap = {};
       barangData.forEach(item => {
-        const key = item.nama.trim().toLowerCase(); // grouping case-insensitive
+        const key = item.nama.trim().toLowerCase();
         if (!summaryMap[key]) {
           summaryMap[key] = { namaAsli: item.nama, total: 0 };
         }
         summaryMap[key].total += parseInt(item.jumlah) || 0;
       });
 
-      // Konversi ke array dan urutkan berdasarkan nama asli
       const sortedEntries = Object.entries(summaryMap).sort((a, b) => a[1].namaAsli.localeCompare(b[1].namaAsli));
 
-      // Render tabel ringkasan
       summaryBody.innerHTML = sortedEntries.map(([key, data]) => `
         <tr>
           <td><strong>${data.namaAsli}</strong></td>
@@ -973,12 +978,12 @@
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const filename = `inventaris_${new Date().toISOString().slice(0,10)}.csv`;
-      const a = document.createElement('a');
-      a.href = url;
+      const a = document.createElement('a');      a.href = url;
       a.download = filename;
       document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);      URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
       showNotification(`💾 File "${filename}" berhasil diunduh!`, 'success');
     }
 
@@ -1022,12 +1027,12 @@
 
       html2canvas(container, {
         scale: 2,
-        backgroundColor: 'white',
-        useCORS: true,
+        backgroundColor: 'white',        useCORS: true,
         logging: false
       }).then(canvas => {
         const link = document.createElement('a');
-        link.download = `inventaris_${new Date().toISOString().slice(0,10)}.png`;        link.href = canvas.toDataURL('image/png');
+        link.download = `inventaris_${new Date().toISOString().slice(0,10)}.png`;
+        link.href = canvas.toDataURL('image/png');
         link.click();
         document.body.removeChild(link);
         document.body.removeChild(container);
@@ -1071,8 +1076,7 @@
           showAuthPage();
         }
       });
-    });
-  </script>
+    });  </script>
 
 </body>
 </html>
