@@ -789,7 +789,7 @@
         renderTable();
       } catch (error) {
         console.error("Error loading ", error);
-        showNotification('Gagal memuat data: ' + error.message, 'error');
+        showNotification('Gagal memuat  ' + error.message, 'error');
       }
     }
 
@@ -923,33 +923,35 @@
         </tr>
       `).join('');
 
-      renderSummaryTable(); // 🔥 Panggil render summary setiap kali tabel utama berubah
+      renderSummaryTable(); // ✅ Panggil fungsi ringkasan
     }
 
     function renderSummaryTable() {
       const summaryBody = document.getElementById('summaryBody');
       
-      // Hitung total per nama barang (case-insensitive grouping)      const summary = {};
-      barangData.forEach(item => {
-        const key = item.nama.trim().toLowerCase();
-        if (!summary[key]) {
-          summary[key] = { namaAsli: item.nama, total: 0 };
-        }
-        summary[key].total += parseInt(item.jumlah) || 0;
-      });
-
-      if (Object.keys(summary).length === 0) {
+      // Jika tidak ada data, tampilkan pesan kosong      if (!barangData || barangData.length === 0) {
         summaryBody.innerHTML = `<tr><td colspan="2" class="empty-state"><i class="fas fa-inbox"></i><div>📦 Belum ada data untuk diakumulasi</div></td></tr>`;
         return;
       }
 
-      // Urutkan berdasarkan nama asli
-      const sortedEntries = Object.entries(summary).sort((a, b) => a[1].namaAsli.localeCompare(b[1].namaAsli));
+      // Buat objek untuk akumulasi per nama (case-insensitive)
+      const summaryMap = {};
+      barangData.forEach(item => {
+        const key = item.nama.trim().toLowerCase(); // grouping case-insensitive
+        if (!summaryMap[key]) {
+          summaryMap[key] = { namaAsli: item.nama, total: 0 };
+        }
+        summaryMap[key].total += parseInt(item.jumlah) || 0;
+      });
 
-      summaryBody.innerHTML = sortedEntries.map(([key, { namaAsli, total }]) => `
+      // Konversi ke array dan urutkan berdasarkan nama asli
+      const sortedEntries = Object.entries(summaryMap).sort((a, b) => a[1].namaAsli.localeCompare(b[1].namaAsli));
+
+      // Render tabel ringkasan
+      summaryBody.innerHTML = sortedEntries.map(([key, data]) => `
         <tr>
-          <td><strong>${namaAsli}</strong></td>
-          <td>${total}</td>
+          <td><strong>${data.namaAsli}</strong></td>
+          <td>${data.total}</td>
         </tr>
       `).join('');
     }
@@ -976,9 +978,9 @@
       a.download = filename;
       document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showNotification(`💾 File "${filename}" berhasil diunduh!`, 'success');    }
+      document.body.removeChild(a);      URL.revokeObjectURL(url);
+      showNotification(`💾 File "${filename}" berhasil diunduh!`, 'success');
+    }
 
     function exportToPNG() {
       if (barangData.length === 0) return showNotification('❌ Tidak ada data untuk diekspor!', 'error');
@@ -1025,9 +1027,9 @@
         logging: false
       }).then(canvas => {
         const link = document.createElement('a');
-        link.download = `inventaris_${new Date().toISOString().slice(0,10)}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();        document.body.removeChild(link);
+        link.download = `inventaris_${new Date().toISOString().slice(0,10)}.png`;        link.href = canvas.toDataURL('image/png');
+        link.click();
+        document.body.removeChild(link);
         document.body.removeChild(container);
         showNotification('🖼️ PNG tabel berhasil diunduh!', 'success');
       }).catch(err => {
