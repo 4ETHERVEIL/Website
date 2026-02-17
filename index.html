@@ -8,7 +8,7 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   
-  <!-- Firebase SDK - URUTAN PENTING! -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -17,7 +17,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
-    // 🔑 Firebase Config — sesuai project Anda
+    // 🔑 Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyB0q9aSR1-MZkbJ0woYiqQI6il6oeoEWUo",
       authDomain: "inventory-2ab17.firebaseapp.com",
@@ -28,7 +28,6 @@
       measurementId: "G-0PKKSLJ6TB"
     };
 
-    // Initialize Firebase dengan penanganan error
     let app;
     try {
       app = firebase.initializeApp(firebaseConfig);
@@ -38,7 +37,6 @@
       }
     }
 
-    // Pastikan semua layanan diambil setelah inisialisasi
     const auth = firebase.auth();
     const db = firebase.firestore();
     const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -47,32 +45,45 @@
 
   <style>
     :root {
-      --primary: #4361ee;      --primary-dark: #3a56d4;
-      --success: #06d6a0;
-      --danger: #ef476f;
-      --warning: #ffd166;
-      --light: #ffffff;
-      --dark: #212529;
-      --gray: #6c757d;
-      --border: #dee2e6;
-      --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      --radius: 16px;
-      --transition: all 0.3s ease;
+      /* NEO BRUTALISM PALETTE */
+      --bg-color: #f0f0f0;
+      --card-bg: #ffffff;      --main-text: #000000;
+      --border-width: 3px;
+      --border-color: #000000;
+      
+      /* Warna-warna Neon/Pastel Tegas */
+      --primary: #a3ff12;       /* Acid Green */
+      --primary-hover: #8cd60b;
+      
+      --secondary: #d4f8ff;     /* Light Blue */
+      --danger: #ff5e5e;        /* Soft Red */
+      --warning: #fffa65;       /* Yellow */
+      --accent: #ff90e8;        /* Pink */
+      
+      --shadow: 5px 5px 0px 0px #000000;
+      --shadow-sm: 3px 3px 0px 0px #000000;
+      --radius: 4px; /* Sudut sedikit tumpul tapi tegas */
     }
 
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Courier New', Courier, monospace; /* Font monospaced untuk kesan teknis */
       -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+      background-color: var(--bg-color);
+      /* Pattern Grid Background */
+      background-image: 
+        linear-gradient(var(--border-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+      background-size: 20px 20px;
+      background-position: center center;
       min-height: 100vh;
       padding: 20px;
-      color: var(--dark);
+      color: var(--main-text);
     }
 
     .container {
@@ -80,94 +91,115 @@
       margin: 0 auto;
     }
 
+    /* ===== GLOBAL COMPONENTS ===== */
+    
+    /* Input Fields */
+    input[type="email"],
+    input[type="password"],
+    input[type="text"],    input[type="number"],
+    input[type="date"] {
+      width: 100%;
+      padding: 0.8rem;
+      border: var(--border-width) solid var(--border-color);
+      background: #fff;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #000;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.1s;
+    }
+
+    input:focus {
+      outline: none;
+      background: var(--secondary);
+      box-shadow: 2px 2px 0px 0px #000000;
+      transform: translate(2px, 2px);
+    }
+
+    /* Buttons */
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: var(--primary);
+      color: #000;
+      border: var(--border-width) solid var(--border-color);
+      font-size: 1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: all 0.1s ease;
+      margin-top: 0.5rem;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .btn:hover {
+      background: var(--primary-hover);
+      transform: translate(-2px, -2px);
+      box-shadow: 7px 7px 0px 0px #000000;
+    }
+
+    .btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 0px 0px 0px 0px #000000;
+    }
+    .btn-secondary {
+      background: #fff;
+    }
+    
+    .btn-google {
+      background: var(--accent);
+    }
+
+    .btn-cancel {
+      background: #fff;
+      color: #000;
+    }
+
     /* ===== AUTH PAGES ===== */
     #authPage, #forgotPasswordPage, #resetPasswordPage {
-      background: white;
-      padding: 2.5rem;
-      border-radius: var(--radius);
-      box-shadow: var(--card-shadow);
+      background: var(--card-bg);
+      padding: 2rem;
+      border: var(--border-width) solid var(--border-color);
+      box-shadow: var(--shadow);
       text-align: center;
       width: 100%;
-      max-width: 400px;
-      margin: 20px auto;
+      max-width: 450px;
+      margin: 40px auto;
     }
 
     .logo {
-      font-size: 2.5rem;
-      color: var(--primary);
+      font-size: 3rem;
+      color: #000;
       margin-bottom: 1rem;
+      display: inline-block;
+      border: var(--border-width) solid #000;
+      background: var(--warning);
+      padding: 10px;
+      border-radius: 50%;
+      box-shadow: 4px 4px 0px #000;
     }
+
     h1 {
-      font-weight: 700;
-      font-size: 1.6rem;
-      color: var(--dark);
+      font-weight: 900;
+      font-size: 1.8rem;
+      text-transform: uppercase;
       margin-bottom: 1.5rem;
+      letter-spacing: -1px;
     }
 
     .input-group {
       margin-bottom: 1.2rem;
       text-align: left;
     }
-
     label {
       display: block;
       margin-bottom: 0.5rem;
-      font-weight: 600;
-      color: var(--dark);
-    }
-
-    input[type="email"],
-    input[type="password"],
-    input[type="text"],
-    input[type="number"],
-    input[type="date"] {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      font-size: 1rem;
-      transition: var(--transition);
-    }
-
-    input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-    }
-
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 0.9rem;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: var(--radius);
-      font-size: 1.05rem;
-      font-weight: 600;
-      cursor: pointer;      transition: var(--transition);
-      margin-top: 0.5rem;
-    }
-
-    .btn:hover {
-      background: var(--primary-dark);
-    }
-
-    .btn-secondary {
-      background: #6c757d;
-    }
-
-    .btn-google {
-      background: #dd4b39;
-    }
-
-    .btn-cancel {
-      background: #e9ecef;
-      color: var(--dark);
-    }
-
-    .btn-cancel:hover {
-      background: #dee2e6;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 0.9rem;
     }
 
     /* ===== MAIN APP ===== */
@@ -180,49 +212,52 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.2rem 1.5rem;
-      background: white;
-      border-radius: var(--radius) var(--radius) 0 0;
-      box-shadow: var(--card-shadow);
-      margin-bottom: 1.5rem;
+      padding: 1.5rem;
+      background: var(--card-bg);
+      border: var(--border-width) solid var(--border-color);
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
     }
 
     .title {
       font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--dark);
+      font-weight: 900;
+      text-transform: uppercase;
     }
 
     .logout-btn {
-      background: none;      border: none;
-      color: var(--gray);
-      font-size: 1.1rem;
+      background: var(--danger);
+      border: var(--border-width) solid #000;
+      color: #000;
+      font-weight: bold;
+      padding: 0.5rem 1rem;
       cursor: pointer;
-      transition: color 0.2s;
+      box-shadow: 3px 3px 0px #000;
+      transition: 0.1s;
     }
-
+    
     .logout-btn:hover {
-      color: var(--danger);
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0px #000;
     }
 
     /* ===== FAB BUTTON ===== */
     #fabButton {
-      position: fixed;
-      bottom: 20px;
+      position: fixed;      bottom: 20px;
       right: 20px;
-      width: 60px;
-      height: 60px;
+      width: 65px;
+      height: 65px;
       background: var(--primary);
-      color: white;
-      border-radius: 50%;
+      color: #000;
+      border: var(--border-width) solid #000;
       display: none;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      font-size: 2rem;
+      box-shadow: var(--shadow);
       cursor: pointer;
       z-index: 100;
-      transition: var(--transition);
+      transition: all 0.2s;
     }
 
     #fabButton.show {
@@ -230,8 +265,8 @@
     }
 
     #fabButton:hover {
-      transform: scale(1.1);
-      background: var(--primary-dark);
+      transform: scale(1.1) rotate(90deg);
+      background: var(--primary-hover);
     }
 
     /* ===== MODAL ===== */
@@ -242,21 +277,22 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 999;      justify-content: center;
+      background: rgba(0,0,0,0.7); /* Latar lebih gelap */
+      backdrop-filter: grayscale(100%);
+      z-index: 999;
+      justify-content: center;
       align-items: center;
     }
 
     .modal, .modal-confirm {
-      background: white;
-      border-radius: var(--radius);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      background: #fff;
+      border: var(--border-width) solid #000;
+      box-shadow: 10px 10px 0px 0px #000;
       width: 90%;
       max-width: 500px;
       max-height: 80vh;
       overflow-y: auto;
-      padding: 1.5rem;
-      animation: fadeIn 0.3s ease-out;
+      padding: 1.5rem;      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .modal-confirm {
@@ -264,9 +300,9 @@
       text-align: center;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.8) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     .modal-header {
@@ -275,37 +311,46 @@
       align-items: center;
       margin-bottom: 1.5rem;
       padding-bottom: 1rem;
-      border-bottom: 1px solid var(--border);
+      border-bottom: var(--border-width) solid #000;
     }
 
     .modal-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--dark);
+      font-size: 1.4rem;
+      font-weight: 900;
+      text-transform: uppercase;
     }
 
     .modal-close {
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      color: var(--gray);
+      background: var(--danger);
+      border: 2px solid #000;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
       cursor: pointer;
+      box-shadow: 2px 2px 0px #000;
     }
-
-    .modal-body {      margin-bottom: 1.5rem;
-    }
-
-    .form-control {
-      margin-bottom: 1.2rem;
+    
+    .modal-close:hover {
+      background: #ff0000;
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px #000;
     }
 
     /* ===== TABLE ===== */
     .table-container {
-      background: white;
-      border-radius: var(--radius);
-      box-shadow: var(--card-shadow);
+      background: var(--card-bg);      border: var(--border-width) solid #000;
+      box-shadow: var(--shadow);
       overflow: hidden;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
+    }
+
+    .table-container h2 {
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 1.2rem;
     }
 
     table {
@@ -316,13 +361,14 @@
     th, td {
       padding: 1rem;
       text-align: left;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 2px solid #000;
     }
 
     th {
-      background: #f1f3f9;
-      font-weight: 700;
-      color: var(--dark);
+      background: var(--secondary);
+      font-weight: 900;
+      text-transform: uppercase;
+      border-right: 2px solid #000;
     }
 
     tr:last-child td {
@@ -330,38 +376,47 @@
     }
 
     tr:hover td {
-      background: #f9fbff;
+      background: var(--warning);
     }
 
     .btn-action {
-      width: 32px;
-      height: 32px;
-      border: none;
-      border-radius: 6px;
-      background: #e9ecef;
-      color: var(--gray);
-      display: flex;
-      align-items: center;      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: 2px solid #000;
+      background: #fff;
+      color: #000;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       margin: 0 0.25rem;
-      transition: var(--transition);
+      box-shadow: 2px 2px 0px #000;      transition: 0.1s;
     }
 
-    .btn-edit { background: #cce7ff; color: #0d6efd; }
-    .btn-edit:hover { background: #b3daff; }
-    .btn-delete { background: #ffe6e6; color: var(--danger); }
-    .btn-delete:hover { background: #ffcccc; }
+    .btn-action:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px #000;
+    }
+
+    .btn-action:active {
+      transform: translate(1px, 1px);
+      box-shadow: 0px 0px 0px #000;
+    }
+
+    .btn-edit:hover { background: var(--secondary); }
+    .btn-delete:hover { background: var(--danger); }
 
     .empty-state {
       text-align: center;
-      padding: 2.5rem 1rem;
-      color: var(--gray);
+      padding: 3rem 1rem;
+      font-weight: bold;
+      text-transform: uppercase;
     }
 
     .empty-state i {
-      font-size: 2.5rem;
+      font-size: 3rem;
       margin-bottom: 1rem;
-      opacity: 0.6;
+      color: #000;
     }
 
     /* ===== NOTIFICATION ===== */
@@ -370,27 +425,30 @@
       top: 20px;
       right: 20px;
       padding: 1rem 1.5rem;
-      border-radius: var(--radius);
-      color: white;
-      font-weight: 600;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border: var(--border-width) solid #000;
+      font-weight: 900;
+      text-transform: uppercase;
+      box-shadow: var(--shadow);
       transform: translateX(200%);
-      transition: transform 0.3s ease-out;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       z-index: 1000;
+      color: #000;
     }
 
     #notification.show {
       transform: translateX(0);
     }
 
-    .notif-success { background: var(--success); }
-    .notif-error { background: var(--danger); }
-    .notif-warning { background: var(--warning); color: var(--dark); }
+    .notif-success { background: var(--primary); }    .notif-error { background: var(--danger); }
+    .notif-warning { background: var(--warning); }
 
     @media (max-width: 768px) {
       #fabButton { bottom: 80px; }
+      .table-container { overflow-x: auto; }
+      table { min-width: 600px; }
     }
-  </style></head>
+  </style>
+</head>
 <body>
 
   <!-- AUTH PAGE -->
@@ -430,8 +488,7 @@
       <div class="input-group">
         <label for="emailSignup"><i class="fas fa-envelope"></i> Email</label>
         <input type="email" id="emailSignup" placeholder="contoh@email.com" autocomplete="off">
-      </div>
-      <div class="input-group">
+      </div>      <div class="input-group">
         <label for="passwordSignup"><i class="fas fa-lock"></i> Password</label>
         <input type="password" id="passwordSignup" placeholder="Minimal 6 karakter">
       </div>
@@ -439,7 +496,8 @@
         <label for="confirmPassword"><i class="fas fa-lock"></i> Konfirmasi Password</label>
         <input type="password" id="confirmPassword" placeholder="Ulangi password">
       </div>
-      <button class="btn" onclick="signUpWithEmail()">Daftar Akun</button>    </div>
+      <button class="btn" onclick="signUpWithEmail()">Daftar Akun</button>
+    </div>
   </div>
 
   <!-- FORGOT PASSWORD PAGE -->
@@ -448,7 +506,7 @@
       <i class="fas fa-key"></i>
     </div>
     <h1>Reset Password</h1>
-    <p style="margin-bottom: 1.5rem; color: var(--gray);">
+    <p style="margin-bottom: 1.5rem; font-weight: bold;">
       Masukkan email akun Anda. Kami akan mengirim tautan reset.
     </p>
     <div class="input-group">
@@ -467,7 +525,7 @@
       <i class="fas fa-lock-open"></i>
     </div>
     <h1>Atur Ulang Password</h1>
-    <p style="margin-bottom: 1.5rem; color: var(--gray);">
+    <p style="margin-bottom: 1.5rem; font-weight: bold;">
       Masukkan password baru untuk akun Anda.
     </p>
     <div class="input-group">
@@ -479,8 +537,7 @@
       <input type="password" id="confirmNewPassword" placeholder="Ulangi password">
     </div>
     <button class="btn" onclick="confirmPasswordReset()">Simpan Password Baru</button>
-    <button class="btn btn-secondary" onclick="showAuthPage()">
-      <i class="fas fa-arrow-left"></i> Kembali ke Login
+    <button class="btn btn-secondary" onclick="showAuthPage()">      <i class="fas fa-arrow-left"></i> Kembali ke Login
     </button>
   </div>
 
@@ -488,22 +545,23 @@
   <div id="app" class="container">
     <header>
       <div class="title" id="userDisplayName">
-        <i class="fas fa-warehouse"></i> Manajemen Inventaris      </div>
+        <i class="fas fa-warehouse"></i> Manajemen Inventaris
+      </div>
       <button class="logout-btn" title="Keluar" onclick="logout()">
-        <i class="fas fa-sign-out-alt"></i>
+        <i class="fas fa-sign-out-alt"></i> Keluar
       </button>
     </header>
 
     <!-- TABEL UTAMA -->
     <div class="table-container">
-      <div style="padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
+      <div style="padding: 1rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; border-bottom: 3px solid #000; background: #fff;">
         <h2 style="font-size: 1.25rem; font-weight: 700;"><i class="fas fa-clipboard-list"></i> Daftar Barang (Terkini)</h2>
-        <div style="display: flex; gap: 0.5rem;">
-          <button class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: var(--success);" onclick="downloadCSV()">
-            <i class="fas fa-file-csv"></i> Unduh CSV
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button class="btn" style="width: auto; margin:0; padding: 0.5rem 1rem; background: var(--warning);" onclick="downloadCSV()">
+            <i class="fas fa-file-csv"></i> CSV
           </button>
-          <button class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: #6c5ce7;" onclick="exportToPNG()">
-            <i class="fas fa-image"></i> Ekspor ke PNG
+          <button class="btn" style="width: auto; margin:0; padding: 0.5rem 1rem; background: var(--accent);" onclick="exportToPNG()">
+            <i class="fas fa-image"></i> PNG
           </button>
         </div>
       </div>
@@ -524,12 +582,11 @@
 
     <!-- TABEL AKUMULASI -->
     <div class="table-container">
-      <div style="padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
+      <div style="padding: 1rem; border-bottom: 3px solid #000; background: #fff;">
         <h2 style="font-size: 1.25rem; font-weight: 700;"><i class="fas fa-calculator"></i> Total Jumlah per Nama Barang</h2>
       </div>
       <table id="summaryTable">
-        <thead>
-          <tr>
+        <thead>          <tr>
             <th>Nama Barang</th>
             <th>Total Jumlah</th>
           </tr>
@@ -537,7 +594,8 @@
         <tbody id="summaryBody">
         </tbody>
       </table>
-    </div>  </div>
+    </div>
+  </div>
 
   <!-- FAB BUTTON -->
   <div id="fabButton" class="fab" onclick="openAddModal()" title="Tambah Data">
@@ -548,17 +606,17 @@
   <div id="addModal" class="modal-backdrop">
     <div class="modal">
       <div class="modal-header">
-        <div class="modal-title"><i class="fas fa-plus-circle"></i> Tambah Data Barang</div>
+        <div class="modal-title"><i class="fas fa-plus-circle"></i> Tambah Data</div>
         <button class="modal-close" onclick="closeModal('addModal')">&times;</button>
       </div>
       <div class="modal-body">
         <div class="form-control">
           <label><i class="fas fa-tag"></i> Nama Barang</label>
-          <input type="text" id="namaBarangInput" placeholder="Contoh: KOWL, K81, LEVER 4xV" required>
+          <input type="text" id="namaBarangInput" placeholder="Contoh: KOWL, K81" required>
         </div>
         <div class="form-control">
           <label><i class="fas fa-sort-numeric-up"></i> Jumlah</label>
-          <input type="number" id="jumlahInput" min="1" placeholder="Contoh: 10" required>
+          <input type="number" id="jumlahInput" min="1" placeholder="10" required>
         </div>
         <div class="form-control">
           <label><i class="fas fa-calendar-day"></i> Tanggal</label>
@@ -576,17 +634,17 @@
   <div id="editModal" class="modal-backdrop">
     <div class="modal">
       <div class="modal-header">
-        <div class="modal-title"><i class="fas fa-edit"></i> Edit Data Barang</div>
-        <button class="modal-close" onclick="closeModal('editModal')">&times;</button>
-      </div>
+        <div class="modal-title"><i class="fas fa-edit"></i> Edit Data</div>
+        <button class="modal-close" onclick="closeModal('editModal')">&times;</button>      </div>
       <div class="modal-body">
         <input type="hidden" id="editIndex">
         <div class="form-control">
           <label><i class="fas fa-tag"></i> Nama Barang</label>
-          <input type="text" id="editNama" placeholder="Contoh: KOWL, K81, LEVER 4xV" required>
+          <input type="text" id="editNama" placeholder="Contoh: KOWL, K81" required>
         </div>
         <div class="form-control">
-          <label><i class="fas fa-sort-numeric-up"></i> Jumlah</label>          <input type="number" id="editJumlah" min="1" placeholder="Contoh: 10" required>
+          <label><i class="fas fa-sort-numeric-up"></i> Jumlah</label>
+          <input type="number" id="editJumlah" min="1" placeholder="10" required>
         </div>
         <div class="form-control">
           <label><i class="fas fa-calendar-day"></i> Tanggal</label>
@@ -603,8 +661,8 @@
   <!-- MODAL KONFIRMASI HAPUS -->
   <div id="confirmModal" class="modal-backdrop">
     <div class="modal-confirm">
-      <div class="modal-title"><i class="fas fa-exclamation-triangle"></i> Konfirmasi Hapus</div>
-      <p>Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.</p>
+      <div class="modal-title" style="color: var(--danger);"><i class="fas fa-exclamation-triangle"></i> Hapus Data?</div>
+      <p style="margin: 1rem 0; font-weight: bold;">Tindakan ini tidak dapat dibatalkan.</p>
       <div style="display: flex; gap: 0.5rem; justify-content: center;">
         <button class="btn btn-cancel" onclick="closeModal('confirmModal')">Batal</button>
         <button class="btn" style="background: var(--danger);" onclick="confirmDelete()">Hapus</button>
@@ -626,7 +684,6 @@
       if (tab === 'login') document.getElementById('tabLogin').classList.remove('btn-secondary');
       if (tab === 'signup') document.getElementById('tabSignup').classList.remove('btn-secondary');
     }
-
     function showAuthPage() {
       document.getElementById('authPage').style.display = 'block';
       document.getElementById('forgotPasswordPage').style.display = 'none';
@@ -635,7 +692,8 @@
       document.getElementById('fabButton').classList.remove('show');
     }
 
-    function forgotPassword() {      const email = document.getElementById('emailLogin').value.trim();
+    function forgotPassword() {
+      const email = document.getElementById('emailLogin').value.trim();
       if (email) document.getElementById('fpEmail').value = email;
       showAuthPage();
       setTimeout(() => {
@@ -675,8 +733,7 @@
       if (!email || !pass) return showNotification('Email & password wajib diisi!', 'warning');
 
       try {
-        showNotification('Login...', 'warning');
-        const userCredential = await auth.signInWithEmailAndPassword(email, pass);
+        showNotification('Login...', 'warning');        const userCredential = await auth.signInWithEmailAndPassword(email, pass);
         currentUser = userCredential.user;
 
         showNotification(`Selamat datang, ${currentUser.email} 👋`, 'success');
@@ -684,7 +741,8 @@
         await loadUserData();
       } catch (error) {
         let msg = 'Gagal login: ';
-        if (error.code === 'auth/user-not-found') msg += 'Akun tidak ditemukan.';        else if (error.code === 'auth/wrong-password') msg += 'Password salah.';
+        if (error.code === 'auth/user-not-found') msg += 'Akun tidak ditemukan.';
+        else if (error.code === 'auth/wrong-password') msg += 'Password salah.';
         else if (error.code === 'auth/invalid-email') msg += 'Format email tidak valid.';
         else msg += error.message;
         showNotification(msg, 'error');
@@ -724,8 +782,7 @@
         showNotification('Anda telah keluar ✅', 'success');
         setTimeout(showAuthPage, 500);
       } catch (error) {
-        showNotification('Gagal logout: ' + error.message, 'error');
-      }
+        showNotification('Gagal logout: ' + error.message, 'error');      }
     }
 
     async function sendPasswordResetLink() {
@@ -733,7 +790,8 @@
       if (!email) return showNotification('Masukkan email Anda.', 'warning');
 
       try {
-        await auth.sendPasswordResetEmail(email, {          url: window.location.origin + '/reset-password',
+        await auth.sendPasswordResetEmail(email, {
+          url: window.location.origin + '/reset-password',
           handleCodeInApp: true
         });
         showNotification(`✅ Tautan reset dikirim ke ${email}. Cek inbox Anda!`, 'success');
@@ -773,8 +831,7 @@
         showNotification('✅ Password berhasil diubah! Silakan login.', 'success');
         setTimeout(() => {
           window.passwordResetCode = null;
-          showAuthPage();
-        }, 2000);
+          showAuthPage();        }, 2000);
       } catch (error) {
         let msg = 'Gagal reset password: ';
         if (error.code === 'auth/expired-action-code') {
@@ -782,7 +839,8 @@
         } else if (error.code === 'auth/invalid-action-code') {
           msg += 'Tautan tidak valid.';
         } else if (error.code === 'auth/weak-password') {
-          msg += 'Password terlalu lemah.';        } else {
+          msg += 'Password terlalu lemah.';
+        } else {
           msg += error.message;
         }
         showNotification(msg, 'error');
@@ -822,8 +880,7 @@
       document.getElementById('app').style.display = 'flex';
       document.getElementById('fabButton').classList.add('show');
 
-      const nameEl = document.getElementById('userDisplayName');
-      if (currentUser.displayName) {
+      const nameEl = document.getElementById('userDisplayName');      if (currentUser.displayName) {
         nameEl.innerHTML = `<i class="fas fa-warehouse"></i> Hai, ${currentUser.displayName} 👋`;
       } else {
         nameEl.innerHTML = `<i class="fas fa-warehouse"></i> ${currentUser.email}`;
@@ -872,15 +929,15 @@
       if (!jumlah || jumlah <= 0) return showNotification('Jumlah harus > 0!', 'warning');
       if (!tanggal) return showNotification('Pilih tanggal!', 'warning');
 
-      barangData[index] = { nama, jumlah, tanggal };
-      await saveUserData();
+      barangData[index] = { nama, jumlah, tanggal };      await saveUserData();
       closeModal('editModal');
       showNotification('✅ Data berhasil diperbarui!', 'success');
     }
 
     let deleteIndex = null;
 
-    function openConfirmDelete(index) {      if (!currentUser) {
+    function openConfirmDelete(index) {
+      if (!currentUser) {
         showNotification('Silakan login terlebih dahulu!', 'warning');
         return;
       }
@@ -921,8 +978,7 @@
 
       tbody.innerHTML = barangData.map((item, i) => `
         <tr>
-          <td>${i + 1}</td>
-          <td><strong>${item.nama}</strong></td>
+          <td>${i + 1}</td>          <td><strong>${item.nama}</strong></td>
           <td>${item.jumlah}</td>
           <td>${formatTanggal(item.tanggal)}</td>
           <td>
@@ -971,14 +1027,14 @@
       if (barangData.length === 0) return showNotification('❌ Tidak ada data untuk diunduh!', 'error');
 
       let csv = 'No,Nama Barang,Jumlah,Tanggal\n';
-      barangData.forEach((item, i) => {
-        csv += `${i + 1},${item.nama},${item.jumlah},${item.tanggal}\n`;
+      barangData.forEach((item, i) => {        csv += `${i + 1},${item.nama},${item.jumlah},${item.tanggal}\n`;
       });
 
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const filename = `inventaris_${new Date().toISOString().slice(0,10)}.csv`;
-      const a = document.createElement('a');      a.href = url;
+      const a = document.createElement('a');
+      a.href = url;
       a.download = filename;
       document.body.appendChild(a);
       a.click();
@@ -993,11 +1049,10 @@
       const container = document.createElement('div');
       container.style.padding = '20px 30px';
       container.style.backgroundColor = 'white';
-      container.style.fontFamily = 'Segoe UI, sans-serif';
+      container.style.border = '3px solid black';
+      container.style.fontFamily = 'Courier New, monospace';
       container.style.fontSize = '14px';
       container.style.color = '#212529';
-      container.style.borderRadius = '12px';
-      container.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
       container.style.maxWidth = '800px';
       container.style.margin = '0 auto';
 
@@ -1005,7 +1060,8 @@
       title.textContent = 'Daftar Barang (Terkini)';
       title.style.margin = '0 0 20px 0';
       title.style.fontSize = '18px';
-      title.style.fontWeight = '700';
+      title.style.fontWeight = '900';
+      title.style.textTransform = 'uppercase';
 
       const table = document.getElementById('dataTable');
       const tableClone = table.cloneNode(true);
@@ -1020,14 +1076,14 @@
       }
 
       container.appendChild(title);
-      container.appendChild(tableClone);
-      container.style.position = 'absolute';
+      container.appendChild(tableClone);      container.style.position = 'absolute';
       container.style.left = '-9999px';
       document.body.appendChild(container);
 
       html2canvas(container, {
         scale: 2,
-        backgroundColor: 'white',        useCORS: true,
+        backgroundColor: 'white',
+        useCORS: true,
         logging: false
       }).then(canvas => {
         const link = document.createElement('a');
@@ -1069,14 +1125,14 @@
 
       auth.onAuthStateChanged(async (user) => {
         if (user) {
-          currentUser = user;
-          showApp();
+          currentUser = user;          showApp();
           await loadUserData();
         } else {
           showAuthPage();
         }
       });
-    });  </script>
+    });
+  </script>
 
 </body>
 </html>
