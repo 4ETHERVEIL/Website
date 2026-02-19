@@ -954,7 +954,7 @@
         map[key].nilai += val;
       });
       tbody.innerHTML = Object.entries(map).sort((a, b) => a[1].nama.localeCompare(b[1].nama)).map(([_, d]) => 
-        `<tr><td><strong>${d.nama}</strong></td><td style="color:var();font-weight:900">${d.qty}</td><td class="col-total">${formatRupiah(d.nilai)}</td></tr>`
+        `<tr><td><strong>${d.nama}</strong></td><td style="color:var(--primary);font-weight:900">${d.qty}</td><td class="col-total">${formatRupiah(d.nilai)}</td></tr>`
       ).join('');
       tfoot.innerHTML = `<tr><td>TOTAL</td><td>-</td><td class="col-total" style="color:#0f0!important">${formatRupiah(grandTotal)}</td></tr>`;
     }
