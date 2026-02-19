@@ -535,7 +535,7 @@
           <table id="summaryTable">
             <thead><tr><th>BARANG</th><th>TOTAL</th><th>NILAI</th></tr></thead>
             <tbody id="summaryBody"></tbody>
-            <tfoot id="summaryFooter" style="background:#000!important;color:#0f0!important;"></tfoot>
+            <tfoot id="summaryFooter" style="background:#000!important;color:#e040fb!important;"></tfoot>
           </table>
         </div>      </div>
     </section>
@@ -956,7 +956,7 @@
       tbody.innerHTML = Object.entries(map).sort((a, b) => a[1].nama.localeCompare(b[1].nama)).map(([_, d]) => 
         `<tr><td><strong>${d.nama}</strong></td><td style="color:var(--primary);font-weight:900">${d.qty}</td><td class="col-total">${formatRupiah(d.nilai)}</td></tr>`
       ).join('');
-      tfoot.innerHTML = `<tr><td>TOTAL</td><td>-</td><td class="col-total" style="color:#0f0!important">${formatRupiah(grandTotal)}</td></tr>`;
+      tfoot.innerHTML = `<tr><td>TOTAL</td><td>-</td><td class="col-total" style="color:##e040fb!important">${formatRupiah(grandTotal)}</td></tr>`;
     }
 
     function downloadCSV() {
