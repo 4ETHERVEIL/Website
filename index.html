@@ -149,6 +149,128 @@
       75% { transform: translate(-20px, -10px) scale(1.02); }
     }
 
+    /* 🪐 PLANETS WITH ORBIT ANIMATION */
+    .planet {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      user-select: none;
+      z-index: -1;
+      opacity: 0.85;
+      box-shadow: 0 0 30px currentColor;
+    }
+
+    /* Planet 1 - Blue Large (Top Right) */
+    .planet-1 {
+      width: 70px;
+      height: 70px;
+      background: radial-gradient(circle at 30% 30%, #7eb3ff, #4169e1 60%, #1a3a7a);
+      color: rgba(100, 149, 237, 0.6);
+      top: 10%;
+      right: 5%;
+      animation: orbit1 45s linear infinite, pulse 4s ease-in-out infinite;
+    }
+
+    /* Planet 2 - Purple Medium (Bottom Left) */
+    .planet-2 {
+      width: 50px;
+      height: 50px;
+      background: radial-gradient(circle at 30% 30%, #c49bff, #9d4edd 60%, #4a1a6b);
+      color: rgba(157, 78, 221, 0.6);
+      bottom: 15%;
+      left: 3%;
+      animation: orbit2 35s linear infinite reverse, pulse 5s ease-in-out infinite;
+    }
+
+    /* Planet 3 - Cyan Small (Center Left) */
+    .planet-3 {
+      width: 35px;
+      height: 35px;
+      background: radial-gradient(circle at 30% 30%, #7ff4ff, #00d4ff 60%, #005566);
+      color: rgba(0, 212, 255, 0.6);
+      top: 40%;
+      left: 2%;
+      animation: orbit3 25s linear infinite, float 8s ease-in-out infinite;
+    }
+
+    /* Planet 4 - Pink Tiny (Top Left - Fast) */
+    .planet-4 {      width: 25px;
+      height: 25px;
+      background: radial-gradient(circle at 30% 30%, #ffb3d9, #ff69b4 60%, #8b1a4a);
+      color: rgba(255, 105, 180, 0.6);
+      top: 5%;
+      left: 10%;
+      animation: orbit4 20s linear infinite reverse, pulse 3s ease-in-out infinite;
+    }
+
+    /* Planet 5 - Orange Medium (Bottom Right) */
+    .planet-5 {
+      width: 45px;
+      height: 45px;
+      background: radial-gradient(circle at 30% 30%, #ffd9a8, #ff8c42 60%, #8b4500);
+      color: rgba(255, 140, 66, 0.6);
+      bottom: 8%;
+      right: 8%;
+      animation: orbit5 40s linear infinite, float 10s ease-in-out infinite;
+    }
+
+    /* Ring effect for some planets */
+    .planet-1::after, .planet-5::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotateX(70deg);
+      width: 140%;
+      height: 40%;
+      border: 3px solid rgba(255,255,255,0.2);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    /* Orbit Animations - Elliptical paths */
+    @keyframes orbit1 {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(30px, -20px) rotate(90deg); }
+      50% { transform: translate(10px, -40px) rotate(180deg); }
+      75% { transform: translate(-20px, -15px) rotate(270deg); }
+      100% { transform: translate(0, 0) rotate(360deg); }
+    }
+
+    @keyframes orbit2 {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(-25px, 15px) rotate(90deg); }
+      50% { transform: translate(-10px, 30px) rotate(180deg); }
+      75% { transform: translate(20px, 10px) rotate(270deg); }
+      100% { transform: translate(0, 0) rotate(360deg); }
+    }
+    @keyframes orbit3 {
+      0% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(20px, -10px) scale(1.1); }
+      66% { transform: translate(-15px, 20px) scale(0.95); }
+      100% { transform: translate(0, 0) scale(1); }
+    }
+
+    @keyframes orbit4 {
+      0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+      50% { transform: translate(15px, -25px) rotate(180deg) scale(1.2); }
+      100% { transform: translate(0, 0) rotate(360deg) scale(1); }
+    }
+
+    @keyframes orbit5 {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(-30px, 20px); }
+      50% { transform: translate(-10px, 40px); }
+      75% { transform: translate(25px, 15px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    /* Pulse glow effect */
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 20px currentColor; opacity: 0.85; }
+      50% { box-shadow: 0 0 40px currentColor, 0 0 60px currentColor; opacity: 1; }
+    }
+
     /* Pastikan konten di atas background */
     .container, #authPage, #app, header, .table-container, .modal, .modal-confirm, #fabButton {
       position: relative;
@@ -170,8 +292,7 @@
 
     #authPage, #forgotPasswordPage, #resetPasswordPage {
       background: var(--card-bg);
-      padding: 1.5rem;
-      border: var(--border-thick);
+      padding: 1.5rem;      border: var(--border-thick);
       box-shadow: var(--shadow-hard);
       text-align: center;
       width: 100%;
@@ -194,7 +315,8 @@
       width: 100%; padding: 0.7rem; border: var(--border-thick); background: #f0f0f0;
       font-family: 'Courier New', monospace; font-weight: bold; font-size: 16px;
       outline: none; box-shadow: inset 2px 2px 0px 0px rgba(0,0,0,0.1); transition: var(--transition);
-    }    input:focus { background: #fff; border-color: var(--primary); box-shadow: 2px 2px 0px 0px var(--primary); }
+    }
+    input:focus { background: #fff; border-color: var(--primary); box-shadow: 2px 2px 0px 0px var(--primary); }
 
     .btn {
       display: block; width: 100%; padding: 0.7rem; background: var(--primary); color: white;
@@ -219,8 +341,7 @@
     }
     
     .nav-scroll {
-      display: flex;
-      gap: 3px;
+      display: flex;      gap: 3px;
       padding: 4px;
       overflow-x: auto;
       scroll-behavior: smooth;
@@ -243,7 +364,8 @@
       gap: 0.3rem;
       white-space: nowrap;
       min-height: 40px;
-    }    
+    }
+    
     .nav-btn.active {
       background: var(--primary);
       color: white;
@@ -268,7 +390,6 @@
     .nav-arrow.left { left: 0; border-right: none; }
     .nav-arrow.right { right: 0; border-left: none; }
     .nav-arrow.hidden { display: none; }
-
     #app { display: none; flex-direction: column; }
     
     header {
@@ -292,7 +413,8 @@
       display: none; align-items: center; justify-content: center; font-size: 1.5rem;
       box-shadow: var(--shadow-hard); cursor: pointer; z-index: 100; 
       border-radius: 50%; min-width: 50px; min-height: 50px;
-    }    #fabButton.show { display: flex !important; }
+    }
+    #fabButton.show { display: flex !important; }
     #fabButton:active { transform: translate(4px, 4px); box-shadow: none; }
 
     .modal-backdrop {
@@ -317,7 +439,6 @@
       width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
       cursor: pointer; font-weight: bold; border-radius: 50%;
     }
-
     .table-container {
       background: var(--card-bg); border: var(--border-thick);
       box-shadow: var(--shadow-hard); overflow: hidden; margin-bottom: 1.5rem;
@@ -341,7 +462,8 @@
       align-items: center;
     }
     .bulk-action-bar.show { display: flex; }
-    .bulk-info { font-size: 0.8rem; }    .bulk-btn {
+    .bulk-info { font-size: 0.8rem; }
+    .bulk-btn {
       background: white; color: var(--danger); border: 2px solid white;
       padding: 0.4rem 0.8rem; font-weight: 800; cursor: pointer;
       min-height: 36px;
@@ -366,8 +488,7 @@
       white-space: nowrap;
     }
     th { 
-      background: #000 !important; 
-      color: #fff !important; 
+      background: #000 !important;       color: #fff !important; 
       font-weight: 900; 
       text-transform: uppercase; 
       font-size: 0.8rem;
@@ -391,6 +512,7 @@
     .custom-checkbox.checked { background: var(--danger); }
     .custom-checkbox i { color: white; font-size: 12px; display: none; }
     .custom-checkbox.checked i { display: block; }
+
     .col-harga { text-align: right; color: #00aa00 !important; font-weight: 700; }
     .col-total { text-align: right; color: #0066cc !important; font-weight: 900; }
 
@@ -415,8 +537,7 @@
       width: 80px; height: 80px; border-radius: 50%; 
       background: linear-gradient(135deg, var(--primary), var(--success));
       color: white; display: flex; align-items: center; justify-content: center;
-      font-size: 2rem; margin: 0 auto 0.8rem; border: var(--border-thick);
-    }
+      font-size: 2rem; margin: 0 auto 0.8rem; border: var(--border-thick);    }
     .account-info { margin: 1.2rem 0; text-align: left; max-width: 100%; }
     .account-info p { 
       margin: 0.6rem 0; padding: 0.6rem; 
@@ -439,7 +560,8 @@
       font-size: 1.3rem;
       padding: 0.8rem;
       border: var(--border-thick);
-      text-align: right;      margin-bottom: 0.8rem;
+      text-align: right;
+      margin-bottom: 0.8rem;
       min-height: 50px;
     }
     .calc-expression { font-size: 0.8rem; color: #888; text-align: right; }
@@ -465,7 +587,6 @@
     }
     .calc-history-item { padding: 0.25rem 0; border-bottom: 1px dashed #ccc; cursor: pointer; }
     .calc-history-item:hover { background: var(--primary); color: white; }
-
     #notification {
       position: fixed; top: 10px; right: 10px; padding: 0.8rem 1.2rem;
       border: var(--border-thick); font-weight: 900; 
@@ -488,12 +609,16 @@
       .bulk-btn { width: 100%; }
       .table-container > div { flex-direction: column; align-items: flex-start; }
       .table-actions { width: 100%; }
+      /* Hide some planets on mobile for performance */
+      .planet-3, .planet-4 { display: none; }
     }
+
     @media (max-width: 480px) {
       body { font-size: 13px; padding: 8px; }
       table { min-width: 520px; font-size: 0.75rem; }
       th, td { padding: 0.45rem 0.25rem; }
       .btn-action { width: 28px; height: 28px; min-width: 28px; min-height: 28px; }
+      .planet-2, .planet-5 { display: none; }
     }
 
     .hidden { display: none !important; }
@@ -510,8 +635,7 @@
     <div id="loginForm">
       <h1>🚀 MASUK</h1>
       <div class="input-group">
-        <label>📧 EMAIL</label>
-        <input type="email" id="emailLogin" placeholder="USER@EMAIL.COM">
+        <label>📧 EMAIL</label>        <input type="email" id="emailLogin" placeholder="USER@EMAIL.COM">
       </div>
       <div class="input-group">
         <label>🔑 PASSWORD</label>
@@ -538,6 +662,7 @@
       <button class="btn" onclick="signUpWithEmail()">🎉 DAFTAR</button>
     </div>
   </div>
+
   <div id="forgotPasswordPage" class="container" style="display: none;">
     <div class="logo"><i class="fas fa-key"></i></div>
     <h1>🔄 RESET</h1>
@@ -559,8 +684,7 @@
     <div class="input-group">
       <label>✅ KONFIRMASI</label>
       <input type="password" id="confirmNewPassword" placeholder="Ulangi password">
-    </div>
-    <button class="btn" onclick="confirmPasswordReset()">💾 SIMPAN</button>
+    </div>    <button class="btn" onclick="confirmPasswordReset()">💾 SIMPAN</button>
     <button class="btn btn-secondary" onclick="showAuthPage()">⬅️ KEMBALI</button>
   </div>
 
@@ -586,7 +710,8 @@
           <div class="bulk-info"><i class="fas fa-check-circle"></i> <span id="bulkCount">0</span> DIPILIH</div>
           <button class="bulk-btn" onclick="deleteSelected()">🗑️ HAPUS</button>
         </div>
-        <div>          <h2><i class="fas fa-clipboard-list"></i> DAFTAR BARANG</h2>
+        <div>
+          <h2><i class="fas fa-clipboard-list"></i> DAFTAR BARANG</h2>
           <div class="table-actions">
             <button class="btn" style="background: var(--success);" onclick="downloadCSV()">CSV</button>
             <button class="btn" style="background: #6c5ce7;" onclick="exportToPNG()">PNG</button>
@@ -608,8 +733,7 @@
 
     <section id="akumulasi" class="content-section">
       <div class="table-container">
-        <div style="background: var(--warning); color: #000;">
-          <h2><i class="fas fa-calculator"></i> TOTAL AKUMULASI</h2>
+        <div style="background: var(--warning); color: #000;">          <h2><i class="fas fa-calculator"></i> TOTAL AKUMULASI</h2>
         </div>
         <div class="table-wrapper">
           <table id="summaryTable">
@@ -635,7 +759,8 @@
           <button class="calc-btn" onclick="calcInput('8')">8</button>
           <button class="calc-btn" onclick="calcInput('9')">9</button>
           <button class="calc-btn operator" onclick="calcInput('×')">×</button>
-          <button class="calc-btn" onclick="calcInput('4')">4</button>          <button class="calc-btn" onclick="calcInput('5')">5</button>
+          <button class="calc-btn" onclick="calcInput('4')">4</button>
+          <button class="calc-btn" onclick="calcInput('5')">5</button>
           <button class="calc-btn" onclick="calcInput('6')">6</button>
           <button class="calc-btn operator" onclick="calcInput('-')">−</button>
           <button class="calc-btn" onclick="calcInput('1')">1</button>
@@ -657,7 +782,6 @@
         <div class="calc-history" id="calcHistory"><div style="text-align:center;color:#666;">Riwayat kosong</div></div>
       </div>
     </section>
-
     <section id="account" class="content-section">
       <div class="account-card">
         <div class="account-avatar" id="accountAvatar"><i class="fas fa-user"></i></div>
@@ -684,7 +808,8 @@
       <div class="input-group"><label>NAMA</label><input type="text" id="namaBarangInput"></div>
       <div class="input-group"><label>JUMLAH</label><input type="number" id="jumlahInput" min="1"></div>
       <div class="input-group"><label>HARGA</label><input type="number" id="hargaInput" min="0"></div>
-      <div class="input-group"><label>TANGGAL</label><input type="date" id="tanggalInput"></div>      <div style="display:flex;gap:0.5rem;"><button class="btn" onclick="tambahData()">SIMPAN</button><button class="btn btn-cancel" onclick="closeModal('addModal')">BATAL</button></div>
+      <div class="input-group"><label>TANGGAL</label><input type="date" id="tanggalInput"></div>
+      <div style="display:flex;gap:0.5rem;"><button class="btn" onclick="tambahData()">SIMPAN</button><button class="btn btn-cancel" onclick="closeModal('addModal')">BATAL</button></div>
     </div>
   </div>
 
@@ -707,7 +832,6 @@
       <div style="display:flex;gap:0.5rem;"><button class="btn btn-cancel" onclick="closeModal('confirmModal')">BATAL</button><button class="btn" style="background:var(--danger);" onclick="confirmDelete()">HAPUS</button></div>
     </div>
   </div>
-
   <div id="confirmBulkModal" class="modal-backdrop">
     <div class="modal-confirm">
       <div class="modal-title" style="color:var(--danger);">HAPUS <span id="bulkConfirmCount">0</span> DATA?</div>
@@ -732,8 +856,10 @@
     let selectedIndices = new Set();
     let calcCurrent = '0', calcPrevious = '', calcOperator = null, calcShouldReset = false, calcHistory = [];
 
-    // ✨ Generate Space Background Animation
-    function createSpaceBackground() {      const starsLayer = document.createElement('div');
+    // ✨ Generate Space Background with Animated Planets
+    function createSpaceBackground() {
+      // Stars layer
+      const starsLayer = document.createElement('div');
       starsLayer.className = 'stars-layer';
       for (let i = 0; i < 30; i++) {
         const star = document.createElement('div');
@@ -749,10 +875,18 @@
         starsLayer.appendChild(star);
       }
       document.body.appendChild(starsLayer);
+      
+      // Nebula layers
       ['nebula-1', 'nebula-2', 'nebula-3'].forEach(cls => {
         const n = document.createElement('div');
         n.className = 'nebula ' + cls;
-        document.body.appendChild(n);
+        document.body.appendChild(n);      });
+      
+      // 🪐 Animated Planets
+      ['planet-1', 'planet-2', 'planet-3', 'planet-4', 'planet-5'].forEach(cls => {
+        const p = document.createElement('div');
+        p.className = 'planet ' + cls;
+        document.body.appendChild(p);
       });
     }
 
@@ -782,7 +916,8 @@
     }
 
     function showTab(tab) {
-      document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';      document.getElementById('signupForm').style.display = tab === 'signup' ? 'block' : 'none';
+      document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+      document.getElementById('signupForm').style.display = tab === 'signup' ? 'block' : 'none';
       document.getElementById('tabLogin').classList.toggle('btn-secondary', tab !== 'login');
       document.getElementById('tabSignup').classList.toggle('btn-secondary', tab !== 'signup');
     }
@@ -794,7 +929,6 @@
       document.getElementById('app').style.display = 'none';
       document.getElementById('fabButton').classList.remove('show');
     }
-
     async function signUpWithEmail() {
       const email = document.getElementById('emailSignup').value.trim();
       const pass = document.getElementById('passwordSignup').value;
@@ -832,6 +966,7 @@
         await loadUserData();
       } catch (e) { showNotification('Gagal: ' + e.message, 'error'); }
     }
+
     async function logout() {
       await auth.signOut();
       currentUser = null; barangData = []; selectedIndices.clear();
@@ -843,8 +978,7 @@
       const email = document.getElementById('emailLogin').value.trim();
       if (email) document.getElementById('fpEmail').value = email;
       showAuthPage();
-      setTimeout(() => {
-        document.getElementById('authPage').style.display = 'none';
+      setTimeout(() => {        document.getElementById('authPage').style.display = 'none';
         document.getElementById('forgotPasswordPage').style.display = 'block';
       }, 300);
     }
@@ -880,7 +1014,8 @@
         const doc = await db.collection('users').doc(currentUser.uid).get();
         barangData = doc.exists && doc.data().barangData ? doc.data().barangData : [];
         selectedIndices.clear();
-        renderTable();        renderSummaryTable();
+        renderTable();
+        renderSummaryTable();
         updateBulkActionBar();
       } catch (e) { showNotification('Gagal memuat data', 'error'); }
     }
@@ -892,8 +1027,7 @@
         await db.collection('users').doc(currentUser.uid).set({ barangData }, { merge: true });
         renderTable();
         renderSummaryTable();
-        updateBulkActionBar();
-      } catch (e) { showNotification('Gagal menyimpan', 'error'); }
+        updateBulkActionBar();      } catch (e) { showNotification('Gagal menyimpan', 'error'); }
     }
 
     function showApp() {
@@ -929,7 +1063,8 @@
 
     async function tambahData() {
       const nama = document.getElementById('namaBarangInput').value.trim();
-      const jumlah = parseInt(document.getElementById('jumlahInput').value);      const harga = parseInt(document.getElementById('hargaInput').value) || 0;
+      const jumlah = parseInt(document.getElementById('jumlahInput').value);
+      const harga = parseInt(document.getElementById('hargaInput').value) || 0;
       const tanggal = document.getElementById('tanggalInput').value;
       if (!nama) return showNotification('Nama wajib!', 'warning');
       if (!jumlah || jumlah <= 0) return showNotification('Jumlah harus > 0!', 'warning');
@@ -941,8 +1076,7 @@
     }
 
     async function updateData() {
-      const index = parseInt(document.getElementById('editIndex').value);
-      const nama = document.getElementById('editNama').value.trim();
+      const index = parseInt(document.getElementById('editIndex').value);      const nama = document.getElementById('editNama').value.trim();
       const jumlah = parseInt(document.getElementById('editJumlah').value);
       const harga = parseInt(document.getElementById('editHarga').value) || 0;
       const tanggal = document.getElementById('editTanggal').value;
@@ -978,7 +1112,8 @@
       document.getElementById('editNama').value = item.nama;
       document.getElementById('editJumlah').value = item.jumlah;
       document.getElementById('editHarga').value = item.harga || 0;
-      document.getElementById('editTanggal').value = item.tanggal;      document.getElementById('editModal').style.display = 'flex';
+      document.getElementById('editTanggal').value = item.tanggal;
+      document.getElementById('editModal').style.display = 'flex';
     }
 
     function toggleSelect(index) {
@@ -990,8 +1125,7 @@
     function toggleSelectAll() {
       if (selectedIndices.size === barangData.length && barangData.length > 0) selectedIndices.clear();
       else barangData.forEach((_, i) => selectedIndices.add(i));
-      renderTable();
-      updateBulkActionBar();
+      renderTable();      updateBulkActionBar();
     }
 
     function updateBulkActionBar() {
@@ -1027,7 +1161,8 @@
         return;
       }
       tbody.innerHTML = barangData.map((item, i) => {
-        const total = (item.jumlah || 0) * (item.harga || 0);        const isSelected = selectedIndices.has(i);
+        const total = (item.jumlah || 0) * (item.harga || 0);
+        const isSelected = selectedIndices.has(i);
         return `<tr style="${isSelected ? 'background:#ffe6e6!important;' : ''}">
           <td style="text-align:center;"><div class="custom-checkbox ${isSelected ? 'checked' : ''}" onclick="toggleSelect(${i})"><i class="fas fa-check"></i></div></td>
           <td>${i + 1}</td><td><strong>${item.nama}</strong></td><td>${item.jumlah}</td>
@@ -1039,8 +1174,7 @@
       }).join('');
     }
 
-    function renderSummaryTable() {
-      const tbody = document.getElementById('summaryBody');
+    function renderSummaryTable() {      const tbody = document.getElementById('summaryBody');
       const tfoot = document.getElementById('summaryFooter');
       if (!barangData.length) {
         tbody.innerHTML = `<tr><td colspan="3" class="empty-state"><i class="fas fa-chart-pie"></i><div>Belum ada data</div></td></tr>`;
@@ -1076,6 +1210,7 @@
       a.click(); URL.revokeObjectURL(url);
       showNotification('File diunduh!', 'success');
     }
+
     function exportToPNG() {
       if (!barangData.length) return showNotification('Tidak ada data!', 'error');
       const div = document.createElement('div');
@@ -1089,7 +1224,6 @@
         showNotification('PNG diunduh!', 'success');
       }).catch(() => { showNotification('Gagal membuat PNG', 'error'); document.body.removeChild(div); });
     }
-
     function initCalculator() {
       calcCurrent = '0'; calcPrevious = ''; calcOperator = null; calcShouldReset = false;
       updateCalcDisplay();
@@ -1125,7 +1259,8 @@
     function calcCalculate(updateHistory = true) {
       if (!calcOperator || !calcPrevious) return;
       const a = parseFloat(calcPrevious), b = parseFloat(calcCurrent);
-      let res;      switch(calcOperator) {
+      let res;
+      switch(calcOperator) {
         case '+': res = a + b; break;
         case '-': res = a - b; break;
         case '×': res = a * b; break;
@@ -1137,8 +1272,7 @@
         if (calcHistory.length > 10) calcHistory.pop();
         document.getElementById('calcHistory').innerHTML = calcHistory.map(h => `<div class="calc-history-item" onclick="calcUseHistory('${h}')">${h}</div>`).join('');
       }
-      calcCurrent = res === 'Error' ? 'Error' : res.toString();
-      calcPrevious = ''; calcOperator = null; calcShouldReset = true;
+      calcCurrent = res === 'Error' ? 'Error' : res.toString();      calcPrevious = ''; calcOperator = null; calcShouldReset = true;
       updateCalcDisplay();
     }
 
@@ -1174,7 +1308,8 @@
       const conf = document.getElementById('confirmNewPasswordAccount').value;
       if (!old || !neu || !conf) return showNotification('Semua kolom wajib!', 'warning');
       if (neu !== conf) return showNotification('Password tidak cocok!', 'warning');
-      if (neu.length < 6) return showNotification('Password minimal 6 karakter!', 'warning');      try {
+      if (neu.length < 6) return showNotification('Password minimal 6 karakter!', 'warning');
+      try {
         const cred = firebase.auth.EmailAuthProvider.credential(currentUser.email, old);
         await currentUser.reauthenticateWithCredential(cred);
         await currentUser.updatePassword(neu);
@@ -1186,8 +1321,7 @@
     async function deleteAccount() {
       if (!confirm('YAKIN HAPUS AKUN? Semua data hilang!')) return;
       try {
-        await db.collection('users').doc(currentUser.uid).delete();
-        await currentUser.delete();
+        await db.collection('users').doc(currentUser.uid).delete();        await currentUser.delete();
         showNotification('Akun dihapus!', 'success');
         setTimeout(() => { currentUser = null; showAuthPage(); }, 1500);
       } catch (e) {
@@ -1204,7 +1338,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      createSpaceBackground(); // ✨ Init space background
+      createSpaceBackground(); // ✨ Init space background with planets
       const params = new URLSearchParams(window.location.search);
       if (params.get('mode') === 'resetPassword' && params.get('oobCode')) {
         window.passwordResetCode = params.get('oobCode');
@@ -1223,7 +1357,8 @@
     });
 
     window.addEventListener('orientationchange', () => setTimeout(() => window.scrollTo(0, 0), 200));
-    let lastTouchEnd = 0;    document.addEventListener('touchend', e => {
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', e => {
       const now = Date.now();
       if (now - lastTouchEnd <= 300) e.preventDefault();
       lastTouchEnd = now;
@@ -1235,8 +1370,7 @@
       else if (e.key === '.') calcInput('.');
       else if (e.key === '+') calcInput('+');
       else if (e.key === '-') calcInput('-');
-      else if (e.key === '*') calcInput('×');
-      else if (e.key === '/') { e.preventDefault(); calcInput('÷'); }
+      else if (e.key === '*') calcInput('×');      else if (e.key === '/') { e.preventDefault(); calcInput('÷'); }
       else if (e.key === '%') calcInput('%');
       else if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); calcCalculate(); }
       else if (e.key === 'Escape' || e.key === 'c' || e.key === 'C') calcClear();
