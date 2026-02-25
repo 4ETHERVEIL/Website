@@ -88,62 +88,86 @@
     .shape-1 { width: 100px; height: 100px; top: 10%; left: -20px; border-radius: 50%; }
     .shape-2 { width: 150px; height: 150px; bottom: 20%; right: -40px; transform: rotate(45deg); background: var(--accent-primary); }
 
-    /* --- MARQUEE --- */
+    /* --- NAVIGATION BAR (BOTTOM) --- */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: var(--main-black);
+        border-top: 3px solid var(--accent-secondary);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 8px 0;
+        z-index: 1000;
+    }
+
+    .nav-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #fff;
+        font-size: 0.7rem;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 5px 0;
+        transition: all 0.2s;
+        font-family: var(--font-head);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-right: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .nav-item:last-child {
+        border-right: none;
+    }
+
+    .nav-item i {
+        font-size: 1.3rem;
+        margin-bottom: 2px;
+        color: var(--accent-secondary);
+    }
+
+    .nav-item.active {
+        background: var(--accent-primary);
+    }
+
+    .nav-item.active i {
+        color: white;
+    }
+
+    /* --- MARQUEE TOP --- */
     .marquee-top {
         background: var(--main-black);
         color: var(--card-bg);
-        padding: 10px 0;
+        padding: 8px 0;
         font-family: var(--font-mono);
-        font-size: 0.8rem;
+        font-size: 0.7rem;
         font-weight: bold;
         border-bottom: var(--border-width) solid var(--accent-secondary);
         overflow: hidden;
         white-space: nowrap;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 999;
     }
-    .marquee-content { display: inline-block; animation: scrollLeft 15s linear infinite; }
-    .marquee-content span { margin-right: 30px; }
-    .marquee-content i { margin: 0 10px; color: var(--accent-secondary); }
+    .marquee-content { display: inline-block; animation: scrollLeft 20s linear infinite; }
+    .marquee-content span { margin-right: 25px; }
+    .marquee-content i { margin: 0 8px; color: var(--accent-secondary); }
     @keyframes scrollLeft { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    /* --- NAVBAR STYLE UNTUK HALAMAN LOGIN --- */
-    .navbar {
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 1rem 1.5rem;
-        background: rgba(255,255,255,0.9);
-        backdrop-filter: blur(5px);
-        border-bottom: var(--border-width) solid var(--main-black);
-        position: sticky; top: 0; z-index: 100;
-        margin-bottom: 20px;
-    }
-
-    .brand-glitch {
-        font-weight: 900; font-size: 1.5rem; letter-spacing: -1px;
-        position: relative;
-        color: var(--main-black);
-    }
-    .brand-glitch::before {
-        content: attr(data-text); position: absolute; left: 2px; text-shadow: -1px 0 var(--accent-primary);
-        top: 0; color: var(--main-black); background: var(--bg-color); overflow: hidden; clip: rect(0, 900px, 0, 0); animation: glitch 2s infinite linear alternate-reverse;
-    }
-
-    .status-badge {
-        display: flex; align-items: center; gap: 5px;
-        font-family: var(--font-mono); font-size: 0.7rem; font-weight: bold;
-        border: 1px solid var(--main-black); padding: 4px 8px; border-radius: 20px; background: #fff;
-    }
-    .dot { width: 8px; height: 8px; background: #00ff00; border-radius: 50%; box-shadow: 0 0 5px #00ff00; }
-
-    .nav-btn {
-        text-decoration: none; color: var(--main-black); font-weight: 800;
-        background: var(--accent-secondary); border: 2px solid var(--main-black);
-        padding: 8px 15px; box-shadow: 3px 3px 0 var(--main-black);
-        font-size: 0.9rem;
-        cursor: pointer;
-        font-family: var(--font-head);
+    /* --- MAIN CONTENT AREA --- */
+    .main-content {
+        margin-top: 50px;
+        margin-bottom: 70px;
+        padding: 15px;
     }
 
     /* --- CONTAINER & CARD --- */
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
+    .container { max-width: 1200px; margin: 0 auto; width: 100%; }
 
     .cyber-card {
         background: var(--card-bg);
@@ -151,7 +175,7 @@
         box-shadow: 8px 8px 0 var(--main-black);
         position: relative;
         overflow: hidden;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
     }
 
     /* Dekorasi Sekrup */
@@ -162,18 +186,18 @@
     /* HEADER VISUAL */
     .card-header-visual {
         background: var(--accent-primary);
-        padding: 20px;
+        padding: 15px;
         border-bottom: var(--border-width) solid var(--main-black);
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
 
-    .profile-section { display: flex; align-items: center; gap: 15px; }
+    .profile-section { display: flex; align-items: center; gap: 12px; }
 
     /* AVATAR STYLING */
     .avatar-img {
-        width: 50px; height: 50px;
+        width: 45px; height: 45px;
         border: 3px solid var(--main-black);
         background: #fff;
         border-radius: 12px;
@@ -181,54 +205,61 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
 
     .profile-info { display: flex; flex-direction: column; }
-    .user-role { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-secondary); font-weight: bold; letter-spacing: 1px; }
-    .user-action { font-weight: 900; color: #fff; font-size: 1.1rem; text-transform: uppercase; line-height: 1.1; }
+    .user-role { font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-secondary); font-weight: bold; letter-spacing: 1px; }
+    .user-action { font-weight: 900; color: #fff; font-size: 1rem; text-transform: uppercase; line-height: 1.1; }
 
-    .decor-lines { font-family: var(--font-mono); color: rgba(255,255,255,0.3); font-weight: 900; font-size: 1.5rem; letter-spacing: -2px; }
+    .decor-lines { font-family: var(--font-mono); color: rgba(255,255,255,0.3); font-weight: 900; font-size: 1.2rem; letter-spacing: -2px; }
 
     /* --- INPUT SECTION --- */
-    .card-body { padding: 25px; }
-    .input-wrapper { position: relative; margin-bottom: 20px; }
-    .input-label { font-family: var(--font-mono); font-weight: bold; font-size: 0.8rem; margin-bottom: 8px; display: block; }
+    .card-body { padding: 20px; }
+    .input-wrapper { position: relative; margin-bottom: 15px; }
+    .input-label { font-family: var(--font-mono); font-weight: bold; font-size: 0.75rem; margin-bottom: 5px; display: block; }
 
     .cyber-input {
-        width: 100%; padding: 15px;
+        width: 100%; padding: 12px;
         border: 3px solid var(--main-black);
         background: #f4f4f4;
-        font-family: var(--font-mono); font-size: 1rem; font-weight: bold;
+        font-family: var(--font-mono); font-size: 0.9rem; font-weight: bold;
         outline: none; transition: 0.2s;
     }
     .cyber-input:focus { background: #fff; border-color: var(--accent-tertiary); }
 
-    .platform-tags { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
-    .platform-tags span {
-        font-size: 0.75rem; font-weight: bold; background: #eee;
-        padding: 4px 8px; border: 1px solid var(--main-black);
-        font-family: var(--font-mono);
-    }
-
     /* --- BUTTON UTAMA --- */
     .cyber-button {
-        width: 100%; padding: 15px;
+        width: 100%; padding: 12px;
         border: 3px solid var(--main-black);
         background: var(--accent-secondary);
         color: var(--main-black);
-        font-family: var(--font-head); font-weight: 900; font-size: 1.1rem;
+        font-family: var(--font-head); font-weight: 900; font-size: 1rem;
         text-transform: uppercase; cursor: pointer;
         position: relative; overflow: hidden;
         box-shadow: 5px 5px 0 var(--main-black);
         transition: all 0.1s;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
     .cyber-button:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--main-black); }
     .cyber-button:hover { background: #bfff00; }
     .cyber-button.secondary { background: #fff; }
     .cyber-button.google { background: #ff6b6b; color: white; }
     .cyber-button.danger { background: var(--accent-tertiary); }
+    .cyber-button.small {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        width: auto;
+        margin-bottom: 0;
+    }
+
+    /* --- PAGE SECTIONS --- */
+    .page-section {
+        display: none;
+    }
+    .page-section.active {
+        display: block;
+    }
 
     /* --- TABLE STYLING --- */
     .table-container {
@@ -242,7 +273,7 @@
     .table-header {
         background: var(--main-black);
         color: white;
-        padding: 15px;
+        padding: 12px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -250,7 +281,7 @@
     }
 
     .table-header h2 {
-        font-size: 1.1rem;
+        font-size: 1rem;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -259,14 +290,7 @@
 
     .table-actions {
         display: flex;
-        gap: 8px;
-    }
-
-    .table-actions .cyber-button.small {
-        padding: 8px 12px;
-        font-size: 0.8rem;
-        width: auto;
-        margin-bottom: 0;
+        gap: 6px;
     }
 
     .table-wrapper {
@@ -277,23 +301,23 @@
     table {
         width: 100%;
         border-collapse: collapse;
-        min-width: 650px;
+        min-width: 600px;
         font-family: var(--font-mono);
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
 
     th {
         background: #f0f0f0;
-        padding: 12px 8px;
+        padding: 10px 6px;
         text-align: left;
         border-bottom: 3px solid var(--main-black);
         font-weight: 900;
         text-transform: uppercase;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
     }
 
     td {
-        padding: 10px 8px;
+        padding: 8px 6px;
         border-bottom: 2px solid #ddd;
     }
 
@@ -311,7 +335,7 @@
 
     /* ACTION BUTTONS */
     .btn-action {
-        width: 32px; height: 32px;
+        width: 30px; height: 30px;
         border: 2px solid var(--main-black);
         background: white;
         display: inline-flex;
@@ -319,7 +343,7 @@
         justify-content: center;
         cursor: pointer;
         margin: 0 2px;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
     }
     .btn-edit { color: var(--accent-primary); }
     .btn-edit:hover { background: var(--accent-primary); color: white; }
@@ -328,7 +352,7 @@
 
     /* CUSTOM CHECKBOX */
     .custom-checkbox {
-        width: 24px; height: 24px;
+        width: 22px; height: 22px;
         border: 2px solid var(--main-black);
         background: white;
         cursor: pointer;
@@ -344,85 +368,27 @@
     .bulk-action-bar {
         background: var(--accent-tertiary);
         color: white;
-        padding: 10px 15px;
+        padding: 8px 12px;
         border-bottom: var(--border-width) solid var(--main-black);
         display: none;
         justify-content: space-between;
         align-items: center;
     }
     .bulk-action-bar.show { display: flex; }
-    .bulk-info { font-weight: bold; }
+    .bulk-info { font-weight: bold; font-size: 0.8rem; }
     .bulk-btn {
         background: white; color: var(--main-black); border: 2px solid var(--main-black);
-        padding: 5px 15px; font-weight: 800; cursor: pointer;
-        font-family: var(--font-head);
+        padding: 4px 12px; font-weight: 800; cursor: pointer;
+        font-family: var(--font-head); font-size: 0.75rem;
     }
-
-    /* NAVIGATION */
-    .nav-wrapper {
-        position: relative;
-        margin: 20px 0;
-        background: var(--card-bg);
-        border: var(--border-width) solid var(--main-black);
-        box-shadow: 5px 5px 0 var(--main-black);
-    }
-
-    .nav-scroll {
-        display: flex;
-        gap: 2px;
-        padding: 5px;
-        overflow-x: auto;
-        scroll-behavior: smooth;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-    .nav-scroll::-webkit-scrollbar { display: none; }
-
-    .nav-btn {
-        flex: 0 0 auto;
-        padding: 10px 15px;
-        background: transparent;
-        color: var(--main-black);
-        border: 2px solid var(--main-black);
-        font-size: 0.8rem;
-        font-weight: 800;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        font-family: var(--font-head);
-    }
-    .nav-btn.active {
-        background: var(--accent-primary);
-        color: white;
-        border-color: var(--main-black);
-    }
-
-    .nav-arrow {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 30px;
-        height: 80%;
-        background: var(--card-bg);
-        border: 2px solid var(--main-black);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        z-index: 10;
-    }
-    .nav-arrow.left { left: 0; border-right: none; }
-    .nav-arrow.right { right: 0; border-left: none; }
-    .nav-arrow.hidden { display: none; }
 
     /* FAB BUTTON */
     #fabButton {
-        position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px;
+        position: fixed; bottom: 80px; right: 15px; width: 55px; height: 55px;
         background: var(--accent-secondary); color: var(--main-black);
         border: 3px solid var(--main-black);
         display: none; align-items: center; justify-content: center;
-        font-size: 1.8rem; font-weight: bold;
+        font-size: 1.6rem; font-weight: bold;
         box-shadow: 5px 5px 0 var(--main-black); cursor: pointer;
         z-index: 100; border-radius: 50%;
     }
@@ -432,60 +398,60 @@
     /* MODAL */
     .modal-backdrop {
         display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.8); z-index: 999; justify-content: center; align-items: center;
+        background: rgba(0,0,0,0.8); z-index: 1001; justify-content: center; align-items: center;
         padding: 15px;
     }
     .modal, .modal-confirm {
         background: var(--card-bg); border: 3px solid var(--main-black);
         box-shadow: 10px 10px 0 var(--main-black);
-        width: 95%; max-width: 500px; max-height: 85vh; overflow-y: auto;
-        padding: 20px; position: relative;
+        width: 95%; max-width: 450px; max-height: 85vh; overflow-y: auto;
+        padding: 18px; position: relative;
     }
-    .modal-confirm { max-width: 380px; text-align: center; }
+    .modal-confirm { max-width: 350px; text-align: center; }
     .modal-header {
         display: flex; justify-content: space-between; align-items: center;
-        margin-bottom: 15px; padding-bottom: 10px; border-bottom: 3px solid var(--main-black);
+        margin-bottom: 12px; padding-bottom: 8px; border-bottom: 3px solid var(--main-black);
     }
-    .modal-title { font-size: 1.2rem; font-weight: 900; font-family: var(--font-head); }
+    .modal-title { font-size: 1.1rem; font-weight: 900; font-family: var(--font-head); }
     .modal-close {
         background: var(--accent-tertiary); color: white; border: 2px solid var(--main-black);
-        width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
-        cursor: pointer; font-weight: bold;
+        width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+        cursor: pointer; font-weight: bold; font-size: 0.9rem;
     }
 
     /* ACCOUNT PAGE */
     .account-card {
         background: var(--card-bg); border: 3px solid var(--main-black);
-        box-shadow: 8px 8px 0 var(--main-black); padding: 20px;
+        box-shadow: 8px 8px 0 var(--main-black); padding: 18px;
     }
     .account-avatar {
-        width: 80px; height: 80px; border: 3px solid var(--main-black);
+        width: 70px; height: 70px; border: 3px solid var(--main-black);
         background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
         color: var(--main-black); display: flex; align-items: center; justify-content: center;
-        font-size: 2rem; margin: 0 auto 15px; border-radius: 15px;
+        font-size: 1.8rem; margin: 0 auto 12px; border-radius: 15px;
         box-shadow: 5px 5px 0 var(--main-black);
     }
     .account-info {
         background: #f5f5f5; border: 2px solid var(--main-black);
-        padding: 15px; margin: 15px 0;
+        padding: 12px; margin: 12px 0;
     }
-    .account-info p { margin: 8px 0; font-family: var(--font-mono); }
+    .account-info p { margin: 6px 0; font-family: var(--font-mono); font-size: 0.85rem; }
 
-    /* KALKULATOR */
+    /* KALKULATOR PAGE */
     .calculator-card {
         background: var(--card-bg); border: 3px solid var(--main-black);
-        box-shadow: 8px 8px 0 var(--main-black); padding: 20px;
+        box-shadow: 8px 8px 0 var(--main-black); padding: 18px;
     }
     .calc-display {
         background: var(--main-black); color: var(--accent-secondary);
-        font-size: 1.8rem; padding: 15px; border: 3px solid var(--accent-primary);
-        text-align: right; margin-bottom: 15px; font-family: var(--font-mono);
+        font-size: 1.6rem; padding: 12px; border: 3px solid var(--accent-primary);
+        text-align: right; margin-bottom: 12px; font-family: var(--font-mono);
         font-weight: bold;
     }
-    .calc-expression { color: #888; font-size: 0.9rem; text-align: right; }
-    .calc-buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .calc-expression { color: #888; font-size: 0.8rem; text-align: right; }
+    .calc-buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
     .calc-btn {
-        padding: 15px; font-size: 1.1rem; font-weight: 800;
+        padding: 12px; font-size: 1rem; font-weight: 800;
         border: 3px solid var(--main-black); background: #fff;
         cursor: pointer; font-family: var(--font-head);
     }
@@ -493,30 +459,31 @@
     .calc-btn.equals { background: var(--accent-secondary); color: var(--main-black); grid-column: span 2; }
     .calc-btn.clear { background: var(--accent-tertiary); color: white; }
     .calc-history {
-        margin-top: 15px; border: 2px solid var(--main-black);
-        padding: 10px; max-height: 100px; overflow-y: auto;
+        margin-top: 12px; border: 2px solid var(--main-black);
+        padding: 8px; max-height: 90px; overflow-y: auto;
+        font-family: var(--font-mono); font-size: 0.8rem;
     }
 
     /* AUTH PAGES */
     #authPage, #forgotPasswordPage, #resetPasswordPage {
-        max-width: 450px;
-        margin: 30px auto;
+        max-width: 400px;
+        margin: 20px auto;
     }
 
     /* EMPTY STATE */
     .empty-state {
-        text-align: center; padding: 30px; color: #666;
+        text-align: center; padding: 25px; color: #666;
         font-family: var(--font-mono);
     }
 
     /* NOTIFICATION */
     #notification {
-        position: fixed; top: 20px; right: 20px; padding: 12px 20px;
+        position: fixed; top: 60px; right: 15px; padding: 10px 18px;
         border: 3px solid var(--main-black); font-weight: 900;
         box-shadow: 5px 5px 0 var(--main-black);
         transform: translateX(200%); transition: transform 0.3s;
-        z-index: 1000; max-width: 90%;
-        font-family: var(--font-head);
+        z-index: 1002; max-width: 90%;
+        font-family: var(--font-head); font-size: 0.85rem;
     }
     #notification.show { transform: translateX(0); }
     .notif-success { background: var(--accent-secondary); color: var(--main-black); }
@@ -529,31 +496,21 @@
     }
     .cyber-card::before, .modal::before, .modal-confirm::before {
         content: '⬤'; position: absolute; top: 5px; left: 10px;
-        font-size: 12px; color: rgba(0,0,0,0.3); pointer-events: none;
+        font-size: 10px; color: rgba(0,0,0,0.3); pointer-events: none;
     }
     .cyber-card::after, .modal::after, .modal-confirm::after {
         content: '⬤'; position: absolute; bottom: 5px; right: 10px;
-        font-size: 12px; color: rgba(0,0,0,0.3); pointer-events: none;
-    }
-
-    /* ANIMATIONS */
-    @keyframes glitch { 
-        0% { clip: rect(20px, 9999px, 10px, 0); } 
-        100% { clip: rect(50px, 9999px, 80px, 0); } 
+        font-size: 10px; color: rgba(0,0,0,0.3); pointer-events: none;
     }
 
     /* RESPONSIVE */
-    @media (max-width: 768px) {
-        .card-header-visual { flex-direction: column; align-items: flex-start; gap: 10px; }
-        .table-header { flex-direction: column; align-items: flex-start; gap: 10px; }
-        .table-actions { width: 100%; }
-        .bulk-action-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
-        .bulk-btn { width: 100%; }
-    }
-
     @media (max-width: 480px) {
-        .container { padding: 0 10px; }
-        .cyber-button { font-size: 1rem; padding: 12px; }
+        .main-content { padding: 10px; }
+        .nav-item i { font-size: 1.2rem; }
+        .nav-item span { font-size: 0.6rem; }
+        .cyber-button { font-size: 0.9rem; padding: 10px; }
+        .table-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+        .table-actions { width: 100%; }
     }
   </style>
 </head>
@@ -574,246 +531,245 @@
     </div>
   </div>
 
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <div class="brand-glitch" data-text="INV-CYBER">INV-CYBER<span class="version-tag">v2.0</span></div>
-    <div class="status-badge"><span class="dot"></span> SYSTEM ONLINE</div>
-    <div>
-      <a href="#" class="nav-btn" id="navAuthBtn">LOGIN</a>
+  <!-- BOTTOM NAVIGATION -->
+  <div class="bottom-nav" id="bottomNav">
+    <div class="nav-item active" data-page="dataBarang">
+      <i class="fas fa-box"></i>
+      <span>DATA</span>
     </div>
-  </nav>
+    <div class="nav-item" data-page="akumulasi">
+      <i class="fas fa-chart-pie"></i>
+      <span>SUMMARY</span>
+    </div>
+    <div class="nav-item" data-page="kalkulator">
+      <i class="fas fa-calculator"></i>
+      <span>CALC</span>
+    </div>
+    <div class="nav-item" data-page="account">
+      <i class="fas fa-user-circle"></i>
+      <span>ACCOUNT</span>
+    </div>
+  </div>
 
-  <!-- AUTH PAGES -->
-  <div id="authPage" class="container">
-    <div class="cyber-card">
-      <div class="card-header-visual">
-        <div class="profile-section">
-          <div class="avatar-img"><i class="fas fa-user-lock"></i></div>
-          <div class="profile-info">
-            <span class="user-role">ACCESS PORTAL</span>
-            <span class="user-action">AUTHENTICATION</span>
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <!-- AUTH PAGES (akan ditampilkan jika belum login) -->
+    <div id="authPage" class="container">
+      <div class="cyber-card">
+        <div class="card-header-visual">
+          <div class="profile-section">
+            <div class="avatar-img"><i class="fas fa-user-lock"></i></div>
+            <div class="profile-info">
+              <span class="user-role">ACCESS PORTAL</span>
+              <span class="user-action">AUTHENTICATION</span>
+            </div>
+          </div>
+          <div class="decor-lines">///</div>
+        </div>
+        <div class="card-body">
+          <div style="display: flex; gap: 0.8rem; margin-bottom: 1.2rem;">
+            <button id="tabLogin" class="cyber-button" style="margin:0;" onclick="showTab('login')">LOGIN</button>
+            <button id="tabSignup" class="cyber-button secondary" style="margin:0;" onclick="showTab('signup')">SIGNUP</button>
+          </div>
+          
+          <div id="loginForm">
+            <div class="input-wrapper">
+              <label class="input-label">📧 EMAIL</label>
+              <input type="email" id="emailLogin" class="cyber-input" placeholder="user@domain.com">
+            </div>
+            <div class="input-wrapper">
+              <label class="input-label">🔑 PASSWORD</label>
+              <input type="password" id="passwordLogin" class="cyber-input" placeholder="••••••••">
+            </div>
+            <button class="cyber-button" onclick="loginWithEmail()">LOGIN</button>
+            <button class="cyber-button secondary" onclick="forgotPassword()">FORGOT PASSWORD?</button>
+            <button class="cyber-button google" onclick="signInWithGoogle()">GOOGLE LOGIN</button>
+          </div>
+          
+          <div id="signupForm" style="display: none;">
+            <div class="input-wrapper">
+              <label class="input-label">📧 EMAIL</label>
+              <input type="email" id="emailSignup" class="cyber-input" placeholder="user@domain.com">
+            </div>
+            <div class="input-wrapper">
+              <label class="input-label">🔑 PASSWORD</label>
+              <input type="password" id="passwordSignup" class="cyber-input" placeholder="Min 6 chars">
+            </div>
+            <div class="input-wrapper">
+              <label class="input-label">✅ CONFIRM</label>
+              <input type="password" id="confirmPassword" class="cyber-input" placeholder="Re-type password">
+            </div>
+            <button class="cyber-button" onclick="signUpWithEmail()">CREATE ACCOUNT</button>
           </div>
         </div>
-        <div class="decor-lines">///</div>
       </div>
-      <div class="card-body">
-        <div style="display: flex; gap: 0.8rem; margin-bottom: 1.2rem;">
-          <button id="tabLogin" class="cyber-button" style="margin:0;" onclick="showTab('login')">LOGIN</button>
-          <button id="tabSignup" class="cyber-button secondary" style="margin:0;" onclick="showTab('signup')">SIGNUP</button>
+    </div>
+
+    <!-- FORGOT PASSWORD PAGE -->
+    <div id="forgotPasswordPage" class="container" style="display: none;">
+      <div class="cyber-card">
+        <div class="card-header-visual">
+          <div class="profile-section">
+            <div class="avatar-img"><i class="fas fa-key"></i></div>
+            <div class="profile-info">
+              <span class="user-role">RECOVERY</span>
+              <span class="user-action">RESET PASSWORD</span>
+            </div>
+          </div>
+          <div class="decor-lines">///</div>
         </div>
-        
-        <div id="loginForm">
+        <div class="card-body">
           <div class="input-wrapper">
             <label class="input-label">📧 EMAIL</label>
-            <input type="email" id="emailLogin" class="cyber-input" placeholder="user@domain.com">
+            <input type="email" id="fpEmail" class="cyber-input" placeholder="user@domain.com">
           </div>
-          <div class="input-wrapper">
-            <label class="input-label">🔑 PASSWORD</label>
-            <input type="password" id="passwordLogin" class="cyber-input" placeholder="••••••••">
-          </div>
-          <button class="cyber-button" onclick="loginWithEmail()">LOGIN</button>
-          <button class="cyber-button secondary" onclick="forgotPassword()">FORGOT PASSWORD?</button>
-          <button class="cyber-button google" onclick="signInWithGoogle()">GOOGLE LOGIN</button>
+          <button class="cyber-button" onclick="sendPasswordResetLink()">SEND RESET LINK</button>
+          <button class="cyber-button secondary" onclick="showAuthPage()">BACK TO LOGIN</button>
         </div>
-        
-        <div id="signupForm" style="display: none;">
-          <div class="input-wrapper">
-            <label class="input-label">📧 EMAIL</label>
-            <input type="email" id="emailSignup" class="cyber-input" placeholder="user@domain.com">
+      </div>
+    </div>
+
+    <!-- RESET PASSWORD PAGE -->
+    <div id="resetPasswordPage" class="container" style="display: none;">
+      <div class="cyber-card">
+        <div class="card-header-visual">
+          <div class="profile-section">
+            <div class="avatar-img"><i class="fas fa-lock-open"></i></div>
+            <div class="profile-info">
+              <span class="user-role">NEW PASSWORD</span>
+              <span class="user-action">SET NEW</span>
+            </div>
           </div>
+          <div class="decor-lines">///</div>
+        </div>
+        <div class="card-body">
           <div class="input-wrapper">
-            <label class="input-label">🔑 PASSWORD</label>
-            <input type="password" id="passwordSignup" class="cyber-input" placeholder="Min 6 chars">
+            <label class="input-label">🔑 NEW PASSWORD</label>
+            <input type="password" id="newPassword" class="cyber-input" placeholder="Min 6 chars">
           </div>
           <div class="input-wrapper">
             <label class="input-label">✅ CONFIRM</label>
-            <input type="password" id="confirmPassword" class="cyber-input" placeholder="Re-type password">
+            <input type="password" id="confirmNewPassword" class="cyber-input" placeholder="Re-type password">
           </div>
-          <button class="cyber-button" onclick="signUpWithEmail()">CREATE ACCOUNT</button>
+          <button class="cyber-button" onclick="confirmPasswordReset()">UPDATE PASSWORD</button>
+          <button class="cyber-button secondary" onclick="showAuthPage()">CANCEL</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN APP PAGES (akan ditampilkan setelah login) -->
+    <div id="app" style="display: none;">
+      <!-- DATA BARANG PAGE -->
+      <div id="dataBarangPage" class="page-section active">
+        <div class="cyber-card" style="margin-bottom: 15px;">
+          <div class="card-header-visual">
+            <div class="profile-section">
+              <div class="avatar-img" id="userAvatar"><i class="fas fa-user"></i></div>
+              <div class="profile-info">
+                <span class="user-role">INVENTORY SYSTEM</span>
+                <span class="user-action" id="userDisplayName">LOADING...</span>
+              </div>
+            </div>
+            <div class="decor-lines">///</div>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <div id="bulkActionBar" class="bulk-action-bar">
+            <div class="bulk-info"><i class="fas fa-check-circle"></i> <span id="bulkCount">0</span> SELECTED</div>
+            <button class="bulk-btn" onclick="deleteSelected()"><i class="fas fa-trash"></i> DELETE</button>
+          </div>
+          <div class="table-header">
+            <h2><i class="fas fa-clipboard-list"></i> INVENTORY DATA</h2>
+            <div class="table-actions">
+              <button class="cyber-button small" style="background: var(--accent-secondary);" onclick="downloadCSV()">CSV</button>
+              <button class="cyber-button small" style="background: var(--accent-primary); color: white;" onclick="exportToPNG()">PNG</button>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table id="dataTable">
+              <thead>
+                <tr>
+                  <th style="width:35px;"><div class="custom-checkbox" onclick="toggleSelectAll()" id="selectAllCheckbox"><i class="fas fa-check"></i></div></th>
+                  <th>NO</th><th>ITEM</th><th>QTY</th><th>PRICE</th><th>TOTAL</th><th>DATE</th><th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="dataBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- AKUMULASI PAGE -->
+      <div id="akumulasiPage" class="page-section">
+        <div class="table-container">
+          <div class="table-header" style="background: var(--accent-primary);">
+            <h2><i class="fas fa-chart-bar"></i> ACCUMULATION SUMMARY</h2>
+          </div>
+          <div class="table-wrapper">
+            <table id="summaryTable">
+              <thead><tr><th>ITEM</th><th>TOTAL QTY</th><th>TOTAL VALUE</th></tr></thead>
+              <tbody id="summaryBody"></tbody>
+              <tfoot id="summaryFooter" style="background: var(--main-black); color: var(--accent-secondary);"></tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- KALKULATOR PAGE -->
+      <div id="kalkulatorPage" class="page-section">
+        <div class="calculator-card">
+          <h2 style="text-align:center; margin-bottom:12px; font-size:1.1rem;"><i class="fas fa-calculator"></i> CYBER CALCULATOR</h2>
+          <div class="calc-expression" id="calcExpression"></div>
+          <div class="calc-display" id="calcDisplay">0</div>
+          <div class="calc-buttons">
+            <button class="calc-btn clear" onclick="calcClear()">AC</button>
+            <button class="calc-btn" onclick="calcBackspace()">⌫</button>
+            <button class="calc-btn operator" onclick="calcInput('%')">%</button>
+            <button class="calc-btn operator" onclick="calcInput('÷')">÷</button>
+            <button class="calc-btn" onclick="calcInput('7')">7</button>
+            <button class="calc-btn" onclick="calcInput('8')">8</button>
+            <button class="calc-btn" onclick="calcInput('9')">9</button>
+            <button class="calc-btn operator" onclick="calcInput('×')">×</button>
+            <button class="calc-btn" onclick="calcInput('4')">4</button>
+            <button class="calc-btn" onclick="calcInput('5')">5</button>
+            <button class="calc-btn" onclick="calcInput('6')">6</button>
+            <button class="calc-btn operator" onclick="calcInput('-')">−</button>
+            <button class="calc-btn" onclick="calcInput('1')">1</button>
+            <button class="calc-btn" onclick="calcInput('2')">2</button>
+            <button class="calc-btn" onclick="calcInput('3')">3</button>
+            <button class="calc-btn operator" onclick="calcInput('+')">+</button>
+            <button class="calc-btn zero" onclick="calcInput('0')">0</button>
+            <button class="calc-btn" onclick="calcInput('.')">.</button>
+            <button class="calc-btn equals" onclick="calcCalculate()">=</button>
+          </div>
+          <div class="calc-history" id="calcHistory"></div>
+        </div>
+      </div>
+
+      <!-- ACCOUNT PAGE -->
+      <div id="accountPage" class="page-section">
+        <div class="account-card">
+          <div class="account-avatar" id="accountAvatar"><i class="fas fa-user"></i></div>
+          <h2 id="accountName" style="text-align:center;">User</h2>
+          <p style="color: var(--accent-primary); text-align:center;" id="accountEmail">email</p>
+          <div class="account-info">
+            <p><i class="fas fa-calendar"></i> Joined: <span id="accountJoined">-</span></p>
+            <p><i class="fas fa-database"></i> Total Items: <span id="accountTotalData">0</span></p>
+          </div>
+          <div style="display: flex; gap: 8px; justify-content: center;">
+            <button class="cyber-button secondary" style="width: auto; padding: 8px 12px; font-size:0.8rem;" onclick="changePassword()">CHANGE PASSWORD</button>
+            <button class="cyber-button danger" style="width: auto; padding: 8px 12px; font-size:0.8rem;" onclick="deleteAccount()">DELETE ACCOUNT</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- FORGOT PASSWORD PAGE -->
-  <div id="forgotPasswordPage" class="container" style="display: none;">
-    <div class="cyber-card">
-      <div class="card-header-visual">
-        <div class="profile-section">
-          <div class="avatar-img"><i class="fas fa-key"></i></div>
-          <div class="profile-info">
-            <span class="user-role">RECOVERY</span>
-            <span class="user-action">RESET PASSWORD</span>
-          </div>
-        </div>
-        <div class="decor-lines">///</div>
-      </div>
-      <div class="card-body">
-        <div class="input-wrapper">
-          <label class="input-label">📧 EMAIL</label>
-          <input type="email" id="fpEmail" class="cyber-input" placeholder="user@domain.com">
-        </div>
-        <button class="cyber-button" onclick="sendPasswordResetLink()">SEND RESET LINK</button>
-        <button class="cyber-button secondary" onclick="showAuthPage()">BACK TO LOGIN</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- RESET PASSWORD PAGE -->
-  <div id="resetPasswordPage" class="container" style="display: none;">
-    <div class="cyber-card">
-      <div class="card-header-visual">
-        <div class="profile-section">
-          <div class="avatar-img"><i class="fas fa-lock-open"></i></div>
-          <div class="profile-info">
-            <span class="user-role">NEW PASSWORD</span>
-            <span class="user-action">SET NEW</span>
-          </div>
-        </div>
-        <div class="decor-lines">///</div>
-      </div>
-      <div class="card-body">
-        <div class="input-wrapper">
-          <label class="input-label">🔑 NEW PASSWORD</label>
-          <input type="password" id="newPassword" class="cyber-input" placeholder="Min 6 chars">
-        </div>
-        <div class="input-wrapper">
-          <label class="input-label">✅ CONFIRM</label>
-          <input type="password" id="confirmNewPassword" class="cyber-input" placeholder="Re-type password">
-        </div>
-        <button class="cyber-button" onclick="confirmPasswordReset()">UPDATE PASSWORD</button>
-        <button class="cyber-button secondary" onclick="showAuthPage()">CANCEL</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MAIN APP -->
-  <div id="app" class="container" style="display: none;">
-    <!-- HEADER -->
-    <div class="cyber-card" style="margin-bottom: 20px;">
-      <div class="card-header-visual">
-        <div class="profile-section">
-          <div class="avatar-img" id="userAvatar"><i class="fas fa-user"></i></div>
-          <div class="profile-info">
-            <span class="user-role">INVENTORY SYSTEM</span>
-            <span class="user-action" id="userDisplayName">LOADING...</span>
-          </div>
-        </div>
-        <div style="display: flex; gap: 10px;">
-          <button class="nav-btn" style="background: var(--accent-tertiary); color: white;" onclick="logout()">LOGOUT</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- NAVIGATION -->
-    <div class="nav-wrapper">
-      <button class="nav-arrow left hidden" onclick="scrollNav(-200)"><i class="fas fa-chevron-left"></i></button>
-      <div class="nav-scroll" id="navScroll">
-        <button class="nav-btn active" onclick="switchTab('dataBarang', this)"><i class="fas fa-box"></i> DATA</button>
-        <button class="nav-btn" onclick="switchTab('akumulasi', this)"><i class="fas fa-chart-pie"></i> SUMMARY</button>
-        <button class="nav-btn" onclick="switchTab('kalkulator', this)"><i class="fas fa-calculator"></i> CALC</button>
-        <button class="nav-btn" onclick="switchTab('account', this)"><i class="fas fa-user-circle"></i> ACCOUNT</button>
-      </div>
-      <button class="nav-arrow right hidden" onclick="scrollNav(200)"><i class="fas fa-chevron-right"></i></button>
-    </div>
-
-    <!-- DATA BARANG SECTION -->
-    <section id="dataBarang" class="content-section active">
-      <div class="table-container">
-        <div id="bulkActionBar" class="bulk-action-bar">
-          <div class="bulk-info"><i class="fas fa-check-circle"></i> <span id="bulkCount">0</span> SELECTED</div>
-          <button class="bulk-btn" onclick="deleteSelected()"><i class="fas fa-trash"></i> DELETE</button>
-        </div>
-        <div class="table-header">
-          <h2><i class="fas fa-clipboard-list"></i> INVENTORY DATA</h2>
-          <div class="table-actions">
-            <button class="cyber-button small" style="background: var(--accent-secondary);" onclick="downloadCSV()">CSV</button>
-            <button class="cyber-button small" style="background: var(--accent-primary); color: white;" onclick="exportToPNG()">PNG</button>
-          </div>
-        </div>
-        <div class="table-wrapper">
-          <table id="dataTable">
-            <thead>
-              <tr>
-                <th style="width:40px;"><div class="custom-checkbox" onclick="toggleSelectAll()" id="selectAllCheckbox"><i class="fas fa-check"></i></div></th>
-                <th>NO</th><th>ITEM</th><th>QTY</th><th>PRICE</th><th>TOTAL</th><th>DATE</th><th>ACTIONS</th>
-              </tr>
-            </thead>
-            <tbody id="dataBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- AKUMULASI SECTION -->
-    <section id="akumulasi" class="content-section">
-      <div class="table-container">
-        <div class="table-header" style="background: var(--accent-primary);">
-          <h2><i class="fas fa-chart-bar"></i> ACCUMULATION SUMMARY</h2>
-        </div>
-        <div class="table-wrapper">
-          <table id="summaryTable">
-            <thead><tr><th>ITEM</th><th>TOTAL QTY</th><th>TOTAL VALUE</th></tr></thead>
-            <tbody id="summaryBody"></tbody>
-            <tfoot id="summaryFooter" style="background: var(--main-black); color: var(--accent-secondary);"></tfoot>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- KALKULATOR SECTION -->
-    <section id="kalkulator" class="content-section">
-      <div class="calculator-card">
-        <h2 style="text-align:center; margin-bottom:15px;"><i class="fas fa-calculator"></i> CYBER CALCULATOR</h2>
-        <div class="calc-expression" id="calcExpression"></div>
-        <div class="calc-display" id="calcDisplay">0</div>
-        <div class="calc-buttons">
-          <button class="calc-btn clear" onclick="calcClear()">AC</button>
-          <button class="calc-btn" onclick="calcBackspace()">⌫</button>
-          <button class="calc-btn operator" onclick="calcInput('%')">%</button>
-          <button class="calc-btn operator" onclick="calcInput('÷')">÷</button>
-          <button class="calc-btn" onclick="calcInput('7')">7</button>
-          <button class="calc-btn" onclick="calcInput('8')">8</button>
-          <button class="calc-btn" onclick="calcInput('9')">9</button>
-          <button class="calc-btn operator" onclick="calcInput('×')">×</button>
-          <button class="calc-btn" onclick="calcInput('4')">4</button>
-          <button class="calc-btn" onclick="calcInput('5')">5</button>
-          <button class="calc-btn" onclick="calcInput('6')">6</button>
-          <button class="calc-btn operator" onclick="calcInput('-')">−</button>
-          <button class="calc-btn" onclick="calcInput('1')">1</button>
-          <button class="calc-btn" onclick="calcInput('2')">2</button>
-          <button class="calc-btn" onclick="calcInput('3')">3</button>
-          <button class="calc-btn operator" onclick="calcInput('+')">+</button>
-          <button class="calc-btn zero" onclick="calcInput('0')">0</button>
-          <button class="calc-btn" onclick="calcInput('.')">.</button>
-          <button class="calc-btn equals" onclick="calcCalculate()">=</button>
-        </div>
-        <div class="calc-history" id="calcHistory"></div>
-      </div>
-    </section>
-
-    <!-- ACCOUNT SECTION -->
-    <section id="account" class="content-section">
-      <div class="account-card">
-        <div class="account-avatar" id="accountAvatar"><i class="fas fa-user"></i></div>
-        <h2 id="accountName">User</h2>
-        <p style="color: var(--accent-primary);" id="accountEmail">email</p>
-        <div class="account-info">
-          <p><i class="fas fa-calendar"></i> Joined: <span id="accountJoined">-</span></p>
-          <p><i class="fas fa-database"></i> Total Items: <span id="accountTotalData">0</span></p>
-        </div>
-        <div style="display: flex; gap: 10px; justify-content: center;">
-          <button class="cyber-button secondary" style="width: auto;" onclick="changePassword()">CHANGE PASSWORD</button>
-          <button class="cyber-button danger" style="width: auto;" onclick="deleteAccount()">DELETE ACCOUNT</button>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- FAB BUTTON -->
+  <!-- FAB BUTTON (untuk tambah data) -->
   <div id="fabButton" onclick="openAddModal()"><i class="fas fa-plus"></i></div>
 
-  <!-- MODALS (dengan style baru) -->
+  <!-- MODALS -->
   <div id="addModal" class="modal-backdrop">
     <div class="modal">
       <div class="modal-header">
@@ -836,7 +792,7 @@
         <label class="input-label">DATE</label>
         <input type="date" id="tanggalInput" class="cyber-input">
       </div>
-      <div style="display:flex;gap:10px;">
+      <div style="display:flex;gap:8px;">
         <button class="cyber-button" style="margin:0;" onclick="tambahData()">SAVE</button>
         <button class="cyber-button secondary" style="margin:0;" onclick="closeModal('addModal')">CANCEL</button>
       </div>
@@ -866,7 +822,7 @@
         <label class="input-label">DATE</label>
         <input type="date" id="editTanggal" class="cyber-input">
       </div>
-      <div style="display:flex;gap:10px;">
+      <div style="display:flex;gap:8px;">
         <button class="cyber-button" style="margin:0;" onclick="updateData()">UPDATE</button>
         <button class="cyber-button secondary" style="margin:0;" onclick="closeModal('editModal')">CANCEL</button>
       </div>
@@ -876,10 +832,10 @@
   <div id="confirmModal" class="modal-backdrop">
     <div class="modal-confirm">
       <div class="modal-title" style="color: var(--accent-tertiary);">DELETE ITEM?</div>
-      <p style="margin:20px 0; font-family: var(--font-mono);">This action cannot be undone!</p>
-      <div style="display:flex;gap:10px; justify-content: center;">
-        <button class="cyber-button secondary" style="width: auto; margin:0;" onclick="closeModal('confirmModal')">CANCEL</button>
-        <button class="cyber-button danger" style="width: auto; margin:0;" onclick="confirmDelete()">DELETE</button>
+      <p style="margin:15px 0; font-family: var(--font-mono); font-size:0.9rem;">This action cannot be undone!</p>
+      <div style="display:flex;gap:8px; justify-content: center;">
+        <button class="cyber-button secondary" style="width: auto; margin:0; padding:8px 15px;" onclick="closeModal('confirmModal')">CANCEL</button>
+        <button class="cyber-button danger" style="width: auto; margin:0; padding:8px 15px;" onclick="confirmDelete()">DELETE</button>
       </div>
     </div>
   </div>
@@ -887,10 +843,10 @@
   <div id="confirmBulkModal" class="modal-backdrop">
     <div class="modal-confirm">
       <div class="modal-title" style="color: var(--accent-tertiary);">DELETE <span id="bulkConfirmCount">0</span> ITEMS?</div>
-      <p style="margin:20px 0; font-family: var(--font-mono);">This action cannot be undone!</p>
-      <div style="display:flex;gap:10px; justify-content: center;">
-        <button class="cyber-button secondary" style="width: auto; margin:0;" onclick="closeModal('confirmBulkModal')">CANCEL</button>
-        <button class="cyber-button danger" style="width: auto; margin:0;" onclick="confirmBulkDelete()">DELETE</button>
+      <p style="margin:15px 0; font-family: var(--font-mono); font-size:0.9rem;">This action cannot be undone!</p>
+      <div style="display:flex;gap:8px; justify-content: center;">
+        <button class="cyber-button secondary" style="width: auto; margin:0; padding:8px 15px;" onclick="closeModal('confirmBulkModal')">CANCEL</button>
+        <button class="cyber-button danger" style="width: auto; margin:0; padding:8px 15px;" onclick="confirmBulkDelete()">DELETE</button>
       </div>
     </div>
   </div>
@@ -913,7 +869,7 @@
         <label class="input-label">CONFIRM NEW</label>
         <input type="password" id="confirmNewPasswordAccount" class="cyber-input">
       </div>
-      <div style="display:flex;gap:10px;">
+      <div style="display:flex;gap:8px;">
         <button class="cyber-button" style="margin:0;" onclick="submitChangePassword()">UPDATE</button>
         <button class="cyber-button secondary" style="margin:0;" onclick="closeModal('changePasswordModal')">CANCEL</button>
       </div>
@@ -923,35 +879,36 @@
   <div id="notification"></div>
 
   <script>
-    // Semua fungsi JavaScript tetap sama persis seperti sebelumnya
-    let currentUser = null, barangData = [], deleteIndex = null, currentTab = 'dataBarang';
+    // Semua fungsi JavaScript tetap sama
+    let currentUser = null, barangData = [], deleteIndex = null, currentPage = 'dataBarang';
     let selectedIndices = new Set();
     let calcCurrent = '0', calcPrevious = '', calcOperator = null, calcShouldReset = false, calcHistory = [];
 
-    function scrollNav(amount) {
-      const nav = document.getElementById('navScroll');
-      nav.scrollBy({ left: amount, behavior: 'smooth' });
-      updateNavArrows();
-    }
+    // Page navigation
+    function switchPage(pageName) {
+      // Update active class on nav items
+      document.querySelectorAll('.nav-item').forEach(item => {
+        if (item.dataset.page === pageName) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
 
-    function updateNavArrows() {
-      const nav = document.getElementById('navScroll');
-      const leftArrow = document.querySelector('.nav-arrow.left');
-      const rightArrow = document.querySelector('.nav-arrow.right');
-      if (leftArrow) leftArrow.classList.toggle('hidden', nav.scrollLeft <= 0);
-      if (rightArrow) rightArrow.classList.toggle('hidden', nav.scrollLeft + nav.clientWidth >= nav.scrollWidth - 10);
-    }
+      // Update active page section
+      document.querySelectorAll('.page-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(pageName + 'Page').classList.add('active');
 
-    function switchTab(tabName, btn) {
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      if (btn) btn.classList.add('active');
-      document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-      document.getElementById(tabName).classList.add('active');
-      document.getElementById('fabButton').classList.toggle('show', tabName === 'dataBarang');
-      currentTab = tabName;
-      updateNavArrows();
-      if (tabName === 'akumulasi') renderSummaryTable();
-      if (tabName === 'account') updateAccountInfo();
+      // Show/hide FAB button (only show on dataBarang page)
+      document.getElementById('fabButton').classList.toggle('show', pageName === 'dataBarang');
+      
+      currentPage = pageName;
+      
+      // Refresh data if needed
+      if (pageName === 'akumulasi') renderSummaryTable();
+      if (pageName === 'account') updateAccountInfo();
     }
 
     function showTab(tab) {
@@ -1082,8 +1039,9 @@
       document.getElementById('tanggalInput').valueAsDate = new Date();
       document.getElementById('editTanggal').valueAsDate = new Date();
       updateAccountInfo();
-      updateNavArrows();
-      document.getElementById('navAuthBtn').style.display = 'none';
+      
+      // Set default page
+      switchPage('dataBarang');
     }
 
     function updateAccountInfo() {
@@ -1376,6 +1334,13 @@
         }, 100);
       }
       
+      // Setup navigation
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+          switchPage(item.dataset.page);
+        });
+      });
+      
       auth.onAuthStateChanged(async user => {
         if (user) { 
           currentUser = user; 
@@ -1383,13 +1348,8 @@
           await loadUserData(); 
         } else {
           showAuthPage();
-          document.getElementById('navAuthBtn').style.display = 'inline-block';
         }
       });
-      
-      setTimeout(updateNavArrows, 100);
-      window.addEventListener('resize', updateNavArrows);
-      window.addEventListener('orientationchange', () => setTimeout(() => window.scrollTo(0, 0), 200));
       
       // Initialize calculator
       updateCalcDisplay();
@@ -1405,7 +1365,7 @@
 
     // Keyboard shortcuts for calculator
     document.addEventListener('keydown', e => {
-      if (currentTab !== 'kalkulator') return;
+      if (currentPage !== 'kalkulator') return;
       if (e.key >= '0' && e.key <= '9') calcInput(e.key);
       else if (e.key === '.') calcInput('.');
       else if (e.key === '+') calcInput('+');
