@@ -251,6 +251,7 @@
     .cyber-button.secondary { background: #fff; }
     .cyber-button.google { background: #ff6b6b; color: white; }
     .cyber-button.danger { background: var(--accent-tertiary); }
+    .cyber-button.success { background: var(--accent-secondary); }
     .cyber-button.small {
         padding: 8px 12px;
         font-size: 0.8rem;
@@ -508,6 +509,30 @@
         font-size: 10px; color: rgba(0,0,0,0.3); pointer-events: none;
     }
 
+    /* BUTTON GROUP */
+    .button-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 15px;
+    }
+
+    .button-group .cyber-button {
+        margin-bottom: 0;
+    }
+
+    /* LOGOUT BUTTON */
+    .logout-button {
+        background: var(--main-black) !important;
+        color: white !important;
+        border: 3px solid var(--accent-tertiary) !important;
+        margin-top: 8px;
+    }
+    .logout-button:hover {
+        background: var(--accent-tertiary) !important;
+        color: var(--main-black) !important;
+    }
+
     /* RESPONSIVE */
     @media (max-width: 480px) {
         .main-content { padding: 10px; }
@@ -762,9 +787,16 @@
             <p><i class="fas fa-calendar"></i> Joined: <span id="accountJoined">-</span></p>
             <p><i class="fas fa-database"></i> Total Items: <span id="accountTotalData">0</span></p>
           </div>
-          <div style="display: flex; gap: 8px; justify-content: center;">
-            <button class="cyber-button secondary" style="width: auto; padding: 8px 12px; font-size:0.8rem;" onclick="changePassword()">CHANGE PASSWORD</button>
-            <button class="cyber-button danger" style="width: auto; padding: 8px 12px; font-size:0.8rem;" onclick="deleteAccount()">DELETE ACCOUNT</button>
+          <div class="button-group">
+            <button class="cyber-button secondary" onclick="changePassword()">
+              <i class="fas fa-key"></i> CHANGE PASSWORD
+            </button>
+            <button class="cyber-button logout-button" onclick="logout()">
+              <i class="fas fa-sign-out-alt"></i> LOGOUT
+            </button>
+            <button class="cyber-button danger" onclick="deleteAccount()">
+              <i class="fas fa-trash"></i> DELETE ACCOUNT
+            </button>
           </div>
         </div>
       </div>
@@ -1291,7 +1323,9 @@
 
     // Account functions
     function changePassword() {
-      if (currentUser?.providerData[0]?.providerId !== 'password') return showNotification('Hanya untuk email/password', 'warning');
+      if (currentUser?.providerData[0]?.providerId !== 'password') {
+        return showNotification('Fitur ini hanya untuk akun email/password!', 'warning');
+      }
       document.getElementById('oldPassword').value = '';
       document.getElementById('newPasswordAccount').value = '';
       document.getElementById('confirmNewPasswordAccount').value = '';
@@ -1302,28 +1336,46 @@
       const old = document.getElementById('oldPassword').value;
       const neu = document.getElementById('newPasswordAccount').value;
       const conf = document.getElementById('confirmNewPasswordAccount').value;
+      
       if (!old || !neu || !conf) return showNotification('Semua kolom wajib!', 'warning');
-      if (neu !== conf) return showNotification('Password tidak cocok!', 'warning');
+      if (neu !== conf) return showNotification('Password baru tidak cocok!', 'warning');
       if (neu.length < 6) return showNotification('Password minimal 6 karakter!', 'warning');
+      
       try {
         const cred = firebase.auth.EmailAuthProvider.credential(currentUser.email, old);
         await currentUser.reauthenticateWithCredential(cred);
         await currentUser.updatePassword(neu);
         closeModal('changePasswordModal');
-        showNotification('Password diubah!', 'success');
-      } catch (e) { showNotification('Gagal: ' + e.message, 'error'); }
+        showNotification('Password berhasil diubah!', 'success');
+      } catch (e) {
+        if (e.code === 'auth/wrong-password') {
+          showNotification('Password lama salah!', 'error');
+        } else {
+          showNotification('Gagal: ' + e.message, 'error');
+        }
+      }
     }
 
     async function deleteAccount() {
-      if (!confirm('YAKIN HAPUS AKUN? Semua data hilang!')) return;
+      if (!confirm('YAKIN HAPUS AKUN? Semua data akan hilang permanen!')) return;
+      
       try {
+        // Hapus data user dari Firestore
         await db.collection('users').doc(currentUser.uid).delete();
+        // Hapus akun dari Authentication
         await currentUser.delete();
-        showNotification('Akun dihapus!', 'success');
-        setTimeout(() => { currentUser = null; showAuthPage(); }, 1500);
+        showNotification('Akun berhasil dihapus!', 'success');
+        setTimeout(() => { 
+          currentUser = null; 
+          showAuthPage(); 
+        }, 1500);
       } catch (e) {
-        if (e.code === 'auth/requires-recent-login') { showNotification('Login ulang!', 'warning'); await logout(); }
-        else showNotification('Gagal: ' + e.message, 'error');
+        if (e.code === 'auth/requires-recent-login') { 
+          showNotification('Silakan login ulang untuk menghapus akun!', 'warning'); 
+          await logout();
+        } else {
+          showNotification('Gagal: ' + e.message, 'error');
+        }
       }
     }
 
