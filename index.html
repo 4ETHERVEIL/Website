@@ -43,7 +43,7 @@
         --main-black: #0a0a0a;
         --card-bg: #ffffff;
         
-        /* PALET WARNA BARU (NO MORE PINK) */
+        /* PALET WARNA BARU */
         --accent-primary: #6a0dad;  /* Deep Electric Violet */
         --accent-secondary: #ccff00; /* Toxic Lime */
         --accent-tertiary: #ff5f00;  /* Industrial Orange */
@@ -177,11 +177,6 @@
         overflow: hidden;
         margin-bottom: 20px;
     }
-
-    /* Dekorasi Sekrup */
-    .screw { position: absolute; font-family: monospace; font-weight: bold; font-size: 1.2rem; pointer-events: none; color: rgba(0,0,0,0.2); }
-    .top-left { top: 5px; left: 10px; } .top-right { top: 5px; right: 10px; }
-    .bottom-left { bottom: 5px; left: 10px; } .bottom-right { bottom: 5px; right: 10px; }
 
     /* HEADER VISUAL */
     .card-header-visual {
@@ -468,6 +463,11 @@
     #authPage, #forgotPasswordPage, #resetPasswordPage {
         max-width: 400px;
         margin: 20px auto;
+        display: block;
+    }
+    
+    #forgotPasswordPage, #resetPasswordPage {
+        display: none;
     }
 
     /* EMPTY STATE */
@@ -491,16 +491,20 @@
     .notif-warning { background: var(--accent-primary); color: white; }
 
     /* SCREW DECORATION FOR CARDS */
-    .cyber-card, .modal, .modal-confirm, .account-card, .calculator-card {
-        position: relative;
-    }
-    .cyber-card::before, .modal::before, .modal-confirm::before {
+    .cyber-card::before {
         content: '⬤'; position: absolute; top: 5px; left: 10px;
         font-size: 10px; color: rgba(0,0,0,0.3); pointer-events: none;
     }
-    .cyber-card::after, .modal::after, .modal-confirm::after {
+    .cyber-card::after {
         content: '⬤'; position: absolute; bottom: 5px; right: 10px;
         font-size: 10px; color: rgba(0,0,0,0.3); pointer-events: none;
+    }
+
+    /* HIDE BOTTOM NAV ON AUTH PAGES */
+    body:has(#authPage:not([style*="display: none"])) .bottom-nav,
+    body:has(#forgotPasswordPage:not([style*="display: none"])) .bottom-nav,
+    body:has(#resetPasswordPage:not([style*="display: none"])) .bottom-nav {
+        display: none;
     }
 
     /* RESPONSIVE */
@@ -553,7 +557,7 @@
 
   <!-- MAIN CONTENT -->
   <div class="main-content">
-    <!-- AUTH PAGES (akan ditampilkan jika belum login) -->
+    <!-- AUTH PAGES -->
     <div id="authPage" class="container">
       <div class="cyber-card">
         <div class="card-header-visual">
@@ -606,7 +610,7 @@
     </div>
 
     <!-- FORGOT PASSWORD PAGE -->
-    <div id="forgotPasswordPage" class="container" style="display: none;">
+    <div id="forgotPasswordPage" class="container">
       <div class="cyber-card">
         <div class="card-header-visual">
           <div class="profile-section">
@@ -630,7 +634,7 @@
     </div>
 
     <!-- RESET PASSWORD PAGE -->
-    <div id="resetPasswordPage" class="container" style="display: none;">
+    <div id="resetPasswordPage" class="container">
       <div class="cyber-card">
         <div class="card-header-visual">
           <div class="profile-section">
@@ -657,7 +661,7 @@
       </div>
     </div>
 
-    <!-- MAIN APP PAGES (akan ditampilkan setelah login) -->
+    <!-- MAIN APP PAGES -->
     <div id="app" style="display: none;">
       <!-- DATA BARANG PAGE -->
       <div id="dataBarangPage" class="page-section active">
@@ -766,7 +770,7 @@
     </div>
   </div>
 
-  <!-- FAB BUTTON (untuk tambah data) -->
+  <!-- FAB BUTTON -->
   <div id="fabButton" onclick="openAddModal()"><i class="fas fa-plus"></i></div>
 
   <!-- MODALS -->
@@ -879,14 +883,13 @@
   <div id="notification"></div>
 
   <script>
-    // Semua fungsi JavaScript tetap sama
+    // Semua fungsi JavaScript
     let currentUser = null, barangData = [], deleteIndex = null, currentPage = 'dataBarang';
     let selectedIndices = new Set();
     let calcCurrent = '0', calcPrevious = '', calcOperator = null, calcShouldReset = false, calcHistory = [];
 
     // Page navigation
     function switchPage(pageName) {
-      // Update active class on nav items
       document.querySelectorAll('.nav-item').forEach(item => {
         if (item.dataset.page === pageName) {
           item.classList.add('active');
@@ -895,18 +898,15 @@
         }
       });
 
-      // Update active page section
       document.querySelectorAll('.page-section').forEach(section => {
         section.classList.remove('active');
       });
       document.getElementById(pageName + 'Page').classList.add('active');
 
-      // Show/hide FAB button (only show on dataBarang page)
       document.getElementById('fabButton').classList.toggle('show', pageName === 'dataBarang');
       
       currentPage = pageName;
       
-      // Refresh data if needed
       if (pageName === 'akumulasi') renderSummaryTable();
       if (pageName === 'account') updateAccountInfo();
     }
@@ -947,8 +947,8 @@
       try {
         await auth.signInWithEmailAndPassword(email, pass);
         showNotification('Selamat datang!', 'success');
-        setTimeout(showApp, 600);
         await loadUserData();
+        showApp();
       } catch (e) { showNotification('Gagal: ' + e.message, 'error'); }
     }
 
@@ -959,8 +959,8 @@
         const docRef = db.collection('users').doc(currentUser.uid);
         if (!(await docRef.get()).exists) await docRef.set({ barangData: [] });
         showNotification('Selamat datang!', 'success');
-        setTimeout(showApp, 600);
         await loadUserData();
+        showApp();
       } catch (e) { showNotification('Gagal: ' + e.message, 'error'); }
     }
 
@@ -974,11 +974,8 @@
     function forgotPassword() {
       const email = document.getElementById('emailLogin').value.trim();
       if (email) document.getElementById('fpEmail').value = email;
-      showAuthPage();
-      setTimeout(() => {
-        document.getElementById('authPage').style.display = 'none';
-        document.getElementById('forgotPasswordPage').style.display = 'block';
-      }, 300);
+      document.getElementById('authPage').style.display = 'none';
+      document.getElementById('forgotPasswordPage').style.display = 'block';
     }
 
     async function sendPasswordResetLink() {
@@ -1039,8 +1036,6 @@
       document.getElementById('tanggalInput').valueAsDate = new Date();
       document.getElementById('editTanggal').valueAsDate = new Date();
       updateAccountInfo();
-      
-      // Set default page
       switchPage('dataBarang');
     }
 
@@ -1344,8 +1339,8 @@
       auth.onAuthStateChanged(async user => {
         if (user) { 
           currentUser = user; 
+          await loadUserData();
           showApp(); 
-          await loadUserData(); 
         } else {
           showAuthPage();
         }
