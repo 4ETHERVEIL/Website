@@ -88,7 +88,7 @@
     .shape-1 { width: 100px; height: 100px; top: 10%; left: -20px; border-radius: 50%; }
     .shape-2 { width: 150px; height: 150px; bottom: 20%; right: -40px; transform: rotate(45deg); background: var(--accent-primary); }
 
-    /* --- NAVIGATION BAR (BOTTOM) --- */
+    /* --- NAVIGATION BAR (BOTTOM) - Hanya muncul di dalam app --- */
     .bottom-nav {
         position: fixed;
         bottom: 0;
@@ -101,6 +101,11 @@
         align-items: center;
         padding: 8px 0;
         z-index: 1000;
+        display: none; /* Default disembunyikan */
+    }
+
+    .bottom-nav.show {
+        display: flex; /* Muncul hanya saat app aktif */
     }
 
     .nav-item {
@@ -531,7 +536,7 @@
     </div>
   </div>
 
-  <!-- BOTTOM NAVIGATION -->
+  <!-- BOTTOM NAVIGATION (Sekarang dengan class untuk kontrol) -->
   <div class="bottom-nav" id="bottomNav">
     <div class="nav-item active" data-page="dataBarang">
       <i class="fas fa-box"></i>
@@ -924,6 +929,9 @@
       document.getElementById('resetPasswordPage').style.display = 'none';
       document.getElementById('app').style.display = 'none';
       document.getElementById('fabButton').classList.remove('show');
+      
+      // Sembunyikan bottom navigation
+      document.getElementById('bottomNav').classList.remove('show');
     }
 
     async function signUpWithEmail() {
@@ -1033,6 +1041,10 @@
       document.getElementById('authPage').style.display = 'none';
       document.getElementById('app').style.display = 'block';
       document.getElementById('fabButton').classList.add('show');
+      
+      // Tampilkan bottom navigation
+      document.getElementById('bottomNav').classList.add('show');
+      
       const user = currentUser;
       document.getElementById('userDisplayName').textContent = user.displayName || user.email;
       document.getElementById('userAvatar').innerHTML = user.displayName ? `<i class="fas fa-user"></i>` : `<i class="fas fa-user-circle"></i>`;
